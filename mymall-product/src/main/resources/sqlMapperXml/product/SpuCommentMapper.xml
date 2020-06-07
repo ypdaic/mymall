@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.product.mapper.SpuCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.product.entity.SpuComment">
+    <result column="id" property="id" />
+        <result column="sku_id" property="skuId" />
+        <result column="spu_id" property="spuId" />
+        <result column="spu_name" property="spuName" />
+        <result column="member_nick_name" property="memberNickName" />
+        <result column="star" property="star" />
+        <result column="member_ip" property="memberIp" />
+        <result column="create_time" property="createTime" />
+        <result column="show_status" property="showStatus" />
+        <result column="spu_attributes" property="spuAttributes" />
+        <result column="likes_count" property="likesCount" />
+        <result column="reply_count" property="replyCount" />
+        <result column="resources" property="resources" />
+        <result column="content" property="content" />
+        <result column="member_icon" property="memberIcon" />
+        <result column="comment_type" property="commentType" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            pms_spu_comment
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.spuName != null">
+                and spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.memberNickName != null">
+                and member_nick_name = #{dto.memberNickName}
+            </if>
+            <if test="dto.star != null">
+                and star = #{dto.star}
+            </if>
+            <if test="dto.memberIp != null">
+                and member_ip = #{dto.memberIp}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.spuAttributes != null">
+                and spu_attributes = #{dto.spuAttributes}
+            </if>
+            <if test="dto.likesCount != null">
+                and likes_count = #{dto.likesCount}
+            </if>
+            <if test="dto.replyCount != null">
+                and reply_count = #{dto.replyCount}
+            </if>
+            <if test="dto.resources != null">
+                and resources = #{dto.resources}
+            </if>
+            <if test="dto.content != null">
+                and content = #{dto.content}
+            </if>
+            <if test="dto.memberIcon != null">
+                and member_icon = #{dto.memberIcon}
+            </if>
+            <if test="dto.commentType != null">
+                and comment_type = #{dto.commentType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from pms_spu_comment
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.spuName != null">
+                and spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.memberNickName != null">
+                and member_nick_name = #{dto.memberNickName}
+            </if>
+            <if test="dto.star != null">
+                and star = #{dto.star}
+            </if>
+            <if test="dto.memberIp != null">
+                and member_ip = #{dto.memberIp}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.spuAttributes != null">
+                and spu_attributes = #{dto.spuAttributes}
+            </if>
+            <if test="dto.likesCount != null">
+                and likes_count = #{dto.likesCount}
+            </if>
+            <if test="dto.replyCount != null">
+                and reply_count = #{dto.replyCount}
+            </if>
+            <if test="dto.resources != null">
+                and resources = #{dto.resources}
+            </if>
+            <if test="dto.content != null">
+                and content = #{dto.content}
+            </if>
+            <if test="dto.memberIcon != null">
+                and member_icon = #{dto.memberIcon}
+            </if>
+            <if test="dto.commentType != null">
+                and comment_type = #{dto.commentType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from pms_spu_comment
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.spuName != null">
+                and spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.memberNickName != null">
+                and member_nick_name = #{dto.memberNickName}
+            </if>
+            <if test="dto.star != null">
+                and star = #{dto.star}
+            </if>
+            <if test="dto.memberIp != null">
+                and member_ip = #{dto.memberIp}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.spuAttributes != null">
+                and spu_attributes = #{dto.spuAttributes}
+            </if>
+            <if test="dto.likesCount != null">
+                and likes_count = #{dto.likesCount}
+            </if>
+            <if test="dto.replyCount != null">
+                and reply_count = #{dto.replyCount}
+            </if>
+            <if test="dto.resources != null">
+                and resources = #{dto.resources}
+            </if>
+            <if test="dto.content != null">
+                and content = #{dto.content}
+            </if>
+            <if test="dto.memberIcon != null">
+                and member_icon = #{dto.memberIcon}
+            </if>
+            <if test="dto.commentType != null">
+                and comment_type = #{dto.commentType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from pms_spu_comment
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.spuName != null">
+                and spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.memberNickName != null">
+                and member_nick_name = #{dto.memberNickName}
+            </if>
+            <if test="dto.star != null">
+                and star = #{dto.star}
+            </if>
+            <if test="dto.memberIp != null">
+                and member_ip = #{dto.memberIp}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.spuAttributes != null">
+                and spu_attributes = #{dto.spuAttributes}
+            </if>
+            <if test="dto.likesCount != null">
+                and likes_count = #{dto.likesCount}
+            </if>
+            <if test="dto.replyCount != null">
+                and reply_count = #{dto.replyCount}
+            </if>
+            <if test="dto.resources != null">
+                and resources = #{dto.resources}
+            </if>
+            <if test="dto.content != null">
+                and content = #{dto.content}
+            </if>
+            <if test="dto.memberIcon != null">
+                and member_icon = #{dto.memberIcon}
+            </if>
+            <if test="dto.commentType != null">
+                and comment_type = #{dto.commentType}
+            </if>
+        </where>
+    </select>
+
+</mapper>

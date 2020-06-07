@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.product.mapper.SkuSaleAttrValueMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.product.entity.SkuSaleAttrValue">
+    <result column="id" property="id" />
+        <result column="sku_id" property="skuId" />
+        <result column="attr_id" property="attrId" />
+        <result column="attr_name" property="attrName" />
+        <result column="attr_value" property="attrValue" />
+        <result column="attr_sort" property="attrSort" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            pms_sku_sale_attr_value
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.attrId != null">
+                and attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.attrValue != null">
+                and attr_value = #{dto.attrValue}
+            </if>
+            <if test="dto.attrSort != null">
+                and attr_sort = #{dto.attrSort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from pms_sku_sale_attr_value
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.attrId != null">
+                and attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.attrValue != null">
+                and attr_value = #{dto.attrValue}
+            </if>
+            <if test="dto.attrSort != null">
+                and attr_sort = #{dto.attrSort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from pms_sku_sale_attr_value
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.attrId != null">
+                and attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.attrValue != null">
+                and attr_value = #{dto.attrValue}
+            </if>
+            <if test="dto.attrSort != null">
+                and attr_sort = #{dto.attrSort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from pms_sku_sale_attr_value
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.attrId != null">
+                and attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.attrValue != null">
+                and attr_value = #{dto.attrValue}
+            </if>
+            <if test="dto.attrSort != null">
+                and attr_sort = #{dto.attrSort}
+            </if>
+        </where>
+    </select>
+
+</mapper>

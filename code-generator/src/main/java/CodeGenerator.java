@@ -256,7 +256,7 @@ public class CodeGenerator {
         // 全局大写命名
         strategy.setCapitalMode(false);
         // 需要生成的表的表名前缀
-        strategy.setTablePrefix(new String[]{});
+        strategy.setTablePrefix(new String[]{config.getString("tablePrefix")});
         // 需要生成的表的表名的策略  此处为下滑线分隔（具体给什么参数以数据库为准）
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 需要生成的表的字段名的策略  此处为下滑线分隔 （具体给什么参数以数据库为准）

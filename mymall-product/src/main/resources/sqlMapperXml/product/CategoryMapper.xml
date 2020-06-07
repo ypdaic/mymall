@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.product.mapper.CategoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.product.entity.Category">
+        <id column="cat_id" property="catId" />
+        <result column="name" property="name" />
+        <result column="parent_cid" property="parentCid" />
+        <result column="cat_level" property="catLevel" />
+        <result column="show_status" property="showStatus" />
+        <result column="sort" property="sort" />
+        <result column="icon" property="icon" />
+        <result column="product_unit" property="productUnit" />
+        <result column="product_count" property="productCount" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            pms_category
+        <where>
+            <if test="dto.catId != null">
+                cat_id = #{dto.catId}
+            </if>
+            <if test="dto.name != null">
+                and name = #{dto.name}
+            </if>
+            <if test="dto.parentCid != null">
+                and parent_cid = #{dto.parentCid}
+            </if>
+            <if test="dto.catLevel != null">
+                and cat_level = #{dto.catLevel}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.productUnit != null">
+                and product_unit = #{dto.productUnit}
+            </if>
+            <if test="dto.productCount != null">
+                and product_count = #{dto.productCount}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from pms_category
+        <where>
+            <if test="dto.catId != null">
+                cat_id = #{dto.catId}
+            </if>
+            <if test="dto.name != null">
+                and name = #{dto.name}
+            </if>
+            <if test="dto.parentCid != null">
+                and parent_cid = #{dto.parentCid}
+            </if>
+            <if test="dto.catLevel != null">
+                and cat_level = #{dto.catLevel}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.productUnit != null">
+                and product_unit = #{dto.productUnit}
+            </if>
+            <if test="dto.productCount != null">
+                and product_count = #{dto.productCount}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from pms_category
+        <where>
+            <if test="dto.catId != null">
+                cat_id = #{dto.catId}
+            </if>
+            <if test="dto.name != null">
+                and name = #{dto.name}
+            </if>
+            <if test="dto.parentCid != null">
+                and parent_cid = #{dto.parentCid}
+            </if>
+            <if test="dto.catLevel != null">
+                and cat_level = #{dto.catLevel}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.productUnit != null">
+                and product_unit = #{dto.productUnit}
+            </if>
+            <if test="dto.productCount != null">
+                and product_count = #{dto.productCount}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from pms_category
+        <where>
+            <if test="dto.catId != null">
+                cat_id = #{dto.catId}
+            </if>
+            <if test="dto.name != null">
+                and name = #{dto.name}
+            </if>
+            <if test="dto.parentCid != null">
+                and parent_cid = #{dto.parentCid}
+            </if>
+            <if test="dto.catLevel != null">
+                and cat_level = #{dto.catLevel}
+            </if>
+            <if test="dto.showStatus != null">
+                and show_status = #{dto.showStatus}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.productUnit != null">
+                and product_unit = #{dto.productUnit}
+            </if>
+            <if test="dto.productCount != null">
+                and product_count = #{dto.productCount}
+            </if>
+        </where>
+    </select>
+
+</mapper>
