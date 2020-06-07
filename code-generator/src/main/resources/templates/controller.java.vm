@@ -1,0 +1,206 @@
+package ${package.Controller};
+
+
+import org.springframework.web.bind.annotation.RequestMapping;
+
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+import ${package.Service}.${table.serviceName};
+import ${dtoPackage}.${entity}Dto;
+import ${package.Entity}.${entity};
+
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.StringUtils;
+import com.ypdaic.mymall.common.enums.FailureEnum;
+import com.ypdaic.mymall.common.enums.NeedAuthEnum;
+import com.ypdaic.mymall.common.enums.EnableEnum;
+import com.ypdaic.mymall.common.result.Result;
+import com.ypdaic.mymall.common.result.ResultUtil;
+#if(${AccountToken})
+import sungo.cms.entity.AccountToken;
+import javax.servlet.http.HttpServletRequest;
+#end
+#if(${SysAccountToken})
+import sungo.manager.entity.SysAccountToken;
+import sungo.manager.annotation.Token;
+#end
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import com.ypdaic.mymall.common.annotation.NeedAuth;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ *
+ * $!{table.comment} 前端控制器
+ *
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Autowired
+    ${table.serviceName} ${serviceLowerName};
+
+    /**
+     *
+     * 新增${table.comment}
+     * @param ${entityLowerName}Dto
+     * @param#if(${AccountToken}) httpServletRequest #elseif (${SysAccountToken}) token #else httpServletRequest #end
+     * @return
+     */
+    @PostMapping("/add")
+    public Result<${entity}> add(@RequestBody @Validated ${entity}Dto ${entityLowerName}Dto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+        if (bindingResult.hasErrors()) {
+            return paramError(bindingResult);
+        }
+
+        ${entity} ${entityLowerName} = ${serviceLowerName}.add(${entityLowerName}Dto);
+
+        return ResultUtil.successOfInsert(${entityLowerName});
+    }
+
+    /**
+     *
+     * 修改${table.comment}
+     * @param ${entityLowerName}Dto
+     * @param#if(${AccountToken}) httpServletRequest #elseif (${SysAccountToken}) token #else httpServletRequest #end
+     * @return
+     */
+    @PostMapping("/update")
+    public Result<${entity}> update(@RequestBody @Validated ${entity}Dto ${entityLowerName}Dto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+        if (bindingResult.hasErrors()) {
+            return paramError(bindingResult);
+        }
+        ${entity} ${entityLowerName} = ${serviceLowerName}.update(${entityLowerName}Dto);
+        if (${entityLowerName} == null) {
+            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+        }
+        return ResultUtil.successOfUpdate(${entityLowerName});
+    }
+
+    /**
+     *
+     * 删除${table.comment}
+     * @param ${entityLowerName}Dto
+     * @param#if(${AccountToken}) httpServletRequest #elseif (${SysAccountToken}) token #else httpServletRequest #end
+     * @return
+     */
+    @PostMapping("/delete")
+
+    public Result<${entity}> delete(@RequestBody ${entity}Dto ${entityLowerName}Dto, HttpServletRequest httpServletRequest) {
+        ${entity} ${entityLowerName} = ${serviceLowerName}.delete(${entityLowerName}Dto);
+        if (${entityLowerName} == null) {
+            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+        }
+        return ResultUtil.successOfDelete(${entityLowerName});
+    }
+
+    /**
+     *
+     * 分页查询${table.comment}
+     * @param ${entityLowerName}Dto
+     * @return
+     */
+    @PostMapping("/queryPage")
+    public Result<IPage<${entity}>> queryPage(@RequestBody ${entity}Dto ${entityLowerName}Dto) {
+        Page<${entity}> ${entityLowerName}Page = new Page<>(${entityLowerName}Dto.getPageIndex(), ${entityLowerName}Dto.getPageSize());
+        IPage<${entity}> page = ${serviceLowerName}.queryPage(${entityLowerName}Dto, ${entityLowerName}Page);
+        return ResultUtil.success(page);
+    }
+
+    /**
+     *
+     * 根据id查询${table.comment}
+     * @param ${entityLowerName}Dto
+     * @return
+     */
+    @PostMapping("/queryById")
+    public Result<${entity}> queryById(@RequestBody ${entity}Dto ${entityLowerName}Dto) {
+        ${entity} ${entityLowerName} = ${serviceLowerName}.getById(${entityLowerName}Dto.getId());
+        if (${entityLowerName} == null) {
+            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+        }
+        return ResultUtil.success(${entityLowerName});
+    }
+
+##    /**
+##     *
+##     * 导出
+##     * @param ${entityLowerName}Dto
+##     * @param response
+##     * @return
+##     */
+##    @PostMapping("/export")
+##    public Result<Object> export(@RequestBody ${entity}Dto ${entityLowerName}Dto, HttpServletResponse response) {
+##
+##        boolean export = ${serviceLowerName}.export(${entityLowerName}Dto, response);
+##
+##        if (!export) {
+##        return ResultUtil.failure(FailureEnum.EXPORT_ERROR, null);
+##        }
+##        return null;
+##    }
+
+    /**
+     *
+     * 查询所有${table.comment}
+     * @return
+     */
+    @PostMapping("/queryAll")
+    @NeedAuth(NeedAuthEnum.TOKEN)
+    public Result<List<${entity}>> queryAll(@RequestBody ${entity}Dto ${entityLowerName}Dto) {
+        List<${entity}> list = ${serviceLowerName}.queryAll(${entityLowerName}Dto);
+        return ResultUtil.success(list);
+    }
+
+    /**
+     * 校验${table.comment}名称
+     *
+     * @return
+     */
+    @PostMapping("/checkName")
+    @NeedAuth(NeedAuthEnum.TOKEN)
+    public Result<String> checkName(@RequestBody ${entity}Dto ${entityLowerName}Dto) {
+
+        if (Objects.isNull(${entityLowerName}Dto.getIsAdd())) {
+            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+        }
+        if (${serviceLowerName}.checkName(${entityLowerName}Dto, ${entityLowerName}Dto.getIsAdd())) {
+            return ResultUtil.success();
+        }
+        return ResultUtil.failure(40001, "${table.comment}名称已存在！");
+    }
+
+}
+
+#end

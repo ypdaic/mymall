@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.product.mapper.PmsSkuImagesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.product.entity.PmsSkuImages">
+    <result column="id" property="id" />
+        <result column="sku_id" property="skuId" />
+        <result column="img_url" property="imgUrl" />
+        <result column="img_sort" property="imgSort" />
+        <result column="default_img" property="defaultImg" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            pms_sku_images
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.imgUrl != null">
+                and img_url = #{dto.imgUrl}
+            </if>
+            <if test="dto.imgSort != null">
+                and img_sort = #{dto.imgSort}
+            </if>
+            <if test="dto.defaultImg != null">
+                and default_img = #{dto.defaultImg}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from pms_sku_images
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.imgUrl != null">
+                and img_url = #{dto.imgUrl}
+            </if>
+            <if test="dto.imgSort != null">
+                and img_sort = #{dto.imgSort}
+            </if>
+            <if test="dto.defaultImg != null">
+                and default_img = #{dto.defaultImg}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from pms_sku_images
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.imgUrl != null">
+                and img_url = #{dto.imgUrl}
+            </if>
+            <if test="dto.imgSort != null">
+                and img_sort = #{dto.imgSort}
+            </if>
+            <if test="dto.defaultImg != null">
+                and default_img = #{dto.defaultImg}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from pms_sku_images
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.imgUrl != null">
+                and img_url = #{dto.imgUrl}
+            </if>
+            <if test="dto.imgSort != null">
+                and img_sort = #{dto.imgSort}
+            </if>
+            <if test="dto.defaultImg != null">
+                and default_img = #{dto.defaultImg}
+            </if>
+        </where>
+    </select>
+
+</mapper>

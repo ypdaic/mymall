@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.product.mapper.PmsSpuInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.product.entity.PmsSpuInfo">
+    <result column="id" property="id" />
+        <result column="spu_name" property="spuName" />
+        <result column="spu_description" property="spuDescription" />
+        <result column="catalog_id" property="catalogId" />
+        <result column="brand_id" property="brandId" />
+        <result column="weight" property="weight" />
+        <result column="publish_status" property="publishStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            pms_spu_info
+        <where>
+            <if test="dto.spuName != null">
+                spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.spuDescription != null">
+                and spu_description = #{dto.spuDescription}
+            </if>
+            <if test="dto.catalogId != null">
+                and catalog_id = #{dto.catalogId}
+            </if>
+            <if test="dto.brandId != null">
+                and brand_id = #{dto.brandId}
+            </if>
+            <if test="dto.weight != null">
+                and weight = #{dto.weight}
+            </if>
+            <if test="dto.publishStatus != null">
+                and publish_status = #{dto.publishStatus}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from pms_spu_info
+        <where>
+            <if test="dto.spuName != null">
+                spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.spuDescription != null">
+                and spu_description = #{dto.spuDescription}
+            </if>
+            <if test="dto.catalogId != null">
+                and catalog_id = #{dto.catalogId}
+            </if>
+            <if test="dto.brandId != null">
+                and brand_id = #{dto.brandId}
+            </if>
+            <if test="dto.weight != null">
+                and weight = #{dto.weight}
+            </if>
+            <if test="dto.publishStatus != null">
+                and publish_status = #{dto.publishStatus}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from pms_spu_info
+        <where>
+            <if test="dto.spuName != null">
+                spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.spuDescription != null">
+                and spu_description = #{dto.spuDescription}
+            </if>
+            <if test="dto.catalogId != null">
+                and catalog_id = #{dto.catalogId}
+            </if>
+            <if test="dto.brandId != null">
+                and brand_id = #{dto.brandId}
+            </if>
+            <if test="dto.weight != null">
+                and weight = #{dto.weight}
+            </if>
+            <if test="dto.publishStatus != null">
+                and publish_status = #{dto.publishStatus}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from pms_spu_info
+        <where>
+            <if test="dto.spuName != null">
+                spu_name = #{dto.spuName}
+            </if>
+            <if test="dto.spuDescription != null">
+                and spu_description = #{dto.spuDescription}
+            </if>
+            <if test="dto.catalogId != null">
+                and catalog_id = #{dto.catalogId}
+            </if>
+            <if test="dto.brandId != null">
+                and brand_id = #{dto.brandId}
+            </if>
+            <if test="dto.weight != null">
+                and weight = #{dto.weight}
+            </if>
+            <if test="dto.publishStatus != null">
+                and publish_status = #{dto.publishStatus}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

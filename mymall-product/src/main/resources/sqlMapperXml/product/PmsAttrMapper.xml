@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.product.mapper.PmsAttrMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.product.entity.PmsAttr">
+        <id column="attr_id" property="attrId" />
+        <result column="attr_name" property="attrName" />
+        <result column="search_type" property="searchType" />
+        <result column="icon" property="icon" />
+        <result column="value_select" property="valueSelect" />
+        <result column="attr_type" property="attrType" />
+        <result column="enable" property="enable" />
+        <result column="catelog_id" property="catelogId" />
+        <result column="show_desc" property="showDesc" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            pms_attr
+        <where>
+            <if test="dto.attrId != null">
+                attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.searchType != null">
+                and search_type = #{dto.searchType}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.valueSelect != null">
+                and value_select = #{dto.valueSelect}
+            </if>
+            <if test="dto.attrType != null">
+                and attr_type = #{dto.attrType}
+            </if>
+            <if test="dto.enable != null">
+                and enable = #{dto.enable}
+            </if>
+            <if test="dto.catelogId != null">
+                and catelog_id = #{dto.catelogId}
+            </if>
+            <if test="dto.showDesc != null">
+                and show_desc = #{dto.showDesc}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from pms_attr
+        <where>
+            <if test="dto.attrId != null">
+                attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.searchType != null">
+                and search_type = #{dto.searchType}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.valueSelect != null">
+                and value_select = #{dto.valueSelect}
+            </if>
+            <if test="dto.attrType != null">
+                and attr_type = #{dto.attrType}
+            </if>
+            <if test="dto.enable != null">
+                and enable = #{dto.enable}
+            </if>
+            <if test="dto.catelogId != null">
+                and catelog_id = #{dto.catelogId}
+            </if>
+            <if test="dto.showDesc != null">
+                and show_desc = #{dto.showDesc}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from pms_attr
+        <where>
+            <if test="dto.attrId != null">
+                attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.searchType != null">
+                and search_type = #{dto.searchType}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.valueSelect != null">
+                and value_select = #{dto.valueSelect}
+            </if>
+            <if test="dto.attrType != null">
+                and attr_type = #{dto.attrType}
+            </if>
+            <if test="dto.enable != null">
+                and enable = #{dto.enable}
+            </if>
+            <if test="dto.catelogId != null">
+                and catelog_id = #{dto.catelogId}
+            </if>
+            <if test="dto.showDesc != null">
+                and show_desc = #{dto.showDesc}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from pms_attr
+        <where>
+            <if test="dto.attrId != null">
+                attr_id = #{dto.attrId}
+            </if>
+            <if test="dto.attrName != null">
+                and attr_name = #{dto.attrName}
+            </if>
+            <if test="dto.searchType != null">
+                and search_type = #{dto.searchType}
+            </if>
+            <if test="dto.icon != null">
+                and icon = #{dto.icon}
+            </if>
+            <if test="dto.valueSelect != null">
+                and value_select = #{dto.valueSelect}
+            </if>
+            <if test="dto.attrType != null">
+                and attr_type = #{dto.attrType}
+            </if>
+            and enable = 1
+            <if test="dto.catelogId != null">
+                and catelog_id = #{dto.catelogId}
+            </if>
+            <if test="dto.showDesc != null">
+                and show_desc = #{dto.showDesc}
+            </if>
+        </where>
+    </select>
+
+</mapper>
