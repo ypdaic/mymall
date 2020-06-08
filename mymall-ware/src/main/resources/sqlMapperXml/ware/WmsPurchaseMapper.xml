@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.ware.mapper.WmsPurchaseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.ware.entity.WmsPurchase">
+    <result column="id" property="id" />
+        <result column="assignee_id" property="assigneeId" />
+        <result column="assignee_name" property="assigneeName" />
+        <result column="phone" property="phone" />
+        <result column="priority" property="priority" />
+        <result column="status" property="status" />
+        <result column="ware_id" property="wareId" />
+        <result column="amount" property="amount" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            wms_purchase
+        <where>
+            <if test="dto.assigneeId != null">
+                assignee_id = #{dto.assigneeId}
+            </if>
+            <if test="dto.assigneeName != null">
+                and assignee_name = #{dto.assigneeName}
+            </if>
+            <if test="dto.phone != null">
+                and phone = #{dto.phone}
+            </if>
+            <if test="dto.priority != null">
+                and priority = #{dto.priority}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.amount != null">
+                and amount = #{dto.amount}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from wms_purchase
+        <where>
+            <if test="dto.assigneeId != null">
+                assignee_id = #{dto.assigneeId}
+            </if>
+            <if test="dto.assigneeName != null">
+                and assignee_name = #{dto.assigneeName}
+            </if>
+            <if test="dto.phone != null">
+                and phone = #{dto.phone}
+            </if>
+            <if test="dto.priority != null">
+                and priority = #{dto.priority}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.amount != null">
+                and amount = #{dto.amount}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from wms_purchase
+        <where>
+            <if test="dto.assigneeId != null">
+                assignee_id = #{dto.assigneeId}
+            </if>
+            <if test="dto.assigneeName != null">
+                and assignee_name = #{dto.assigneeName}
+            </if>
+            <if test="dto.phone != null">
+                and phone = #{dto.phone}
+            </if>
+            <if test="dto.priority != null">
+                and priority = #{dto.priority}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.amount != null">
+                and amount = #{dto.amount}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from wms_purchase
+        <where>
+            <if test="dto.assigneeId != null">
+                assignee_id = #{dto.assigneeId}
+            </if>
+            <if test="dto.assigneeName != null">
+                and assignee_name = #{dto.assigneeName}
+            </if>
+            <if test="dto.phone != null">
+                and phone = #{dto.phone}
+            </if>
+            <if test="dto.priority != null">
+                and priority = #{dto.priority}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.amount != null">
+                and amount = #{dto.amount}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.updateTime != null">
+                and update_time = #{dto.updateTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

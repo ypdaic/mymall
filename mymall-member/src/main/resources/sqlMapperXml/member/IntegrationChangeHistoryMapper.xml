@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.member.mapper.IntegrationChangeHistoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.member.entity.IntegrationChangeHistory">
+    <result column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="create_time" property="createTime" />
+        <result column="change_count" property="changeCount" />
+        <result column="note" property="note" />
+        <result column="source_tyoe" property="sourceTyoe" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            ums_integration_change_history
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.changeCount != null">
+                and change_count = #{dto.changeCount}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.sourceTyoe != null">
+                and source_tyoe = #{dto.sourceTyoe}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from ums_integration_change_history
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.changeCount != null">
+                and change_count = #{dto.changeCount}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.sourceTyoe != null">
+                and source_tyoe = #{dto.sourceTyoe}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from ums_integration_change_history
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.changeCount != null">
+                and change_count = #{dto.changeCount}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.sourceTyoe != null">
+                and source_tyoe = #{dto.sourceTyoe}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from ums_integration_change_history
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.changeCount != null">
+                and change_count = #{dto.changeCount}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.sourceTyoe != null">
+                and source_tyoe = #{dto.sourceTyoe}
+            </if>
+        </where>
+    </select>
+
+</mapper>

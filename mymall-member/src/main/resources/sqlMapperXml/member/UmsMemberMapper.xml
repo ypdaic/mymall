@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.member.mapper.UmsMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.member.entity.UmsMember">
+    <result column="id" property="id" />
+        <result column="level_id" property="levelId" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nickname" property="nickname" />
+        <result column="mobile" property="mobile" />
+        <result column="email" property="email" />
+        <result column="header" property="header" />
+        <result column="gender" property="gender" />
+        <result column="birth" property="birth" />
+        <result column="city" property="city" />
+        <result column="job" property="job" />
+        <result column="sign" property="sign" />
+        <result column="source_type" property="sourceType" />
+        <result column="integration" property="integration" />
+        <result column="growth" property="growth" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            ums_member
+        <where>
+            <if test="dto.levelId != null">
+                level_id = #{dto.levelId}
+            </if>
+            <if test="dto.username != null">
+                and username = #{dto.username}
+            </if>
+            <if test="dto.password != null">
+                and password = #{dto.password}
+            </if>
+            <if test="dto.nickname != null">
+                and nickname = #{dto.nickname}
+            </if>
+            <if test="dto.mobile != null">
+                and mobile = #{dto.mobile}
+            </if>
+            <if test="dto.email != null">
+                and email = #{dto.email}
+            </if>
+            <if test="dto.header != null">
+                and header = #{dto.header}
+            </if>
+            <if test="dto.gender != null">
+                and gender = #{dto.gender}
+            </if>
+            <if test="dto.birth != null">
+                and birth = #{dto.birth}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.job != null">
+                and job = #{dto.job}
+            </if>
+            <if test="dto.sign != null">
+                and sign = #{dto.sign}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from ums_member
+        <where>
+            <if test="dto.levelId != null">
+                level_id = #{dto.levelId}
+            </if>
+            <if test="dto.username != null">
+                and username = #{dto.username}
+            </if>
+            <if test="dto.password != null">
+                and password = #{dto.password}
+            </if>
+            <if test="dto.nickname != null">
+                and nickname = #{dto.nickname}
+            </if>
+            <if test="dto.mobile != null">
+                and mobile = #{dto.mobile}
+            </if>
+            <if test="dto.email != null">
+                and email = #{dto.email}
+            </if>
+            <if test="dto.header != null">
+                and header = #{dto.header}
+            </if>
+            <if test="dto.gender != null">
+                and gender = #{dto.gender}
+            </if>
+            <if test="dto.birth != null">
+                and birth = #{dto.birth}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.job != null">
+                and job = #{dto.job}
+            </if>
+            <if test="dto.sign != null">
+                and sign = #{dto.sign}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from ums_member
+        <where>
+            <if test="dto.levelId != null">
+                level_id = #{dto.levelId}
+            </if>
+            <if test="dto.username != null">
+                and username = #{dto.username}
+            </if>
+            <if test="dto.password != null">
+                and password = #{dto.password}
+            </if>
+            <if test="dto.nickname != null">
+                and nickname = #{dto.nickname}
+            </if>
+            <if test="dto.mobile != null">
+                and mobile = #{dto.mobile}
+            </if>
+            <if test="dto.email != null">
+                and email = #{dto.email}
+            </if>
+            <if test="dto.header != null">
+                and header = #{dto.header}
+            </if>
+            <if test="dto.gender != null">
+                and gender = #{dto.gender}
+            </if>
+            <if test="dto.birth != null">
+                and birth = #{dto.birth}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.job != null">
+                and job = #{dto.job}
+            </if>
+            <if test="dto.sign != null">
+                and sign = #{dto.sign}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from ums_member
+        <where>
+            <if test="dto.levelId != null">
+                level_id = #{dto.levelId}
+            </if>
+            <if test="dto.username != null">
+                and username = #{dto.username}
+            </if>
+            <if test="dto.password != null">
+                and password = #{dto.password}
+            </if>
+            <if test="dto.nickname != null">
+                and nickname = #{dto.nickname}
+            </if>
+            <if test="dto.mobile != null">
+                and mobile = #{dto.mobile}
+            </if>
+            <if test="dto.email != null">
+                and email = #{dto.email}
+            </if>
+            <if test="dto.header != null">
+                and header = #{dto.header}
+            </if>
+            <if test="dto.gender != null">
+                and gender = #{dto.gender}
+            </if>
+            <if test="dto.birth != null">
+                and birth = #{dto.birth}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.job != null">
+                and job = #{dto.job}
+            </if>
+            <if test="dto.sign != null">
+                and sign = #{dto.sign}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

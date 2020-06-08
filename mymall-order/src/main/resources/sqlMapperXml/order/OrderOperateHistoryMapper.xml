@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.order.mapper.OrderOperateHistoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.order.entity.OrderOperateHistory">
+    <result column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="operate_man" property="operateMan" />
+        <result column="create_time" property="createTime" />
+        <result column="order_status" property="orderStatus" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            oms_order_operate_history
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.operateMan != null">
+                and operate_man = #{dto.operateMan}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.orderStatus != null">
+                and order_status = #{dto.orderStatus}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from oms_order_operate_history
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.operateMan != null">
+                and operate_man = #{dto.operateMan}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.orderStatus != null">
+                and order_status = #{dto.orderStatus}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from oms_order_operate_history
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.operateMan != null">
+                and operate_man = #{dto.operateMan}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.orderStatus != null">
+                and order_status = #{dto.orderStatus}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from oms_order_operate_history
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.operateMan != null">
+                and operate_man = #{dto.operateMan}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.orderStatus != null">
+                and order_status = #{dto.orderStatus}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+        </where>
+    </select>
+
+</mapper>

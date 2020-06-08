@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.coupon.mapper.SeckillSkuNoticeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.coupon.entity.SeckillSkuNotice">
+    <result column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="sku_id" property="skuId" />
+        <result column="session_id" property="sessionId" />
+        <result column="subcribe_time" property="subcribeTime" />
+        <result column="send_time" property="sendTime" />
+        <result column="notice_type" property="noticeType" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            sms_seckill_sku_notice
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.sessionId != null">
+                and session_id = #{dto.sessionId}
+            </if>
+            <if test="dto.subcribeTime != null">
+                and subcribe_time = #{dto.subcribeTime}
+            </if>
+            <if test="dto.sendTime != null">
+                and send_time = #{dto.sendTime}
+            </if>
+            <if test="dto.noticeType != null">
+                and notice_type = #{dto.noticeType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from sms_seckill_sku_notice
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.sessionId != null">
+                and session_id = #{dto.sessionId}
+            </if>
+            <if test="dto.subcribeTime != null">
+                and subcribe_time = #{dto.subcribeTime}
+            </if>
+            <if test="dto.sendTime != null">
+                and send_time = #{dto.sendTime}
+            </if>
+            <if test="dto.noticeType != null">
+                and notice_type = #{dto.noticeType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from sms_seckill_sku_notice
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.sessionId != null">
+                and session_id = #{dto.sessionId}
+            </if>
+            <if test="dto.subcribeTime != null">
+                and subcribe_time = #{dto.subcribeTime}
+            </if>
+            <if test="dto.sendTime != null">
+                and send_time = #{dto.sendTime}
+            </if>
+            <if test="dto.noticeType != null">
+                and notice_type = #{dto.noticeType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from sms_seckill_sku_notice
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.sessionId != null">
+                and session_id = #{dto.sessionId}
+            </if>
+            <if test="dto.subcribeTime != null">
+                and subcribe_time = #{dto.subcribeTime}
+            </if>
+            <if test="dto.sendTime != null">
+                and send_time = #{dto.sendTime}
+            </if>
+            <if test="dto.noticeType != null">
+                and notice_type = #{dto.noticeType}
+            </if>
+        </where>
+    </select>
+
+</mapper>

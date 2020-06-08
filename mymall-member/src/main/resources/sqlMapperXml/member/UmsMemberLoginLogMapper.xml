@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.member.mapper.UmsMemberLoginLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.member.entity.UmsMemberLoginLog">
+    <result column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="create_time" property="createTime" />
+        <result column="ip" property="ip" />
+        <result column="city" property="city" />
+        <result column="login_type" property="loginType" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            ums_member_login_log
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.ip != null">
+                and ip = #{dto.ip}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.loginType != null">
+                and login_type = #{dto.loginType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from ums_member_login_log
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.ip != null">
+                and ip = #{dto.ip}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.loginType != null">
+                and login_type = #{dto.loginType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from ums_member_login_log
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.ip != null">
+                and ip = #{dto.ip}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.loginType != null">
+                and login_type = #{dto.loginType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from ums_member_login_log
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.ip != null">
+                and ip = #{dto.ip}
+            </if>
+            <if test="dto.city != null">
+                and city = #{dto.city}
+            </if>
+            <if test="dto.loginType != null">
+                and login_type = #{dto.loginType}
+            </if>
+        </where>
+    </select>
+
+</mapper>

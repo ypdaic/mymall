@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.order.mapper.OrderSettingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.order.entity.OrderSetting">
+    <result column="id" property="id" />
+        <result column="flash_order_overtime" property="flashOrderOvertime" />
+        <result column="normal_order_overtime" property="normalOrderOvertime" />
+        <result column="confirm_overtime" property="confirmOvertime" />
+        <result column="finish_overtime" property="finishOvertime" />
+        <result column="comment_overtime" property="commentOvertime" />
+        <result column="member_level" property="memberLevel" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            oms_order_setting
+        <where>
+            <if test="dto.flashOrderOvertime != null">
+                flash_order_overtime = #{dto.flashOrderOvertime}
+            </if>
+            <if test="dto.normalOrderOvertime != null">
+                and normal_order_overtime = #{dto.normalOrderOvertime}
+            </if>
+            <if test="dto.confirmOvertime != null">
+                and confirm_overtime = #{dto.confirmOvertime}
+            </if>
+            <if test="dto.finishOvertime != null">
+                and finish_overtime = #{dto.finishOvertime}
+            </if>
+            <if test="dto.commentOvertime != null">
+                and comment_overtime = #{dto.commentOvertime}
+            </if>
+            <if test="dto.memberLevel != null">
+                and member_level = #{dto.memberLevel}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from oms_order_setting
+        <where>
+            <if test="dto.flashOrderOvertime != null">
+                flash_order_overtime = #{dto.flashOrderOvertime}
+            </if>
+            <if test="dto.normalOrderOvertime != null">
+                and normal_order_overtime = #{dto.normalOrderOvertime}
+            </if>
+            <if test="dto.confirmOvertime != null">
+                and confirm_overtime = #{dto.confirmOvertime}
+            </if>
+            <if test="dto.finishOvertime != null">
+                and finish_overtime = #{dto.finishOvertime}
+            </if>
+            <if test="dto.commentOvertime != null">
+                and comment_overtime = #{dto.commentOvertime}
+            </if>
+            <if test="dto.memberLevel != null">
+                and member_level = #{dto.memberLevel}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from oms_order_setting
+        <where>
+            <if test="dto.flashOrderOvertime != null">
+                flash_order_overtime = #{dto.flashOrderOvertime}
+            </if>
+            <if test="dto.normalOrderOvertime != null">
+                and normal_order_overtime = #{dto.normalOrderOvertime}
+            </if>
+            <if test="dto.confirmOvertime != null">
+                and confirm_overtime = #{dto.confirmOvertime}
+            </if>
+            <if test="dto.finishOvertime != null">
+                and finish_overtime = #{dto.finishOvertime}
+            </if>
+            <if test="dto.commentOvertime != null">
+                and comment_overtime = #{dto.commentOvertime}
+            </if>
+            <if test="dto.memberLevel != null">
+                and member_level = #{dto.memberLevel}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from oms_order_setting
+        <where>
+            <if test="dto.flashOrderOvertime != null">
+                flash_order_overtime = #{dto.flashOrderOvertime}
+            </if>
+            <if test="dto.normalOrderOvertime != null">
+                and normal_order_overtime = #{dto.normalOrderOvertime}
+            </if>
+            <if test="dto.confirmOvertime != null">
+                and confirm_overtime = #{dto.confirmOvertime}
+            </if>
+            <if test="dto.finishOvertime != null">
+                and finish_overtime = #{dto.finishOvertime}
+            </if>
+            <if test="dto.commentOvertime != null">
+                and comment_overtime = #{dto.commentOvertime}
+            </if>
+            <if test="dto.memberLevel != null">
+                and member_level = #{dto.memberLevel}
+            </if>
+        </where>
+    </select>
+
+</mapper>

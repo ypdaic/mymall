@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.ware.mapper.WmsWareOrderTaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.ware.entity.WmsWareOrderTask">
+    <result column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="order_sn" property="orderSn" />
+        <result column="consignee" property="consignee" />
+        <result column="consignee_tel" property="consigneeTel" />
+        <result column="delivery_address" property="deliveryAddress" />
+        <result column="order_comment" property="orderComment" />
+        <result column="payment_way" property="paymentWay" />
+        <result column="task_status" property="taskStatus" />
+        <result column="order_body" property="orderBody" />
+        <result column="tracking_no" property="trackingNo" />
+        <result column="create_time" property="createTime" />
+        <result column="ware_id" property="wareId" />
+        <result column="task_comment" property="taskComment" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            wms_ware_order_task
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.consignee != null">
+                and consignee = #{dto.consignee}
+            </if>
+            <if test="dto.consigneeTel != null">
+                and consignee_tel = #{dto.consigneeTel}
+            </if>
+            <if test="dto.deliveryAddress != null">
+                and delivery_address = #{dto.deliveryAddress}
+            </if>
+            <if test="dto.orderComment != null">
+                and order_comment = #{dto.orderComment}
+            </if>
+            <if test="dto.paymentWay != null">
+                and payment_way = #{dto.paymentWay}
+            </if>
+            <if test="dto.taskStatus != null">
+                and task_status = #{dto.taskStatus}
+            </if>
+            <if test="dto.orderBody != null">
+                and order_body = #{dto.orderBody}
+            </if>
+            <if test="dto.trackingNo != null">
+                and tracking_no = #{dto.trackingNo}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.taskComment != null">
+                and task_comment = #{dto.taskComment}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from wms_ware_order_task
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.consignee != null">
+                and consignee = #{dto.consignee}
+            </if>
+            <if test="dto.consigneeTel != null">
+                and consignee_tel = #{dto.consigneeTel}
+            </if>
+            <if test="dto.deliveryAddress != null">
+                and delivery_address = #{dto.deliveryAddress}
+            </if>
+            <if test="dto.orderComment != null">
+                and order_comment = #{dto.orderComment}
+            </if>
+            <if test="dto.paymentWay != null">
+                and payment_way = #{dto.paymentWay}
+            </if>
+            <if test="dto.taskStatus != null">
+                and task_status = #{dto.taskStatus}
+            </if>
+            <if test="dto.orderBody != null">
+                and order_body = #{dto.orderBody}
+            </if>
+            <if test="dto.trackingNo != null">
+                and tracking_no = #{dto.trackingNo}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.taskComment != null">
+                and task_comment = #{dto.taskComment}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from wms_ware_order_task
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.consignee != null">
+                and consignee = #{dto.consignee}
+            </if>
+            <if test="dto.consigneeTel != null">
+                and consignee_tel = #{dto.consigneeTel}
+            </if>
+            <if test="dto.deliveryAddress != null">
+                and delivery_address = #{dto.deliveryAddress}
+            </if>
+            <if test="dto.orderComment != null">
+                and order_comment = #{dto.orderComment}
+            </if>
+            <if test="dto.paymentWay != null">
+                and payment_way = #{dto.paymentWay}
+            </if>
+            <if test="dto.taskStatus != null">
+                and task_status = #{dto.taskStatus}
+            </if>
+            <if test="dto.orderBody != null">
+                and order_body = #{dto.orderBody}
+            </if>
+            <if test="dto.trackingNo != null">
+                and tracking_no = #{dto.trackingNo}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.taskComment != null">
+                and task_comment = #{dto.taskComment}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from wms_ware_order_task
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.consignee != null">
+                and consignee = #{dto.consignee}
+            </if>
+            <if test="dto.consigneeTel != null">
+                and consignee_tel = #{dto.consigneeTel}
+            </if>
+            <if test="dto.deliveryAddress != null">
+                and delivery_address = #{dto.deliveryAddress}
+            </if>
+            <if test="dto.orderComment != null">
+                and order_comment = #{dto.orderComment}
+            </if>
+            <if test="dto.paymentWay != null">
+                and payment_way = #{dto.paymentWay}
+            </if>
+            <if test="dto.taskStatus != null">
+                and task_status = #{dto.taskStatus}
+            </if>
+            <if test="dto.orderBody != null">
+                and order_body = #{dto.orderBody}
+            </if>
+            <if test="dto.trackingNo != null">
+                and tracking_no = #{dto.trackingNo}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.wareId != null">
+                and ware_id = #{dto.wareId}
+            </if>
+            <if test="dto.taskComment != null">
+                and task_comment = #{dto.taskComment}
+            </if>
+        </where>
+    </select>
+
+</mapper>

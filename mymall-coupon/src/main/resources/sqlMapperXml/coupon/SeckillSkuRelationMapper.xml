@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.coupon.mapper.SeckillSkuRelationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.coupon.entity.SeckillSkuRelation">
+    <result column="id" property="id" />
+        <result column="promotion_id" property="promotionId" />
+        <result column="promotion_session_id" property="promotionSessionId" />
+        <result column="sku_id" property="skuId" />
+        <result column="seckill_price" property="seckillPrice" />
+        <result column="seckill_count" property="seckillCount" />
+        <result column="seckill_limit" property="seckillLimit" />
+        <result column="seckill_sort" property="seckillSort" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            sms_seckill_sku_relation
+        <where>
+            <if test="dto.promotionId != null">
+                promotion_id = #{dto.promotionId}
+            </if>
+            <if test="dto.promotionSessionId != null">
+                and promotion_session_id = #{dto.promotionSessionId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.seckillPrice != null">
+                and seckill_price = #{dto.seckillPrice}
+            </if>
+            <if test="dto.seckillCount != null">
+                and seckill_count = #{dto.seckillCount}
+            </if>
+            <if test="dto.seckillLimit != null">
+                and seckill_limit = #{dto.seckillLimit}
+            </if>
+            <if test="dto.seckillSort != null">
+                and seckill_sort = #{dto.seckillSort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from sms_seckill_sku_relation
+        <where>
+            <if test="dto.promotionId != null">
+                promotion_id = #{dto.promotionId}
+            </if>
+            <if test="dto.promotionSessionId != null">
+                and promotion_session_id = #{dto.promotionSessionId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.seckillPrice != null">
+                and seckill_price = #{dto.seckillPrice}
+            </if>
+            <if test="dto.seckillCount != null">
+                and seckill_count = #{dto.seckillCount}
+            </if>
+            <if test="dto.seckillLimit != null">
+                and seckill_limit = #{dto.seckillLimit}
+            </if>
+            <if test="dto.seckillSort != null">
+                and seckill_sort = #{dto.seckillSort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from sms_seckill_sku_relation
+        <where>
+            <if test="dto.promotionId != null">
+                promotion_id = #{dto.promotionId}
+            </if>
+            <if test="dto.promotionSessionId != null">
+                and promotion_session_id = #{dto.promotionSessionId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.seckillPrice != null">
+                and seckill_price = #{dto.seckillPrice}
+            </if>
+            <if test="dto.seckillCount != null">
+                and seckill_count = #{dto.seckillCount}
+            </if>
+            <if test="dto.seckillLimit != null">
+                and seckill_limit = #{dto.seckillLimit}
+            </if>
+            <if test="dto.seckillSort != null">
+                and seckill_sort = #{dto.seckillSort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from sms_seckill_sku_relation
+        <where>
+            <if test="dto.promotionId != null">
+                promotion_id = #{dto.promotionId}
+            </if>
+            <if test="dto.promotionSessionId != null">
+                and promotion_session_id = #{dto.promotionSessionId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.seckillPrice != null">
+                and seckill_price = #{dto.seckillPrice}
+            </if>
+            <if test="dto.seckillCount != null">
+                and seckill_count = #{dto.seckillCount}
+            </if>
+            <if test="dto.seckillLimit != null">
+                and seckill_limit = #{dto.seckillLimit}
+            </if>
+            <if test="dto.seckillSort != null">
+                and seckill_sort = #{dto.seckillSort}
+            </if>
+        </where>
+    </select>
+
+</mapper>

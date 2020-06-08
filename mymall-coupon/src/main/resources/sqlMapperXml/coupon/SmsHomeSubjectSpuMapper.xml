@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.coupon.mapper.SmsHomeSubjectSpuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.coupon.entity.SmsHomeSubjectSpu">
+    <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="subject_id" property="subjectId" />
+        <result column="spu_id" property="spuId" />
+        <result column="sort" property="sort" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            sms_home_subject_spu
+        <where>
+            <if test="dto.name != null">
+                name = #{dto.name}
+            </if>
+            <if test="dto.subjectId != null">
+                and subject_id = #{dto.subjectId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from sms_home_subject_spu
+        <where>
+            <if test="dto.name != null">
+                name = #{dto.name}
+            </if>
+            <if test="dto.subjectId != null">
+                and subject_id = #{dto.subjectId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from sms_home_subject_spu
+        <where>
+            <if test="dto.name != null">
+                name = #{dto.name}
+            </if>
+            <if test="dto.subjectId != null">
+                and subject_id = #{dto.subjectId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from sms_home_subject_spu
+        <where>
+            <if test="dto.name != null">
+                name = #{dto.name}
+            </if>
+            <if test="dto.subjectId != null">
+                and subject_id = #{dto.subjectId}
+            </if>
+            <if test="dto.spuId != null">
+                and spu_id = #{dto.spuId}
+            </if>
+            <if test="dto.sort != null">
+                and sort = #{dto.sort}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.ware.mapper.WareOrderTaskDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.ware.entity.WareOrderTaskDetail">
+    <result column="id" property="id" />
+        <result column="sku_id" property="skuId" />
+        <result column="sku_name" property="skuName" />
+        <result column="sku_num" property="skuNum" />
+        <result column="task_id" property="taskId" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            wms_ware_order_task_detail
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuNum != null">
+                and sku_num = #{dto.skuNum}
+            </if>
+            <if test="dto.taskId != null">
+                and task_id = #{dto.taskId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from wms_ware_order_task_detail
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuNum != null">
+                and sku_num = #{dto.skuNum}
+            </if>
+            <if test="dto.taskId != null">
+                and task_id = #{dto.taskId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from wms_ware_order_task_detail
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuNum != null">
+                and sku_num = #{dto.skuNum}
+            </if>
+            <if test="dto.taskId != null">
+                and task_id = #{dto.taskId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from wms_ware_order_task_detail
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuNum != null">
+                and sku_num = #{dto.skuNum}
+            </if>
+            <if test="dto.taskId != null">
+                and task_id = #{dto.taskId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

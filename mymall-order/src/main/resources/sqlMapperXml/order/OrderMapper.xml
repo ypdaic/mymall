@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.order.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.order.entity.Order">
+    <result column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="order_sn" property="orderSn" />
+        <result column="coupon_id" property="couponId" />
+        <result column="create_time" property="createTime" />
+        <result column="member_username" property="memberUsername" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="pay_amount" property="payAmount" />
+        <result column="freight_amount" property="freightAmount" />
+        <result column="promotion_amount" property="promotionAmount" />
+        <result column="integration_amount" property="integrationAmount" />
+        <result column="coupon_amount" property="couponAmount" />
+        <result column="discount_amount" property="discountAmount" />
+        <result column="pay_type" property="payType" />
+        <result column="source_type" property="sourceType" />
+        <result column="status" property="status" />
+        <result column="delivery_company" property="deliveryCompany" />
+        <result column="delivery_sn" property="deliverySn" />
+        <result column="auto_confirm_day" property="autoConfirmDay" />
+        <result column="integration" property="integration" />
+        <result column="growth" property="growth" />
+        <result column="bill_type" property="billType" />
+        <result column="bill_header" property="billHeader" />
+        <result column="bill_content" property="billContent" />
+        <result column="bill_receiver_phone" property="billReceiverPhone" />
+        <result column="bill_receiver_email" property="billReceiverEmail" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_phone" property="receiverPhone" />
+        <result column="receiver_post_code" property="receiverPostCode" />
+        <result column="receiver_province" property="receiverProvince" />
+        <result column="receiver_city" property="receiverCity" />
+        <result column="receiver_region" property="receiverRegion" />
+        <result column="receiver_detail_address" property="receiverDetailAddress" />
+        <result column="note" property="note" />
+        <result column="confirm_status" property="confirmStatus" />
+        <result column="delete_status" property="deleteStatus" />
+        <result column="use_integration" property="useIntegration" />
+        <result column="payment_time" property="paymentTime" />
+        <result column="delivery_time" property="deliveryTime" />
+        <result column="receive_time" property="receiveTime" />
+        <result column="comment_time" property="commentTime" />
+        <result column="modify_time" property="modifyTime" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            oms_order
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.couponId != null">
+                and coupon_id = #{dto.couponId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.totalAmount != null">
+                and total_amount = #{dto.totalAmount}
+            </if>
+            <if test="dto.payAmount != null">
+                and pay_amount = #{dto.payAmount}
+            </if>
+            <if test="dto.freightAmount != null">
+                and freight_amount = #{dto.freightAmount}
+            </if>
+            <if test="dto.promotionAmount != null">
+                and promotion_amount = #{dto.promotionAmount}
+            </if>
+            <if test="dto.integrationAmount != null">
+                and integration_amount = #{dto.integrationAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.discountAmount != null">
+                and discount_amount = #{dto.discountAmount}
+            </if>
+            <if test="dto.payType != null">
+                and pay_type = #{dto.payType}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.deliveryCompany != null">
+                and delivery_company = #{dto.deliveryCompany}
+            </if>
+            <if test="dto.deliverySn != null">
+                and delivery_sn = #{dto.deliverySn}
+            </if>
+            <if test="dto.autoConfirmDay != null">
+                and auto_confirm_day = #{dto.autoConfirmDay}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.billType != null">
+                and bill_type = #{dto.billType}
+            </if>
+            <if test="dto.billHeader != null">
+                and bill_header = #{dto.billHeader}
+            </if>
+            <if test="dto.billContent != null">
+                and bill_content = #{dto.billContent}
+            </if>
+            <if test="dto.billReceiverPhone != null">
+                and bill_receiver_phone = #{dto.billReceiverPhone}
+            </if>
+            <if test="dto.billReceiverEmail != null">
+                and bill_receiver_email = #{dto.billReceiverEmail}
+            </if>
+            <if test="dto.receiverName != null">
+                and receiver_name = #{dto.receiverName}
+            </if>
+            <if test="dto.receiverPhone != null">
+                and receiver_phone = #{dto.receiverPhone}
+            </if>
+            <if test="dto.receiverPostCode != null">
+                and receiver_post_code = #{dto.receiverPostCode}
+            </if>
+            <if test="dto.receiverProvince != null">
+                and receiver_province = #{dto.receiverProvince}
+            </if>
+            <if test="dto.receiverCity != null">
+                and receiver_city = #{dto.receiverCity}
+            </if>
+            <if test="dto.receiverRegion != null">
+                and receiver_region = #{dto.receiverRegion}
+            </if>
+            <if test="dto.receiverDetailAddress != null">
+                and receiver_detail_address = #{dto.receiverDetailAddress}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.confirmStatus != null">
+                and confirm_status = #{dto.confirmStatus}
+            </if>
+            <if test="dto.deleteStatus != null">
+                and delete_status = #{dto.deleteStatus}
+            </if>
+            <if test="dto.useIntegration != null">
+                and use_integration = #{dto.useIntegration}
+            </if>
+            <if test="dto.paymentTime != null">
+                and payment_time = #{dto.paymentTime}
+            </if>
+            <if test="dto.deliveryTime != null">
+                and delivery_time = #{dto.deliveryTime}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.commentTime != null">
+                and comment_time = #{dto.commentTime}
+            </if>
+            <if test="dto.modifyTime != null">
+                and modify_time = #{dto.modifyTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from oms_order
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.couponId != null">
+                and coupon_id = #{dto.couponId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.totalAmount != null">
+                and total_amount = #{dto.totalAmount}
+            </if>
+            <if test="dto.payAmount != null">
+                and pay_amount = #{dto.payAmount}
+            </if>
+            <if test="dto.freightAmount != null">
+                and freight_amount = #{dto.freightAmount}
+            </if>
+            <if test="dto.promotionAmount != null">
+                and promotion_amount = #{dto.promotionAmount}
+            </if>
+            <if test="dto.integrationAmount != null">
+                and integration_amount = #{dto.integrationAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.discountAmount != null">
+                and discount_amount = #{dto.discountAmount}
+            </if>
+            <if test="dto.payType != null">
+                and pay_type = #{dto.payType}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.deliveryCompany != null">
+                and delivery_company = #{dto.deliveryCompany}
+            </if>
+            <if test="dto.deliverySn != null">
+                and delivery_sn = #{dto.deliverySn}
+            </if>
+            <if test="dto.autoConfirmDay != null">
+                and auto_confirm_day = #{dto.autoConfirmDay}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.billType != null">
+                and bill_type = #{dto.billType}
+            </if>
+            <if test="dto.billHeader != null">
+                and bill_header = #{dto.billHeader}
+            </if>
+            <if test="dto.billContent != null">
+                and bill_content = #{dto.billContent}
+            </if>
+            <if test="dto.billReceiverPhone != null">
+                and bill_receiver_phone = #{dto.billReceiverPhone}
+            </if>
+            <if test="dto.billReceiverEmail != null">
+                and bill_receiver_email = #{dto.billReceiverEmail}
+            </if>
+            <if test="dto.receiverName != null">
+                and receiver_name = #{dto.receiverName}
+            </if>
+            <if test="dto.receiverPhone != null">
+                and receiver_phone = #{dto.receiverPhone}
+            </if>
+            <if test="dto.receiverPostCode != null">
+                and receiver_post_code = #{dto.receiverPostCode}
+            </if>
+            <if test="dto.receiverProvince != null">
+                and receiver_province = #{dto.receiverProvince}
+            </if>
+            <if test="dto.receiverCity != null">
+                and receiver_city = #{dto.receiverCity}
+            </if>
+            <if test="dto.receiverRegion != null">
+                and receiver_region = #{dto.receiverRegion}
+            </if>
+            <if test="dto.receiverDetailAddress != null">
+                and receiver_detail_address = #{dto.receiverDetailAddress}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.confirmStatus != null">
+                and confirm_status = #{dto.confirmStatus}
+            </if>
+            <if test="dto.deleteStatus != null">
+                and delete_status = #{dto.deleteStatus}
+            </if>
+            <if test="dto.useIntegration != null">
+                and use_integration = #{dto.useIntegration}
+            </if>
+            <if test="dto.paymentTime != null">
+                and payment_time = #{dto.paymentTime}
+            </if>
+            <if test="dto.deliveryTime != null">
+                and delivery_time = #{dto.deliveryTime}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.commentTime != null">
+                and comment_time = #{dto.commentTime}
+            </if>
+            <if test="dto.modifyTime != null">
+                and modify_time = #{dto.modifyTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from oms_order
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.couponId != null">
+                and coupon_id = #{dto.couponId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.totalAmount != null">
+                and total_amount = #{dto.totalAmount}
+            </if>
+            <if test="dto.payAmount != null">
+                and pay_amount = #{dto.payAmount}
+            </if>
+            <if test="dto.freightAmount != null">
+                and freight_amount = #{dto.freightAmount}
+            </if>
+            <if test="dto.promotionAmount != null">
+                and promotion_amount = #{dto.promotionAmount}
+            </if>
+            <if test="dto.integrationAmount != null">
+                and integration_amount = #{dto.integrationAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.discountAmount != null">
+                and discount_amount = #{dto.discountAmount}
+            </if>
+            <if test="dto.payType != null">
+                and pay_type = #{dto.payType}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.deliveryCompany != null">
+                and delivery_company = #{dto.deliveryCompany}
+            </if>
+            <if test="dto.deliverySn != null">
+                and delivery_sn = #{dto.deliverySn}
+            </if>
+            <if test="dto.autoConfirmDay != null">
+                and auto_confirm_day = #{dto.autoConfirmDay}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.billType != null">
+                and bill_type = #{dto.billType}
+            </if>
+            <if test="dto.billHeader != null">
+                and bill_header = #{dto.billHeader}
+            </if>
+            <if test="dto.billContent != null">
+                and bill_content = #{dto.billContent}
+            </if>
+            <if test="dto.billReceiverPhone != null">
+                and bill_receiver_phone = #{dto.billReceiverPhone}
+            </if>
+            <if test="dto.billReceiverEmail != null">
+                and bill_receiver_email = #{dto.billReceiverEmail}
+            </if>
+            <if test="dto.receiverName != null">
+                and receiver_name = #{dto.receiverName}
+            </if>
+            <if test="dto.receiverPhone != null">
+                and receiver_phone = #{dto.receiverPhone}
+            </if>
+            <if test="dto.receiverPostCode != null">
+                and receiver_post_code = #{dto.receiverPostCode}
+            </if>
+            <if test="dto.receiverProvince != null">
+                and receiver_province = #{dto.receiverProvince}
+            </if>
+            <if test="dto.receiverCity != null">
+                and receiver_city = #{dto.receiverCity}
+            </if>
+            <if test="dto.receiverRegion != null">
+                and receiver_region = #{dto.receiverRegion}
+            </if>
+            <if test="dto.receiverDetailAddress != null">
+                and receiver_detail_address = #{dto.receiverDetailAddress}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.confirmStatus != null">
+                and confirm_status = #{dto.confirmStatus}
+            </if>
+            <if test="dto.deleteStatus != null">
+                and delete_status = #{dto.deleteStatus}
+            </if>
+            <if test="dto.useIntegration != null">
+                and use_integration = #{dto.useIntegration}
+            </if>
+            <if test="dto.paymentTime != null">
+                and payment_time = #{dto.paymentTime}
+            </if>
+            <if test="dto.deliveryTime != null">
+                and delivery_time = #{dto.deliveryTime}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.commentTime != null">
+                and comment_time = #{dto.commentTime}
+            </if>
+            <if test="dto.modifyTime != null">
+                and modify_time = #{dto.modifyTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from oms_order
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.couponId != null">
+                and coupon_id = #{dto.couponId}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.totalAmount != null">
+                and total_amount = #{dto.totalAmount}
+            </if>
+            <if test="dto.payAmount != null">
+                and pay_amount = #{dto.payAmount}
+            </if>
+            <if test="dto.freightAmount != null">
+                and freight_amount = #{dto.freightAmount}
+            </if>
+            <if test="dto.promotionAmount != null">
+                and promotion_amount = #{dto.promotionAmount}
+            </if>
+            <if test="dto.integrationAmount != null">
+                and integration_amount = #{dto.integrationAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.discountAmount != null">
+                and discount_amount = #{dto.discountAmount}
+            </if>
+            <if test="dto.payType != null">
+                and pay_type = #{dto.payType}
+            </if>
+            <if test="dto.sourceType != null">
+                and source_type = #{dto.sourceType}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.deliveryCompany != null">
+                and delivery_company = #{dto.deliveryCompany}
+            </if>
+            <if test="dto.deliverySn != null">
+                and delivery_sn = #{dto.deliverySn}
+            </if>
+            <if test="dto.autoConfirmDay != null">
+                and auto_confirm_day = #{dto.autoConfirmDay}
+            </if>
+            <if test="dto.integration != null">
+                and integration = #{dto.integration}
+            </if>
+            <if test="dto.growth != null">
+                and growth = #{dto.growth}
+            </if>
+            <if test="dto.billType != null">
+                and bill_type = #{dto.billType}
+            </if>
+            <if test="dto.billHeader != null">
+                and bill_header = #{dto.billHeader}
+            </if>
+            <if test="dto.billContent != null">
+                and bill_content = #{dto.billContent}
+            </if>
+            <if test="dto.billReceiverPhone != null">
+                and bill_receiver_phone = #{dto.billReceiverPhone}
+            </if>
+            <if test="dto.billReceiverEmail != null">
+                and bill_receiver_email = #{dto.billReceiverEmail}
+            </if>
+            <if test="dto.receiverName != null">
+                and receiver_name = #{dto.receiverName}
+            </if>
+            <if test="dto.receiverPhone != null">
+                and receiver_phone = #{dto.receiverPhone}
+            </if>
+            <if test="dto.receiverPostCode != null">
+                and receiver_post_code = #{dto.receiverPostCode}
+            </if>
+            <if test="dto.receiverProvince != null">
+                and receiver_province = #{dto.receiverProvince}
+            </if>
+            <if test="dto.receiverCity != null">
+                and receiver_city = #{dto.receiverCity}
+            </if>
+            <if test="dto.receiverRegion != null">
+                and receiver_region = #{dto.receiverRegion}
+            </if>
+            <if test="dto.receiverDetailAddress != null">
+                and receiver_detail_address = #{dto.receiverDetailAddress}
+            </if>
+            <if test="dto.note != null">
+                and note = #{dto.note}
+            </if>
+            <if test="dto.confirmStatus != null">
+                and confirm_status = #{dto.confirmStatus}
+            </if>
+            <if test="dto.deleteStatus != null">
+                and delete_status = #{dto.deleteStatus}
+            </if>
+            <if test="dto.useIntegration != null">
+                and use_integration = #{dto.useIntegration}
+            </if>
+            <if test="dto.paymentTime != null">
+                and payment_time = #{dto.paymentTime}
+            </if>
+            <if test="dto.deliveryTime != null">
+                and delivery_time = #{dto.deliveryTime}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.commentTime != null">
+                and comment_time = #{dto.commentTime}
+            </if>
+            <if test="dto.modifyTime != null">
+                and modify_time = #{dto.modifyTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

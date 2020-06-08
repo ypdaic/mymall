@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.order.mapper.OrderReturnApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.order.entity.OrderReturnApply">
+    <result column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="sku_id" property="skuId" />
+        <result column="order_sn" property="orderSn" />
+        <result column="create_time" property="createTime" />
+        <result column="member_username" property="memberUsername" />
+        <result column="return_amount" property="returnAmount" />
+        <result column="return_name" property="returnName" />
+        <result column="return_phone" property="returnPhone" />
+        <result column="status" property="status" />
+        <result column="handle_time" property="handleTime" />
+        <result column="sku_img" property="skuImg" />
+        <result column="sku_name" property="skuName" />
+        <result column="sku_brand" property="skuBrand" />
+        <result column="sku_attrs_vals" property="skuAttrsVals" />
+        <result column="sku_count" property="skuCount" />
+        <result column="sku_price" property="skuPrice" />
+        <result column="sku_real_price" property="skuRealPrice" />
+        <result column="reason" property="reason" />
+        <result column="description述" property="description述" />
+        <result column="desc_pics" property="descPics" />
+        <result column="handle_note" property="handleNote" />
+        <result column="handle_man" property="handleMan" />
+        <result column="receive_man" property="receiveMan" />
+        <result column="receive_time" property="receiveTime" />
+        <result column="receive_note" property="receiveNote" />
+        <result column="receive_phone" property="receivePhone" />
+        <result column="company_address" property="companyAddress" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            oms_order_return_apply
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.returnAmount != null">
+                and return_amount = #{dto.returnAmount}
+            </if>
+            <if test="dto.returnName != null">
+                and return_name = #{dto.returnName}
+            </if>
+            <if test="dto.returnPhone != null">
+                and return_phone = #{dto.returnPhone}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.handleTime != null">
+                and handle_time = #{dto.handleTime}
+            </if>
+            <if test="dto.skuImg != null">
+                and sku_img = #{dto.skuImg}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuBrand != null">
+                and sku_brand = #{dto.skuBrand}
+            </if>
+            <if test="dto.skuAttrsVals != null">
+                and sku_attrs_vals = #{dto.skuAttrsVals}
+            </if>
+            <if test="dto.skuCount != null">
+                and sku_count = #{dto.skuCount}
+            </if>
+            <if test="dto.skuPrice != null">
+                and sku_price = #{dto.skuPrice}
+            </if>
+            <if test="dto.skuRealPrice != null">
+                and sku_real_price = #{dto.skuRealPrice}
+            </if>
+            <if test="dto.reason != null">
+                and reason = #{dto.reason}
+            </if>
+            <if test="dto.description述 != null">
+                and description述 = #{dto.description述}
+            </if>
+            <if test="dto.descPics != null">
+                and desc_pics = #{dto.descPics}
+            </if>
+            <if test="dto.handleNote != null">
+                and handle_note = #{dto.handleNote}
+            </if>
+            <if test="dto.handleMan != null">
+                and handle_man = #{dto.handleMan}
+            </if>
+            <if test="dto.receiveMan != null">
+                and receive_man = #{dto.receiveMan}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.receiveNote != null">
+                and receive_note = #{dto.receiveNote}
+            </if>
+            <if test="dto.receivePhone != null">
+                and receive_phone = #{dto.receivePhone}
+            </if>
+            <if test="dto.companyAddress != null">
+                and company_address = #{dto.companyAddress}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from oms_order_return_apply
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.returnAmount != null">
+                and return_amount = #{dto.returnAmount}
+            </if>
+            <if test="dto.returnName != null">
+                and return_name = #{dto.returnName}
+            </if>
+            <if test="dto.returnPhone != null">
+                and return_phone = #{dto.returnPhone}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.handleTime != null">
+                and handle_time = #{dto.handleTime}
+            </if>
+            <if test="dto.skuImg != null">
+                and sku_img = #{dto.skuImg}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuBrand != null">
+                and sku_brand = #{dto.skuBrand}
+            </if>
+            <if test="dto.skuAttrsVals != null">
+                and sku_attrs_vals = #{dto.skuAttrsVals}
+            </if>
+            <if test="dto.skuCount != null">
+                and sku_count = #{dto.skuCount}
+            </if>
+            <if test="dto.skuPrice != null">
+                and sku_price = #{dto.skuPrice}
+            </if>
+            <if test="dto.skuRealPrice != null">
+                and sku_real_price = #{dto.skuRealPrice}
+            </if>
+            <if test="dto.reason != null">
+                and reason = #{dto.reason}
+            </if>
+            <if test="dto.description述 != null">
+                and description述 = #{dto.description述}
+            </if>
+            <if test="dto.descPics != null">
+                and desc_pics = #{dto.descPics}
+            </if>
+            <if test="dto.handleNote != null">
+                and handle_note = #{dto.handleNote}
+            </if>
+            <if test="dto.handleMan != null">
+                and handle_man = #{dto.handleMan}
+            </if>
+            <if test="dto.receiveMan != null">
+                and receive_man = #{dto.receiveMan}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.receiveNote != null">
+                and receive_note = #{dto.receiveNote}
+            </if>
+            <if test="dto.receivePhone != null">
+                and receive_phone = #{dto.receivePhone}
+            </if>
+            <if test="dto.companyAddress != null">
+                and company_address = #{dto.companyAddress}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from oms_order_return_apply
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.returnAmount != null">
+                and return_amount = #{dto.returnAmount}
+            </if>
+            <if test="dto.returnName != null">
+                and return_name = #{dto.returnName}
+            </if>
+            <if test="dto.returnPhone != null">
+                and return_phone = #{dto.returnPhone}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.handleTime != null">
+                and handle_time = #{dto.handleTime}
+            </if>
+            <if test="dto.skuImg != null">
+                and sku_img = #{dto.skuImg}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuBrand != null">
+                and sku_brand = #{dto.skuBrand}
+            </if>
+            <if test="dto.skuAttrsVals != null">
+                and sku_attrs_vals = #{dto.skuAttrsVals}
+            </if>
+            <if test="dto.skuCount != null">
+                and sku_count = #{dto.skuCount}
+            </if>
+            <if test="dto.skuPrice != null">
+                and sku_price = #{dto.skuPrice}
+            </if>
+            <if test="dto.skuRealPrice != null">
+                and sku_real_price = #{dto.skuRealPrice}
+            </if>
+            <if test="dto.reason != null">
+                and reason = #{dto.reason}
+            </if>
+            <if test="dto.description述 != null">
+                and description述 = #{dto.description述}
+            </if>
+            <if test="dto.descPics != null">
+                and desc_pics = #{dto.descPics}
+            </if>
+            <if test="dto.handleNote != null">
+                and handle_note = #{dto.handleNote}
+            </if>
+            <if test="dto.handleMan != null">
+                and handle_man = #{dto.handleMan}
+            </if>
+            <if test="dto.receiveMan != null">
+                and receive_man = #{dto.receiveMan}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.receiveNote != null">
+                and receive_note = #{dto.receiveNote}
+            </if>
+            <if test="dto.receivePhone != null">
+                and receive_phone = #{dto.receivePhone}
+            </if>
+            <if test="dto.companyAddress != null">
+                and company_address = #{dto.companyAddress}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from oms_order_return_apply
+        <where>
+            <if test="dto.orderId != null">
+                order_id = #{dto.orderId}
+            </if>
+            <if test="dto.skuId != null">
+                and sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.orderSn != null">
+                and order_sn = #{dto.orderSn}
+            </if>
+            <if test="dto.createTime != null">
+                and create_time = #{dto.createTime}
+            </if>
+            <if test="dto.memberUsername != null">
+                and member_username = #{dto.memberUsername}
+            </if>
+            <if test="dto.returnAmount != null">
+                and return_amount = #{dto.returnAmount}
+            </if>
+            <if test="dto.returnName != null">
+                and return_name = #{dto.returnName}
+            </if>
+            <if test="dto.returnPhone != null">
+                and return_phone = #{dto.returnPhone}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.handleTime != null">
+                and handle_time = #{dto.handleTime}
+            </if>
+            <if test="dto.skuImg != null">
+                and sku_img = #{dto.skuImg}
+            </if>
+            <if test="dto.skuName != null">
+                and sku_name = #{dto.skuName}
+            </if>
+            <if test="dto.skuBrand != null">
+                and sku_brand = #{dto.skuBrand}
+            </if>
+            <if test="dto.skuAttrsVals != null">
+                and sku_attrs_vals = #{dto.skuAttrsVals}
+            </if>
+            <if test="dto.skuCount != null">
+                and sku_count = #{dto.skuCount}
+            </if>
+            <if test="dto.skuPrice != null">
+                and sku_price = #{dto.skuPrice}
+            </if>
+            <if test="dto.skuRealPrice != null">
+                and sku_real_price = #{dto.skuRealPrice}
+            </if>
+            <if test="dto.reason != null">
+                and reason = #{dto.reason}
+            </if>
+            <if test="dto.description述 != null">
+                and description述 = #{dto.description述}
+            </if>
+            <if test="dto.descPics != null">
+                and desc_pics = #{dto.descPics}
+            </if>
+            <if test="dto.handleNote != null">
+                and handle_note = #{dto.handleNote}
+            </if>
+            <if test="dto.handleMan != null">
+                and handle_man = #{dto.handleMan}
+            </if>
+            <if test="dto.receiveMan != null">
+                and receive_man = #{dto.receiveMan}
+            </if>
+            <if test="dto.receiveTime != null">
+                and receive_time = #{dto.receiveTime}
+            </if>
+            <if test="dto.receiveNote != null">
+                and receive_note = #{dto.receiveNote}
+            </if>
+            <if test="dto.receivePhone != null">
+                and receive_phone = #{dto.receivePhone}
+            </if>
+            <if test="dto.companyAddress != null">
+                and company_address = #{dto.companyAddress}
+            </if>
+        </where>
+    </select>
+
+</mapper>

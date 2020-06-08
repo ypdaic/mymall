@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.coupon.mapper.MemberPriceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.coupon.entity.MemberPrice">
+    <result column="id" property="id" />
+        <result column="sku_id" property="skuId" />
+        <result column="member_level_id" property="memberLevelId" />
+        <result column="member_level_name" property="memberLevelName" />
+        <result column="member_price" property="memberPrice" />
+        <result column="add_other" property="addOther" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            sms_member_price
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.memberLevelId != null">
+                and member_level_id = #{dto.memberLevelId}
+            </if>
+            <if test="dto.memberLevelName != null">
+                and member_level_name = #{dto.memberLevelName}
+            </if>
+            <if test="dto.memberPrice != null">
+                and member_price = #{dto.memberPrice}
+            </if>
+            <if test="dto.addOther != null">
+                and add_other = #{dto.addOther}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from sms_member_price
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.memberLevelId != null">
+                and member_level_id = #{dto.memberLevelId}
+            </if>
+            <if test="dto.memberLevelName != null">
+                and member_level_name = #{dto.memberLevelName}
+            </if>
+            <if test="dto.memberPrice != null">
+                and member_price = #{dto.memberPrice}
+            </if>
+            <if test="dto.addOther != null">
+                and add_other = #{dto.addOther}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from sms_member_price
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.memberLevelId != null">
+                and member_level_id = #{dto.memberLevelId}
+            </if>
+            <if test="dto.memberLevelName != null">
+                and member_level_name = #{dto.memberLevelName}
+            </if>
+            <if test="dto.memberPrice != null">
+                and member_price = #{dto.memberPrice}
+            </if>
+            <if test="dto.addOther != null">
+                and add_other = #{dto.addOther}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from sms_member_price
+        <where>
+            <if test="dto.skuId != null">
+                sku_id = #{dto.skuId}
+            </if>
+            <if test="dto.memberLevelId != null">
+                and member_level_id = #{dto.memberLevelId}
+            </if>
+            <if test="dto.memberLevelName != null">
+                and member_level_name = #{dto.memberLevelName}
+            </if>
+            <if test="dto.memberPrice != null">
+                and member_price = #{dto.memberPrice}
+            </if>
+            <if test="dto.addOther != null">
+                and add_other = #{dto.addOther}
+            </if>
+        </where>
+    </select>
+
+</mapper>
