@@ -24,6 +24,7 @@
         <module>renren-fast</module>
         <module>mymall-common</module>
         <module>code-generator</module>
+        <module>mymall-gateway</module>
     </modules>
 
     <properties>
@@ -168,6 +169,7 @@
                 <order.port>8083</order.port>
                 <member.port>8084</member.port>
                 <coupon.port>8085</coupon.port>
+                <gateway.port>8086</gateway.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -189,6 +191,7 @@
                 <order.port>8083</order.port>
                 <member.port>8084</member.port>
                 <coupon.port>8085</coupon.port>
+                <gateway.port>8086</gateway.port>
             </properties>
         </profile>
         <profile>
@@ -203,6 +206,7 @@
                 <order.port>8083</order.port>
                 <member.port>8084</member.port>
                 <coupon.port>8085</coupon.port>
+                <gateway.port>8086</gateway.port>
             </properties>
         </profile>
     </profiles>

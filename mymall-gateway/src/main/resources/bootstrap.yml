@@ -2,4 +2,4 @@ spring:
   profiles:
     active: @env@
   application:
-    name: mymall-product #设置应用名称
+    name: mymall-gateway #设置应用名称

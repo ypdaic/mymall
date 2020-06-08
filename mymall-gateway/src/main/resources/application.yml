@@ -1,0 +1,26 @@
+server:
+  port: @gateway.port@
+  servlet:
+    context-path: /
+
+spring:
+ main:
+   allow-bean-definition-overriding: true
+ cloud:
+   gateway:
+     discovery:
+       locator:
+         enabled: true
+     routes:
+       - id: coupon
+         uri: lb://mymall-member
+         predicates:
+           - Path=/member
+
+
+
+info:
+  app.name: @project.name@
+  company.name: daiyanping
+  build.artifactId: @project.artifactId@
+  build.modelVersion: @project.modelVersion@

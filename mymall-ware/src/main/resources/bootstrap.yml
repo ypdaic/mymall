@@ -1,3 +1,5 @@
 spring:
+  profiles:
+    active: @env@
   application:
-    name: @project.name@ #设置应用名称
+    name: mymall-ware #设置应用名称
