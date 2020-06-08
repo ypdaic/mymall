@@ -31,7 +31,7 @@ info:
   build.modelVersion: @project.modelVersion@
 
 # 配置ribbon 饥饿加载
-ribbon:
-  eager-load:
-    enabled: true
-    clients: springcloud-provider
+#ribbon:
+#  eager-load:
+#    enabled: true
+#    clients: springcloud-provider
