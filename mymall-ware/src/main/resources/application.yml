@@ -13,7 +13,7 @@ spring:
    allow-bean-definition-overriding: true
 
 mybatis-plus:
-  mapperLocations: classpath:/sqlMapperXml/**/*.xml
+  mapper-locations: classpath:/sqlMapperXml/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false

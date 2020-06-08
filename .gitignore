@@ -22,6 +22,7 @@ target/
 **/mvnw.cmd
 .mvn
 logs/
+.DS_Store
 
 ### NetBeans ###
 /nbproject/private/
