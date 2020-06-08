@@ -8,14 +8,36 @@ spring:
    allow-bean-definition-overriding: true
  cloud:
    gateway:
+     #  跨域配置
+     globalcors:
+       corsConfigurations:
+         '[/**]':
+           allowedOrigins: "*"
+           allowedHeaders: "*"
+           allowCredentials: true
+           allowedMethods: "*"
+     # 开启自动发现
      discovery:
        locator:
          enabled: true
+     # 注意优先级问题，配置最前面的最先匹配
      routes:
-       - id: coupon
-         uri: lb://mymall-member
+       - id: product
+         uri: lb://mymall-product
          predicates:
-           - Path=/member
+           - Path=/api/product/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: admin
+         uri: lb://renren-fast
+         predicates:
+           - Path=/api/**  #前端项目直接先走renren-fast
+         filters:
+           - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment} #路径重写
+
+
+
 
 
 

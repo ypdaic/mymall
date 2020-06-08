@@ -158,5 +158,15 @@ public class CategoryController extends BaseController {
         return ResultUtil.failure(40001, "商品三级分类名称已存在！");
     }
 
+    /**
+     * 查出所有分类以及子分类，以树形结构组装起来
+     */
+    @RequestMapping("/list/tree")
+    public Result<List<Category>> list(){
+
+        List<Category> entities = categoryService.listWithTree();
+        return ResultUtil.success(entities);
+    }
+
 }
 

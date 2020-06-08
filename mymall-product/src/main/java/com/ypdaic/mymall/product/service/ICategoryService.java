@@ -62,4 +62,10 @@ public interface ICategoryService extends IService<Category> {
      * @return
      */
     List<Category> queryAll(CategoryDto categoryDto);
+
+    /**
+     * 查询所有分类
+     * @return
+     */
+    List<Category> listWithTree();
 }

@@ -1,12 +1,16 @@
 package com.ypdaic.mymall.product.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  *
@@ -20,7 +24,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pms_category")
-public class Category extends SuperEntity {
+public class Category extends Model {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,6 +73,12 @@ public class Category extends SuperEntity {
      * 商品数量
      */
     private Integer productCount;
+
+    /**
+     * 子分类
+     */
+    @TableField(exist = false)
+    private List<Category> children;
 
 
 }
