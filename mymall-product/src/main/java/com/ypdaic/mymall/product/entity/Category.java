@@ -1,9 +1,6 @@
 package com.ypdaic.mymall.product.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
@@ -52,6 +49,7 @@ public class Category extends Model {
     /**
      * 是否显示[0-不显示，1显示]
      */
+    @TableLogic(value = "1", delval = "0")
     private Integer showStatus;
 
     /**

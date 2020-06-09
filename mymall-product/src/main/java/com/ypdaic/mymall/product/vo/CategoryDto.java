@@ -3,6 +3,8 @@ package com.ypdaic.mymall.product.vo;
 import lombok.Data;
 import com.ypdaic.mymall.common.base.BaseDto;
 
+import java.util.List;
+
 /**
  *
  * 商品三级分类 DTO对象
@@ -68,5 +70,10 @@ public class CategoryDto extends BaseDto {
      * 是否新增
      */
 	private Boolean isAdd;
+
+	/**
+	 * id列表
+	 */
+	private List<Long> ids;
 
 }

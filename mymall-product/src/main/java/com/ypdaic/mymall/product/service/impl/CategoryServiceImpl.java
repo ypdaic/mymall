@@ -89,13 +89,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Category delete(CategoryDto categoryDto) {
-        Category category = baseMapper.selectById(categoryDto.getId());
-        if (category == null) {
-            return null;
-        }
-        category.deleteById();
-
-        return category;
+//        Category category = baseMapper.selectById(categoryDto.getId());
+//        if (category == null) {
+//            return null;
+//        }
+//        category.deleteById();
+        baseMapper.deleteBatchIds(categoryDto.getIds());
+        return null;
     }
 
     /**

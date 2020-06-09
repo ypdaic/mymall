@@ -32,7 +32,13 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
-
+    cloud:
+        nacos:
+            discovery:
+                server-addr: 192.168.0.1:8848
+                service: ${spring.application.name}
+                heart-beat-interval: 5000 #心跳间隔
+                namespace: dev
 
 ##多数据源的配置
 #dynamic:

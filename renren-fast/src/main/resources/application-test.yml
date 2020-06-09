@@ -4,8 +4,8 @@ spring:
         druid:
             driver-class-name: com.mysql.cj.jdbc.Driver
             url: jdbc:mysql://localhost:3306/renren_fast?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-            username: renren
-            password: 123456
+            username: root
+            password: test1234
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -32,6 +32,13 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+    cloud:
+        nacos:
+            discovery:
+                server-addr: 192.168.0.201:8848
+                service: ${spring.application.name}
+                heart-beat-interval: 5000 #心跳间隔
+                namespace: test
 
 
 ##多数据源的配置

@@ -15,7 +15,12 @@ spring:
            allowedOrigins: "*"
            allowedHeaders: "*"
            allowCredentials: true
-           allowedMethods: "*"
+           allowedMethods:
+             - GET
+             - POST
+             - OPTIONS
+             - PUT
+             - DELETE
      # 开启自动发现
      discovery:
        locator:
@@ -29,6 +34,34 @@ spring:
          filters:
            #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
            - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: coupon
+         uri: lb://mymall-coupon
+         predicates:
+           - Path=/api/coupon/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: member
+         uri: lb://mymall-member
+         predicates:
+           - Path=/api/member/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: order
+         uri: lb://mymall-order
+         predicates:
+           - Path=/api/order/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: ware
+           uri: lb://mymall-ware
+           predicates:
+             - Path=/api/ware/**
+           filters:
+             #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+             - StripPrefix=1 # 效果同上， 截取路径位数
        - id: admin
          uri: lb://renren-fast
          predicates:
