@@ -1,11 +1,18 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.ypdaic.mymall.product.entity.Brand;
+import com.ypdaic.mymall.product.entity.Category;
 import com.ypdaic.mymall.product.entity.CategoryBrandRelation;
+import com.ypdaic.mymall.product.mapper.BrandMapper;
 import com.ypdaic.mymall.product.mapper.CategoryBrandRelationMapper;
+import com.ypdaic.mymall.product.mapper.CategoryMapper;
+import com.ypdaic.mymall.product.service.IBrandService;
 import com.ypdaic.mymall.product.service.ICategoryBrandRelationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.product.vo.CategoryBrandRelationDto;
 import com.ypdaic.mymall.product.enums.CategoryBrandRelationExcelHeadersEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -15,6 +22,7 @@ import com.ypdaic.mymall.common.util.ExcelUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.util.JavaUtils;
@@ -30,6 +38,17 @@ import com.ypdaic.mymall.common.util.JavaUtils;
 @Service
 public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandRelationMapper, CategoryBrandRelation> implements ICategoryBrandRelationService {
 
+    @Autowired
+    BrandMapper brandDao;
+
+    @Autowired
+    CategoryMapper categoryDao;
+
+    @Autowired
+    CategoryBrandRelationMapper relationDao;
+
+    @Autowired
+    IBrandService brandService;
 
     /**
      * 新增品牌分类关联
@@ -130,6 +149,46 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
      */
     public List<CategoryBrandRelation> queryAll(CategoryBrandRelationDto categoryBrandRelationDto) {
         return baseMapper.queryAll(categoryBrandRelationDto);
+    }
+
+    @Override
+    public void updateCategory(Long catId, String name) {
+        this.baseMapper.updateCategory(catId,name);
+    }
+
+    @Override
+    public void saveDetail(CategoryBrandRelation categoryBrandRelation) {
+        Long brandId = categoryBrandRelation.getBrandId();
+        Long catelogId = categoryBrandRelation.getCatelogId();
+        //1、查询详细名字
+        Brand brandEntity = brandDao.selectById(brandId);
+        Category categoryEntity = categoryDao.selectById(catelogId);
+
+        categoryBrandRelation.setBrandName(brandEntity.getName());
+        categoryBrandRelation.setCatelogName(categoryEntity.getName());
+
+        this.save(categoryBrandRelation);
+
+    }
+
+    @Override
+    public void updateBrand(Long brandId, String name) {
+        CategoryBrandRelation relationEntity = new CategoryBrandRelation();
+        relationEntity.setBrandId(brandId);
+        relationEntity.setBrandName(name);
+        this.update(relationEntity,new UpdateWrapper<CategoryBrandRelation>().eq("brand_id",brandId));
+    }
+
+    @Override
+    public List<Brand> getBrandsByCatId(Long catId) {
+
+        List<CategoryBrandRelation> catelogId = relationDao.selectList(new QueryWrapper<CategoryBrandRelation>().eq("catelog_id", catId));
+        List<Brand> collect = catelogId.stream().map(item -> {
+            Long brandId = item.getBrandId();
+            Brand byId = brandService.getById(brandId);
+            return byId;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }

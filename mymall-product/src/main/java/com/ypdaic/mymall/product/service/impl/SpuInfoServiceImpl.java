@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.product.entity.SpuInfo;
 import com.ypdaic.mymall.product.mapper.SpuInfoMapper;
 import com.ypdaic.mymall.product.service.ISpuInfoService;
@@ -142,6 +143,21 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
      */
     public List<SpuInfo> queryAll(SpuInfoDto spuInfoDto) {
         return baseMapper.queryAll(spuInfoDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SpuInfoDesc> page = this.page(
+                new Query<SpuInfoDesc>().getPage(params),
+                new QueryWrapper<SpuInfoDesc>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public void saveSpuInfoDesc(SpuInfoDescEntity descEntity) {
+        this.baseMapper.insert(descEntity);
     }
 
 }

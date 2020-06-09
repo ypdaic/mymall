@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.product.service;
 
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.product.entity.SpuImages;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.product.vo.SpuImagesDto;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,4 +64,9 @@ public interface ISpuImagesService extends IService<SpuImages> {
      * @return
      */
     List<SpuImages> queryAll(SpuImagesDto spuImagesDto);
+
+
+    PageUtils queryPage(Map<String, Object> params);
+
+    void saveImages(Long id, List<String> images);
 }

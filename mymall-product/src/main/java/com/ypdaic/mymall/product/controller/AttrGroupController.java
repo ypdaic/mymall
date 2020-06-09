@@ -1,9 +1,16 @@
 package com.ypdaic.mymall.product.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.product.entity.Attr;
+import com.ypdaic.mymall.product.service.IAttrAttrgroupRelationService;
+import com.ypdaic.mymall.product.service.IAttrService;
+import com.ypdaic.mymall.product.service.ICategoryService;
+import com.ypdaic.mymall.product.vo.AttrAttrgroupRelationDto;
+import com.ypdaic.mymall.product.vo.AttrGroupWithAttrsDto;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.IAttrGroupService;
@@ -12,8 +19,6 @@ import com.ypdaic.mymall.product.entity.AttrGroup;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,11 +47,20 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/product/attr-group")
+@RequestMapping("/product/attrgroup")
 public class AttrGroupController extends BaseController {
 
     @Autowired
     IAttrGroupService attrGroupService;
+    @Autowired
+    ICategoryService categoryService;
+
+    @Autowired
+    IAttrService attrService;
+
+    @Autowired
+    IAttrAttrgroupRelationService relationService;
+
 
     /**
      *
@@ -156,6 +173,112 @@ public class AttrGroupController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "属性分组名称已存在！");
+    }
+
+    ///product/attrgroup/attr/relation
+    @PostMapping("/attr/relation")
+    public R addRelation(@RequestBody List<AttrAttrgroupRelationDto> vos){
+
+        relationService.saveBatch(vos);
+        return R.ok();
+    }
+
+    ///product/attrgroup/{catelogId}/withattr
+    @GetMapping("/{catelogId}/withattr")
+    public R getAttrGroupWithAttrs(@PathVariable("catelogId")Long catelogId){
+
+        //1、查出当前分类下的所有属性分组，
+        //2、查出每个属性分组的所有属性
+        List<AttrGroupWithAttrsDto> vos =  attrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return R.ok().put("data",vos);
+    }
+
+
+    ///product/attrgroup/{attrgroupId}/attr/relation
+    @GetMapping("/{attrgroupId}/attr/relation")
+    public R attrRelation(@PathVariable("attrgroupId") Long attrgroupId){
+        List<Attr> entities =  attrService.getRelationAttr(attrgroupId);
+        return R.ok().put("data",entities);
+    }
+
+    ///product/attrgroup/{attrgroupId}/noattr/relation
+    @GetMapping("/{attrgroupId}/noattr/relation")
+    public R attrNoRelation(@PathVariable("attrgroupId") Long attrgroupId,
+                            @RequestParam Map<String, Object> params){
+        PageUtils page = attrService.getNoRelationAttr(params,attrgroupId);
+        return R.ok().put("page",page);
+    }
+
+    @PostMapping("/attr/relation/delete")
+    public R deleteRelation(@RequestBody  AttrAttrgroupRelationDto[] vos){
+        attrService.deleteRelation(vos);
+        return R.ok();
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list/{catelogId}")
+    //@RequiresPermissions("product:attrgroup:list")
+    public R list(@RequestParam Map<String, Object> params,
+                  @PathVariable("catelogId") Long catelogId){
+//        PageUtils page = attrGroupService.queryPage(params);
+
+        PageUtils page = attrGroupService.queryPage(params,catelogId);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{attrGroupId}")
+    //@RequiresPermissions("product:attrgroup:info")
+    public R info(@PathVariable("attrGroupId") Long attrGroupId){
+        AttrGroup attrGroup = attrGroupService.getById(attrGroupId);
+
+        Long catelogId = attrGroup.getCatelogId();
+        Long[] path = categoryService.findCatelogPath(catelogId);
+
+        attrGroup.setCatelogPath(path);
+
+        return R.ok().put("attrGroup", attrGroup);
+    }
+
+
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("product:attrgroup:save")
+    public R save(@RequestBody AttrGroup attrGroup){
+        attrGroupService.save(attrGroup);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:attrgroup:update")
+    public R update(@RequestBody AttrGroup attrGroup){
+        attrGroupService.updateById(attrGroup);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("product:attrgroup:delete")
+    public R delete(@RequestBody Long[] attrGroupIds){
+        attrGroupService.removeByIds(Arrays.asList(attrGroupIds));
+
+        return R.ok();
     }
 
 }

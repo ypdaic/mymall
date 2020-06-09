@@ -1,11 +1,16 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.Brand;
 import com.ypdaic.mymall.product.mapper.BrandMapper;
 import com.ypdaic.mymall.product.service.IBrandService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.product.service.ICategoryBrandRelationService;
 import com.ypdaic.mymall.product.vo.BrandDto;
 import com.ypdaic.mymall.product.enums.BrandExcelHeadersEnum;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -30,6 +35,9 @@ import com.ypdaic.mymall.common.util.JavaUtils;
 @Service
 public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements IBrandService {
 
+
+    @Autowired
+    ICategoryBrandRelationService categoryBrandRelationService;
 
     /**
      * 新增品牌
@@ -137,6 +145,38 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
      */
     public List<Brand> queryAll(BrandDto brandDto) {
         return baseMapper.queryAll(brandDto);
+    }
+
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        //1、获取key
+        String key = (String) params.get("key");
+        QueryWrapper<Brand> queryWrapper = new QueryWrapper<>();
+        if(!StringUtils.isEmpty(key)){
+            queryWrapper.eq("brand_id",key).or().like("name",key);
+        }
+
+        IPage<Brand> page = this.page(
+                new Query<Brand>().getPage(params),
+                queryWrapper
+
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Transactional
+    @Override
+    public void updateDetail(Brand brand) {
+        //保证冗余字段的数据一致
+        this.updateById(brand);
+        if(!StringUtils.isEmpty(brand.getName())){
+            //同步更新其他关联表中的数据
+            categoryBrandRelationService.updateBrand(brand.getBrandId(),brand.getName());
+
+            //TODO 更新其他关联
+        }
     }
 
 }

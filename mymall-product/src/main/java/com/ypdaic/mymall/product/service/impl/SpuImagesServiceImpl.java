@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.SpuImages;
 import com.ypdaic.mymall.product.mapper.SpuImagesMapper;
 import com.ypdaic.mymall.product.service.ISpuImagesService;
@@ -15,6 +17,7 @@ import com.ypdaic.mymall.common.util.ExcelUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.util.JavaUtils;
@@ -132,6 +135,33 @@ public class SpuImagesServiceImpl extends ServiceImpl<SpuImagesMapper, SpuImages
      */
     public List<SpuImages> queryAll(SpuImagesDto spuImagesDto) {
         return baseMapper.queryAll(spuImagesDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SpuImages> page = this.page(
+                new Query<SpuImages>().getPage(params),
+                new QueryWrapper<SpuImages>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public void saveImages(Long id, List<String> images) {
+        if(images == null || images.size() == 0){
+
+        }else{
+            List<SpuImages> collect = images.stream().map(img -> {
+                SpuImages spuImagesEntity = new SpuImages();
+                spuImagesEntity.setSpuId(id);
+                spuImagesEntity.setImgUrl(img);
+
+                return spuImagesEntity;
+            }).collect(Collectors.toList());
+
+            this.saveBatch(collect);
+        }
     }
 
 }

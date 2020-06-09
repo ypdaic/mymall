@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.product.service;
 
+import com.ypdaic.mymall.product.entity.Brand;
 import com.ypdaic.mymall.product.entity.CategoryBrandRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.product.vo.CategoryBrandRelationDto;
@@ -62,4 +63,12 @@ public interface ICategoryBrandRelationService extends IService<CategoryBrandRel
      * @return
      */
     List<CategoryBrandRelation> queryAll(CategoryBrandRelationDto categoryBrandRelationDto);
+
+    void updateCategory(Long catId, String name);
+
+    void saveDetail(CategoryBrandRelation categoryBrandRelation);
+
+    void updateBrand(Long brandId, String name);
+
+    List<Brand> getBrandsByCatId(Long catId);
 }

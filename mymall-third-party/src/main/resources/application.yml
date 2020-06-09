@@ -1,0 +1,5 @@
+
+server:
+  port: @third-party.port@
+  servlet:
+    context-path: /

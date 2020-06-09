@@ -2,10 +2,12 @@ package com.ypdaic.mymall.product.service.impl;
 
 import com.ypdaic.mymall.product.entity.Category;
 import com.ypdaic.mymall.product.mapper.CategoryMapper;
+import com.ypdaic.mymall.product.service.ICategoryBrandRelationService;
 import com.ypdaic.mymall.product.service.ICategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.product.vo.CategoryDto;
 import com.ypdaic.mymall.product.enums.CategoryExcelHeadersEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ypdaic.mymall.common.util.ExcelUtil;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +34,8 @@ import com.ypdaic.mymall.common.util.JavaUtils;
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements ICategoryService {
 
+    @Autowired
+    ICategoryBrandRelationService categoryBrandRelationService;
 
     /**
      * 新增商品三级分类
@@ -167,6 +172,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         return level1Menus;
     }
 
+    @Override
+    public void updateCascade(Category category) {
+        this.updateById(category);
+        categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
+    }
+
     //递归查找所有菜单的子菜单
     private List<Category> getChildrens(Category root,List<Category> all){
 
@@ -183,4 +194,29 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         return children;
     }
+
+    //[2,25,225]
+    @Override
+    public Long[] findCatelogPath(Long catelogId) {
+        List<Long> paths = new ArrayList<>();
+        List<Long> parentPath = findParentPath(catelogId, paths);
+
+        Collections.reverse(parentPath);
+
+
+        return parentPath.toArray(new Long[parentPath.size()]);
+    }
+
+    //225,25,2
+    private List<Long> findParentPath(Long catelogId,List<Long> paths){
+        //1、收集当前节点id
+        paths.add(catelogId);
+        Category byId = this.getById(catelogId);
+        if(byId.getParentCid()!=0){
+            findParentPath(byId.getParentCid(),paths);
+        }
+        return paths;
+
+    }
+
 }

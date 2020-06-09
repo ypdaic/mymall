@@ -68,4 +68,14 @@ public interface ICategoryService extends IService<Category> {
      * @return
      */
     List<Category> listWithTree();
+
+    void updateCascade(Category category);
+
+    /**
+     * 找到catelogId的完整路径；
+     * [父/子/孙]
+     * @param catelogId
+     * @return
+     */
+    Long[] findCatelogPath(Long catelogId);
 }

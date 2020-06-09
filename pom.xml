@@ -25,6 +25,7 @@
         <module>mymall-common</module>
         <module>code-generator</module>
         <module>mymall-gateway</module>
+        <module>mymall-third-party</module>
     </modules>
 
     <properties>
@@ -170,6 +171,7 @@
                 <member.port>8084</member.port>
                 <coupon.port>8085</coupon.port>
                 <gateway.port>8086</gateway.port>
+                <third-party.port>8087</third-party.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -192,6 +194,7 @@
                 <member.port>8084</member.port>
                 <coupon.port>8085</coupon.port>
                 <gateway.port>8086</gateway.port>
+                <third-party.port>8087</third-party.port>
             </properties>
         </profile>
         <profile>
@@ -207,6 +210,7 @@
                 <member.port>8084</member.port>
                 <coupon.port>8085</coupon.port>
                 <gateway.port>8086</gateway.port>
+                <third-party.port>8087</third-party.port>
             </properties>
         </profile>
     </profiles>

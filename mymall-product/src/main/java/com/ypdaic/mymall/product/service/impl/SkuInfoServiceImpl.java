@@ -1,17 +1,22 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.SkuInfo;
 import com.ypdaic.mymall.product.mapper.SkuInfoMapper;
 import com.ypdaic.mymall.product.service.ISkuInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.product.vo.SkuInfoDto;
 import com.ypdaic.mymall.product.enums.SkuInfoExcelHeadersEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ypdaic.mymall.common.util.ExcelUtil;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -144,6 +149,78 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
      */
     public List<SkuInfo> queryAll(SkuInfoDto skuInfoDto) {
         return baseMapper.queryAll(skuInfoDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SkuInfo> page = this.page(
+                new Query<SkuInfo>().getPage(params),
+                new QueryWrapper<SkuInfo>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public void saveSkuInfo(SkuInfo skuInfoEntity) {
+        this.baseMapper.insert(skuInfoEntity);
+    }
+
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        QueryWrapper<SkuInfo> queryWrapper = new QueryWrapper<>();
+        /**
+         * key:
+         * catelogId: 0
+         * brandId: 0
+         * min: 0
+         * max: 0
+         */
+        String key = (String) params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            queryWrapper.and((wrapper)->{
+                wrapper.eq("sku_id",key).or().like("sku_name",key);
+            });
+        }
+
+        String catelogId = (String) params.get("catelogId");
+        if(!StringUtils.isEmpty(catelogId)&&!"0".equalsIgnoreCase(catelogId)){
+
+            queryWrapper.eq("catalog_id",catelogId);
+        }
+
+        String brandId = (String) params.get("brandId");
+        if(!StringUtils.isEmpty(brandId)&&!"0".equalsIgnoreCase(catelogId)){
+            queryWrapper.eq("brand_id",brandId);
+        }
+
+        String min = (String) params.get("min");
+        if(!StringUtils.isEmpty(min)){
+            queryWrapper.ge("price",min);
+        }
+
+        String max = (String) params.get("max");
+
+        if(!StringUtils.isEmpty(max)  ){
+            try{
+                BigDecimal bigDecimal = new BigDecimal(max);
+
+                if(bigDecimal.compareTo(new BigDecimal("0"))==1){
+                    queryWrapper.le("price",max);
+                }
+            }catch (Exception e){
+
+            }
+
+        }
+
+
+        IPage<SkuInfo> page = this.page(
+                new Query<SkuInfo>().getPage(params),
+                queryWrapper
+        );
+
+        return new PageUtils(page);
     }
 
 }

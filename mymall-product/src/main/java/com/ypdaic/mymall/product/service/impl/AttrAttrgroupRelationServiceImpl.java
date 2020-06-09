@@ -1,11 +1,14 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.AttrAttrgroupRelation;
 import com.ypdaic.mymall.product.mapper.AttrAttrgroupRelationMapper;
 import com.ypdaic.mymall.product.service.IAttrAttrgroupRelationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.product.vo.AttrAttrgroupRelationDto;
 import com.ypdaic.mymall.product.enums.AttrAttrgroupRelationExcelHeadersEnum;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -15,6 +18,7 @@ import com.ypdaic.mymall.common.util.ExcelUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.util.JavaUtils;
@@ -128,6 +132,26 @@ public class AttrAttrgroupRelationServiceImpl extends ServiceImpl<AttrAttrgroupR
      */
     public List<AttrAttrgroupRelation> queryAll(AttrAttrgroupRelationDto attrAttrgroupRelationDto) {
         return baseMapper.queryAll(attrAttrgroupRelationDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<AttrAttrgroupRelation> page = this.page(
+                new Query<AttrAttrgroupRelation>().getPage(params),
+                new QueryWrapper<AttrAttrgroupRelation>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public void saveBatch(List<AttrAttrgroupRelationDto> vos) {
+        List<AttrAttrgroupRelation> collect = vos.stream().map(item -> {
+            AttrAttrgroupRelation relationEntity = new AttrAttrgroupRelation();
+            BeanUtils.copyProperties(item, relationEntity);
+            return relationEntity;
+        }).collect(Collectors.toList());
+        this.saveBatch(collect);
     }
 
 }

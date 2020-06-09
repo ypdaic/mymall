@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.SpuComment;
 import com.ypdaic.mymall.product.mapper.SpuCommentMapper;
 import com.ypdaic.mymall.product.service.ISpuCommentService;
@@ -153,6 +155,16 @@ public class SpuCommentServiceImpl extends ServiceImpl<SpuCommentMapper, SpuComm
      */
     public List<SpuComment> queryAll(SpuCommentDto spuCommentDto) {
         return baseMapper.queryAll(spuCommentDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SpuComment> page = this.page(
+                new Query<SpuComment>().getPage(params),
+                new QueryWrapper<SpuComment>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

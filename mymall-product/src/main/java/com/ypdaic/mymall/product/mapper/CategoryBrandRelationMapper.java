@@ -6,6 +6,8 @@ import com.ypdaic.mymall.product.vo.CategoryBrandRelationDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.Map;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
  * @author daiyanping
  * @since 2020-06-08
  */
+@Repository
 public interface CategoryBrandRelationMapper extends BaseMapper<CategoryBrandRelation> {
 
     /**
@@ -49,4 +52,5 @@ public interface CategoryBrandRelationMapper extends BaseMapper<CategoryBrandRel
      */
     List<CategoryBrandRelation> queryAll(@Param("dto") CategoryBrandRelationDto categoryBrandRelationDto);
 
+    void updateCategory(@Param("catId") Long catId, @Param("name") String name);
 }

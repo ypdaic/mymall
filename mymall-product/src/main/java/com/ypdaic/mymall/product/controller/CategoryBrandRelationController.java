@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.product.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.product.entity.Brand;
+import com.ypdaic.mymall.product.vo.BrandDto;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.ICategoryBrandRelationService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.product.entity.CategoryBrandRelation;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,8 +26,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -39,7 +42,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/product/category-brand-relation")
+@RequestMapping("/product/categorybrandrelation")
 public class CategoryBrandRelationController extends BaseController {
 
     @Autowired
@@ -156,6 +159,100 @@ public class CategoryBrandRelationController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "品牌分类关联名称已存在！");
+    }
+
+    /**
+     * 获取当前品牌关联的所有分类列表
+     */
+    @GetMapping("/catelog/list")
+    //@RequiresPermissions("product:categorybrandrelation:list")
+    public Result cateloglist(@RequestParam("brandId")Long brandId){
+        List<CategoryBrandRelation> data = categoryBrandRelationService.list(
+                new QueryWrapper<CategoryBrandRelation>().eq("brand_id",brandId)
+        );
+
+        return ResultUtil.success(data);
+    }
+
+    /**
+     *  /product/categorybrandrelation/brands/list
+     *
+     *  1、Controller：处理请求，接受和校验数据
+     *  2、Service接受controller传来的数据，进行业务处理
+     *  3、Controller接受Service处理完的数据，封装页面指定的vo
+     */
+    @GetMapping("/brands/list")
+    public Result relationBrandsList(@RequestParam(value = "catId",required = true)Long catId){
+        List<Brand> vos = categoryBrandRelationService.getBrandsByCatId(catId);
+
+        List<BrandDto> collect = vos.stream().map(item -> {
+            BrandDto brandVo = new BrandDto();
+            brandVo.setBrandId(item.getBrandId());
+            brandVo.setBrandName(item.getName());
+
+            return brandVo;
+        }).collect(Collectors.toList());
+
+        return ResultUtil.success(collect);
+
+    }
+
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("product:categorybrandrelation:list")
+    public Result list(@RequestBody CategoryBrandRelationDto categoryBrandRelationDto){
+        Page<CategoryBrandRelation> categoryBrandRelationPage = new Page<>(categoryBrandRelationDto.getPageIndex(), categoryBrandRelationDto.getPageSize());
+        IPage<CategoryBrandRelation> page = categoryBrandRelationService.queryPage(categoryBrandRelationDto, categoryBrandRelationPage);
+        return ResultUtil.success(page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("product:categorybrandrelation:info")
+    public Result info(@PathVariable("id") Long id){
+        CategoryBrandRelation categoryBrandRelation = categoryBrandRelationService.getById(id);
+        return ResultUtil.success(categoryBrandRelation);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("product:categorybrandrelation:save")
+    public Result save(@RequestBody CategoryBrandRelation categoryBrandRelation){
+
+
+        categoryBrandRelationService.saveDetail(categoryBrandRelation);
+
+        return ResultUtil.success();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:categorybrandrelation:update")
+    public Result update(@RequestBody CategoryBrandRelation categoryBrandRelation){
+        categoryBrandRelationService.updateById(categoryBrandRelation);
+
+        return ResultUtil.success();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("product:categorybrandrelation:delete")
+    public Result delete(@RequestBody Long[] ids){
+        categoryBrandRelationService.removeByIds(Arrays.asList(ids));
+
+        return ResultUtil.success();
     }
 
 }

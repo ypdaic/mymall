@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.109.1:8848
+        service: ${spring.application.name}
+        heart-beat-interval: 5000 #心跳间隔
+        namespace: dev
+      config:
+        namespace: dev
+        name: dev
+        # 如果Data Id没有使用后缀，需要指定为空字符串
+        file-extension: yml
+        server-addr: 192.168.109.1:8848
+        ext-config:
+          - data-id: oss.yml
+            refresh: true
+    alicloud:
+      access-key: LTAI4FwvfjSycd1APnuG9bjj
+      secret-key: O6xaxyiWfSIitcOkSuK27ju4hXT5Hl
+      oss:
+        endpoint: oss-cn-beijing.aliyuncs.com
+        bucket: gulimall-hello

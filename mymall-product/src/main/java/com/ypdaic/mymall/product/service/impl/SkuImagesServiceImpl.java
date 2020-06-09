@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.SkuImages;
 import com.ypdaic.mymall.product.mapper.SkuImagesMapper;
 import com.ypdaic.mymall.product.service.ISkuImagesService;
@@ -130,6 +132,16 @@ public class SkuImagesServiceImpl extends ServiceImpl<SkuImagesMapper, SkuImages
      */
     public List<SkuImages> queryAll(SkuImagesDto skuImagesDto) {
         return baseMapper.queryAll(skuImagesDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SkuImages> page = this.page(
+                new Query<SkuImages>().getPage(params),
+                new QueryWrapper<SkuImages>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

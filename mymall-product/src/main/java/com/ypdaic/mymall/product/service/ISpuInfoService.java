@@ -62,4 +62,6 @@ public interface ISpuInfoService extends IService<SpuInfo> {
      * @return
      */
     List<SpuInfo> queryAll(SpuInfoDto spuInfoDto);
+
+
 }

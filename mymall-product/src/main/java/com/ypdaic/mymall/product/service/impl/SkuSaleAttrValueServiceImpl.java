@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.SkuSaleAttrValue;
 import com.ypdaic.mymall.product.mapper.SkuSaleAttrValueMapper;
 import com.ypdaic.mymall.product.service.ISkuSaleAttrValueService;
@@ -132,6 +134,16 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMap
      */
     public List<SkuSaleAttrValue> queryAll(SkuSaleAttrValueDto skuSaleAttrValueDto) {
         return baseMapper.queryAll(skuSaleAttrValueDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SkuSaleAttrValue> page = this.page(
+                new Query<SkuSaleAttrValue>().getPage(params),
+                new QueryWrapper<SkuSaleAttrValue>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

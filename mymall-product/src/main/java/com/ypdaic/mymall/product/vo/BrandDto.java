@@ -30,6 +30,11 @@ public class BrandDto extends BaseDto {
 	private String name;
 
 	/**
+	 * 品牌名
+	 */
+	private String brandName;
+
+	/**
 	 * 品牌logo地址
 	 */
 	private String logo;

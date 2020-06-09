@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.ProductAttrValue;
 import com.ypdaic.mymall.product.mapper.ProductAttrValueMapper;
 import com.ypdaic.mymall.product.service.IProductAttrValueService;
@@ -15,6 +17,7 @@ import com.ypdaic.mymall.common.util.ExcelUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.util.JavaUtils;
@@ -136,4 +139,38 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueMap
         return baseMapper.queryAll(productAttrValueDto);
     }
 
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<ProductAttrValue> page = this.page(
+                new Query<ProductAttrValue>().getPage(params),
+                new QueryWrapper<ProductAttrValue>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public void saveProductAttr(List<ProductAttrValue> collect) {
+        this.saveBatch(collect);
+    }
+
+    @Override
+    public List<ProductAttrValue> baseAttrlistforspu(Long spuId) {
+        List<ProductAttrValue> entities = this.baseMapper.selectList(new QueryWrapper<ProductAttrValue>().eq("spu_id", spuId));
+        return entities;
+    }
+
+    @Transactional
+    @Override
+    public void updateSpuAttr(Long spuId, List<ProductAttrValue> entities) {
+        //1、删除这个spuId之前对应的所有属性
+        this.baseMapper.delete(new QueryWrapper<ProductAttrValue>().eq("spu_id",spuId));
+
+
+        List<ProductAttrValue> collect = entities.stream().map(item -> {
+            item.setSpuId(spuId);
+            return item;
+        }).collect(Collectors.toList());
+        this.saveBatch(collect);
+    }
 }

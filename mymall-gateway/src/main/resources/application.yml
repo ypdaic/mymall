@@ -56,12 +56,19 @@ spring:
            #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
            - StripPrefix=1 # 效果同上， 截取路径位数
        - id: ware
-           uri: lb://mymall-ware
-           predicates:
-             - Path=/api/ware/**
-           filters:
-             #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
-             - StripPrefix=1 # 效果同上， 截取路径位数
+         uri: lb://mymall-ware
+         predicates:
+           - Path=/api/ware/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: thrid-party
+         uri: lb://mymall-third-party
+         predicates:
+           - Path=/api/thirdparty/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
        - id: admin
          uri: lb://renren-fast
          predicates:

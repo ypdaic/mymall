@@ -2,9 +2,8 @@ package com.ypdaic.mymall.product.controller;
 
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.ICategoryService;
@@ -13,8 +12,6 @@ import com.ypdaic.mymall.product.entity.Category;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -168,6 +167,43 @@ public class CategoryController extends BaseController {
 
         List<Category> entities = categoryService.listWithTree();
         return ResultUtil.success(entities);
+    }
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{catId}")
+    public Result info(@PathVariable("catId") Long catId){
+        Category category = categoryService.getById(catId);
+
+        return ResultUtil.success(category);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    public Result save(@RequestBody CategoryDto categoryDto){
+        Category category = categoryService.add(categoryDto);
+
+        return ResultUtil.success(category);
+    }
+
+    @RequestMapping("/update/sort")
+    //@RequiresPermissions("product:category:update")
+    public Result updateSort(@RequestBody Category[] category){
+        categoryService.updateBatchById(Arrays.asList(category));
+        return ResultUtil.success();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:category:update")
+    public Result update(@RequestBody Category category){
+        categoryService.updateCascade(category);
+        return ResultUtil.success();
     }
 
 }

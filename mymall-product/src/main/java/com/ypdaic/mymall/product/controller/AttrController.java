@@ -1,9 +1,14 @@
 package com.ypdaic.mymall.product.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.product.entity.ProductAttrValue;
+import com.ypdaic.mymall.product.service.IProductAttrValueService;
+import com.ypdaic.mymall.product.vo.AttrRespVo;
+import com.ypdaic.mymall.product.vo.AttrVo;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.IAttrService;
@@ -12,8 +17,6 @@ import com.ypdaic.mymall.product.entity.Attr;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +30,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -44,6 +50,9 @@ public class AttrController extends BaseController {
 
     @Autowired
     IAttrService attrService;
+
+    @Autowired
+    IProductAttrValueService productAttrValueService;
 
     /**
      *
@@ -156,6 +165,98 @@ public class AttrController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "商品属性名称已存在！");
+    }
+
+    ///product/attr/info/{attrId}
+
+    // /product/attr/base/listforspu/{spuId}
+    @GetMapping("/base/listforspu/{spuId}")
+    public R baseAttrlistforspu(@PathVariable("spuId") Long spuId){
+
+        List<ProductAttrValue> entities = productAttrValueService.baseAttrlistforspu(spuId);
+
+        return R.ok().put("data",entities);
+    }
+
+    //product/attr/sale/list/0?
+    ///product/attr/base/list/{catelogId}
+    @GetMapping("/{attrType}/list/{catelogId}")
+    public R baseAttrList(@RequestParam Map<String, Object> params,
+                          @PathVariable("catelogId") Long catelogId,
+                          @PathVariable("attrType")String type){
+
+        PageUtils page = attrService.queryBaseAttrPage(params,catelogId,type);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("product:attr:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = attrService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{attrId}")
+    //@RequiresPermissions("product:attr:info")
+    public R info(@PathVariable("attrId") Long attrId){
+        //AttrEntity attr = attrService.getById(attrId);
+        AttrRespVo respVo = attrService.getAttrInfo(attrId);
+
+        return R.ok().put("attr", respVo);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("product:attr:save")
+    public R save(@RequestBody AttrVo attr){
+        attrService.saveAttr(attr);
+
+        return R.ok();
+    }
+
+    ///product/attrgroup/attr/relation/delete
+
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:attr:update")
+    public R update(@RequestBody AttrVo attr){
+        attrService.updateAttr(attr);
+
+        return R.ok();
+    }
+
+    ///product/attr/update/{spuId}
+    @PostMapping("/update/{spuId}")
+    public R updateSpuAttr(@PathVariable("spuId") Long spuId,
+                           @RequestBody List<ProductAttrValue> entities){
+
+        productAttrValueService.updateSpuAttr(spuId,entities);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("product:attr:delete")
+    public R delete(@RequestBody Long[] attrIds){
+        attrService.removeByIds(Arrays.asList(attrIds));
+
+        return R.ok();
     }
 
 }
