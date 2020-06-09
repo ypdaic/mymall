@@ -12,6 +12,12 @@ spring:
  main:
    allow-bean-definition-overriding: true
 
+ cloud:
+  sentinel:
+    transport:
+      port: 8719
+      dashboard: localhost:8080
+
 mybatis-plus:
   mapperLocations: classpath:/sqlMapperXml/**/*.xml
   configuration:

@@ -1,6 +1,7 @@
 package com.ypdaic.mymall.product.controller;
 
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -162,6 +163,7 @@ public class CategoryController extends BaseController {
      * 查出所有分类以及子分类，以树形结构组装起来
      */
     @RequestMapping("/list/tree")
+    @SentinelResource("/list/tree")
     public Result<List<Category>> list(){
 
         List<Category> entities = categoryService.listWithTree();
