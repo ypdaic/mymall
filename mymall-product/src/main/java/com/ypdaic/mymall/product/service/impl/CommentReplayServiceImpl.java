@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.product.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.product.entity.CommentReplay;
 import com.ypdaic.mymall.product.mapper.CommentReplayMapper;
 import com.ypdaic.mymall.product.service.ICommentReplayService;
@@ -124,8 +126,19 @@ public class CommentReplayServiceImpl extends ServiceImpl<CommentReplayMapper, C
      * 查询所有商品评价回复关系
      * @return
      */
+    @Override
     public List<CommentReplay> queryAll(CommentReplayDto commentReplayDto) {
         return baseMapper.queryAll(commentReplayDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<CommentReplay> page = this.page(
+                new Query<CommentReplay>().getPage(params),
+                new QueryWrapper<CommentReplay>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

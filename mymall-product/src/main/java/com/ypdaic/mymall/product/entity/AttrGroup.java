@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  *
@@ -21,7 +24,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pms_attr_group")
-public class AttrGroup extends SuperEntity {
+public class AttrGroup extends Model {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,6 +62,11 @@ public class AttrGroup extends SuperEntity {
 
     @TableField(exist = false)
     private Long[] catelogPath;
+
+    @Override
+    protected Serializable pkVal() {
+        return this.attrGroupId;
+    }
 
 
 

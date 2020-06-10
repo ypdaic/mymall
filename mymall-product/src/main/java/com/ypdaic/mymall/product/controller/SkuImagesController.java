@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.product.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.ISkuImagesService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.product.entity.SkuImages;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +158,62 @@ public class SkuImagesController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "sku图片名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("product:skuimages:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = skuImagesService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("product:skuimages:info")
+    public R info(@PathVariable("id") Long id){
+        SkuImages skuImages = skuImagesService.getById(id);
+
+        return R.ok().put("skuImages", skuImages);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("product:skuimages:save")
+    public R save(@RequestBody SkuImages skuImages){
+        skuImagesService.save(skuImages);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:skuimages:update")
+    public R update(@RequestBody SkuImages skuImages){
+        skuImagesService.updateById(skuImages);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("product:skuimages:delete")
+    public R delete(@RequestBody Long[] ids){
+        skuImagesService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

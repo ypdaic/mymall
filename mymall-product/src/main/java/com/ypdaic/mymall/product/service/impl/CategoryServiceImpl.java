@@ -7,6 +7,7 @@ import com.ypdaic.mymall.product.service.ICategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.product.vo.CategoryDto;
 import com.ypdaic.mymall.product.enums.CategoryExcelHeadersEnum;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -172,6 +173,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         return level1Menus;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCascade(Category category) {
         this.updateById(category);
@@ -182,10 +184,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     private List<Category> getChildrens(Category root,List<Category> all){
 
         List<Category> children = all.stream().filter(categoryEntity -> {
-            return categoryEntity.getParentCid() == root.getCatId();
+            return categoryEntity.getParentCid().equals(root.getCatId());
         }).map(categoryEntity -> {
-            //1、找到子菜单
-            categoryEntity.setChildren(getChildrens(categoryEntity,all));
+            List<Category> childrens = getChildrens(categoryEntity, all);
+            if (CollectionUtils.isNotEmpty(childrens)) {
+                //1、找到子菜单
+                categoryEntity.setChildren(childrens);
+            }
+
             return categoryEntity;
         }).sorted((menu1,menu2)->{
             //2、菜单的排序

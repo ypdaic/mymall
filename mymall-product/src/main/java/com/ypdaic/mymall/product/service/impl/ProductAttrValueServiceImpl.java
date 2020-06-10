@@ -135,6 +135,7 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueMap
      * 查询所有spu属性值
      * @return
      */
+    @Override
     public List<ProductAttrValue> queryAll(ProductAttrValueDto productAttrValueDto) {
         return baseMapper.queryAll(productAttrValueDto);
     }

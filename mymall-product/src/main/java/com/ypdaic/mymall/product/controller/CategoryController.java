@@ -63,24 +63,24 @@ public class CategoryController extends BaseController {
         return ResultUtil.successOfInsert(category);
     }
 
-    /**
-     *
-     * 修改商品三级分类
-     * @param categoryDto
-     * @param httpServletRequest 
-     * @return
-     */
-    @PostMapping("/update")
-    public Result<Category> update(@RequestBody @Validated CategoryDto categoryDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            return paramError(bindingResult);
-        }
-        Category category = categoryService.update(categoryDto);
-        if (category == null) {
-            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
-        }
-        return ResultUtil.successOfUpdate(category);
-    }
+//    /**
+//     *
+//     * 修改商品三级分类
+//     * @param categoryDto
+//     * @param httpServletRequest
+//     * @return
+//     */
+//    @PostMapping("/update")
+//    public Result<Category> update(@RequestBody @Validated CategoryDto categoryDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+//        if (bindingResult.hasErrors()) {
+//            return paramError(bindingResult);
+//        }
+//        Category category = categoryService.update(categoryDto);
+//        if (category == null) {
+//            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+//        }
+//        return ResultUtil.successOfUpdate(category);
+//    }
 
     /**
      *

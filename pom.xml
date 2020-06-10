@@ -26,6 +26,7 @@
         <module>code-generator</module>
         <module>mymall-gateway</module>
         <module>mymall-third-party</module>
+        <module>mymall-fegin-service</module>
     </modules>
 
     <properties>
@@ -48,6 +49,7 @@
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <poi.version>3.17</poi.version>
+        <collections4.version>4.4</collections4.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -152,6 +154,11 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${collections4.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -172,6 +179,7 @@
                 <coupon.port>8085</coupon.port>
                 <gateway.port>8086</gateway.port>
                 <third-party.port>8087</third-party.port>
+                <renren-fast.port>8088</renren-fast.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -195,6 +203,7 @@
                 <coupon.port>8085</coupon.port>
                 <gateway.port>8086</gateway.port>
                 <third-party.port>8087</third-party.port>
+                <renren-fast.port>8088</renren-fast.port>
             </properties>
         </profile>
         <profile>
@@ -211,6 +220,7 @@
                 <coupon.port>8085</coupon.port>
                 <gateway.port>8086</gateway.port>
                 <third-party.port>8087</third-party.port>
+                <renren-fast.port>8088</renren-fast.port>
             </properties>
         </profile>
     </profiles>

@@ -147,6 +147,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
      * 查询所有sku信息
      * @return
      */
+    @Override
     public List<SkuInfo> queryAll(SkuInfoDto skuInfoDto) {
         return baseMapper.queryAll(skuInfoDto);
     }
@@ -179,7 +180,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         String key = (String) params.get("key");
         if(!StringUtils.isEmpty(key)){
             queryWrapper.and((wrapper)->{
-                wrapper.eq("sku_id",key).or().like("sku_name",key);
+                return wrapper.eq("sku_id",key).or().like("sku_name",key);
             });
         }
 

@@ -244,6 +244,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
      * 查询所有${table.comment}
      * @return
      */
+    @Override
     public List<${entity}> queryAll(${entity}Dto ${entityLowerName}Dto) {
         return baseMapper.queryAll(${entityLowerName}Dto);
     }

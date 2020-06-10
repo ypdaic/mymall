@@ -74,15 +74,15 @@
                 </includes>
             </resource>
 
-            <!--<resource>-->
-            <!--<directory>src/main/resources</directory>-->
-            <!--&lt;!&ndash;filtering为false,表示不过滤文件，但需要排除掉上面我们需要-->
-            <!--过滤的文件&ndash;&gt;-->
-            <!--<filtering>false</filtering>-->
-            <!--<excludes>-->
-            <!--<exclude>*.yml</exclude>-->
-            <!--</excludes>-->
-            <!--</resource>-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <!--filtering为false,表示不过滤文件，但需要排除掉上面我们需要
+                过滤的文件-->
+                <filtering>false</filtering>
+                <excludes>
+                <exclude>*.yml</exclude>
+                </excludes>
+            </resource>
         </resources>
     </build>
 

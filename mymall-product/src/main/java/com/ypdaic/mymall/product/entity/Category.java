@@ -2,6 +2,8 @@ package com.ypdaic.mymall.product.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

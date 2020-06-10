@@ -1,12 +1,16 @@
 package com.ypdaic.mymall.product.service;
 
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.product.entity.SpuInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.product.vo.SpuInfoDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ypdaic.mymall.product.vo.SpuSaveVo;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,6 +66,15 @@ public interface ISpuInfoService extends IService<SpuInfo> {
      * @return
      */
     List<SpuInfo> queryAll(SpuInfoDto spuInfoDto);
+
+    PageUtils queryPage(Map<String, Object> params);
+
+    void saveSpuInfo(SpuSaveVo vo);
+
+    void saveBaseSpuInfo(SpuInfo infoEntity);
+
+
+    PageUtils queryPageByCondition(Map<String, Object> params);
 
 
 }
