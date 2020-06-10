@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.member.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.member.service.IMemberLevelService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.member.entity.MemberLevel;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/member/member-level")
+@RequestMapping("/member/memberlevel")
 public class MemberLevelController extends BaseController {
 
     @Autowired
@@ -156,6 +158,62 @@ public class MemberLevelController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "会员等级名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("member:memberlevel:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = memberLevelService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("member:memberlevel:info")
+    public R info(@PathVariable("id") Long id){
+        MemberLevel memberLevel = memberLevelService.getById(id);
+
+        return R.ok().put("memberLevel", memberLevel);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("member:memberlevel:save")
+    public R save(@RequestBody MemberLevel memberLevel){
+        memberLevelService.save(memberLevel);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("member:memberlevel:update")
+    public R update(@RequestBody MemberLevel memberLevel){
+        memberLevelService.updateById(memberLevel);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("member:memberlevel:delete")
+    public R delete(@RequestBody Long[] ids){
+        memberLevelService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

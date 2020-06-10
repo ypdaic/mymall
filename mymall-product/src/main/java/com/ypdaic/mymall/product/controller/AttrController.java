@@ -72,41 +72,41 @@ public class AttrController extends BaseController {
         return ResultUtil.successOfInsert(attr);
     }
 
-    /**
-     *
-     * 修改商品属性
-     * @param attrDto
-     * @param httpServletRequest 
-     * @return
-     */
-    @PostMapping("/update")
-    public Result<Attr> update(@RequestBody @Validated AttrDto attrDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            return paramError(bindingResult);
-        }
-        Attr attr = attrService.update(attrDto);
-        if (attr == null) {
-            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
-        }
-        return ResultUtil.successOfUpdate(attr);
-    }
+//    /**
+//     *
+//     * 修改商品属性
+//     * @param attrDto
+//     * @param httpServletRequest
+//     * @return
+//     */
+//    @PostMapping("/update")
+//    public Result<Attr> update(@RequestBody @Validated AttrDto attrDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+//        if (bindingResult.hasErrors()) {
+//            return paramError(bindingResult);
+//        }
+//        Attr attr = attrService.update(attrDto);
+//        if (attr == null) {
+//            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+//        }
+//        return ResultUtil.successOfUpdate(attr);
+//    }
 
-    /**
-     *
-     * 删除商品属性
-     * @param attrDto
-     * @param httpServletRequest 
-     * @return
-     */
-    @PostMapping("/delete")
-
-    public Result<Attr> delete(@RequestBody AttrDto attrDto, HttpServletRequest httpServletRequest) {
-        Attr attr = attrService.delete(attrDto);
-        if (attr == null) {
-            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
-        }
-        return ResultUtil.successOfDelete(attr);
-    }
+//    /**
+//     *
+//     * 删除商品属性
+//     * @param attrDto
+//     * @param httpServletRequest
+//     * @return
+//     */
+//    @PostMapping("/delete")
+//
+//    public Result<Attr> delete(@RequestBody AttrDto attrDto, HttpServletRequest httpServletRequest) {
+//        Attr attr = attrService.delete(attrDto);
+//        if (attr == null) {
+//            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+//        }
+//        return ResultUtil.successOfDelete(attr);
+//    }
 
     /**
      *

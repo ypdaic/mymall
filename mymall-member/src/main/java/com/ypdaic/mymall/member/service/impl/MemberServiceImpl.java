@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.member.entity.Member;
 import com.ypdaic.mymall.member.mapper.MemberMapper;
 import com.ypdaic.mymall.member.service.IMemberService;
@@ -161,6 +163,16 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
      */
     public List<Member> queryAll(MemberDto memberDto) {
         return baseMapper.queryAll(memberDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<Member> page = this.page(
+                new Query<Member>().getPage(params),
+                new QueryWrapper<Member>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

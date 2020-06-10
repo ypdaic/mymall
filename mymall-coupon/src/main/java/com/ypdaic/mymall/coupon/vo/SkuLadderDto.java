@@ -44,7 +44,7 @@ public class SkuLadderDto extends BaseDto {
 	/**
 	 * 是否叠加其他优惠[0-不可叠加，1-可叠加]
 	 */
-	private Boolean addOther;
+	private Integer addOther;
 
 	/**
      * 是否新增

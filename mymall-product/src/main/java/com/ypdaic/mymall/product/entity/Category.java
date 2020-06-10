@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -77,6 +78,7 @@ public class Category extends Model {
     /**
      * 子分类
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @TableField(exist = false)
     private List<Category> children;
 

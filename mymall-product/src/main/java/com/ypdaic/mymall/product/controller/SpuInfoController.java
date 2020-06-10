@@ -1,9 +1,11 @@
 package com.ypdaic.mymall.product.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.product.vo.SpuSaveVo;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.ISpuInfoService;
@@ -12,8 +14,6 @@ import com.ypdaic.mymall.product.entity.SpuInfo;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,7 +42,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/product/spu-info")
+@RequestMapping("/product/spuinfo")
 public class SpuInfoController extends BaseController {
 
     @Autowired
@@ -156,6 +159,64 @@ public class SpuInfoController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "spu信息名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("product:spuinfo:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = spuInfoService.queryPageByCondition(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("product:spuinfo:info")
+    public R info(@PathVariable("id") Long id){
+        SpuInfo spuInfo = spuInfoService.getById(id);
+
+        return R.ok().put("spuInfo", spuInfo);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("product:spuinfo:save")
+    public R save(@RequestBody SpuSaveVo vo){
+        //spuInfoService.save(spuInfo);
+
+        spuInfoService.saveSpuInfo(vo);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:spuinfo:update")
+    public R update(@RequestBody SpuInfo spuInfo){
+        spuInfoService.updateById(spuInfo);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("product:spuinfo:delete")
+    public R delete(@RequestBody Long[] ids){
+        spuInfoService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

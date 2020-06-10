@@ -211,8 +211,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, Attr> implements IA
         if(!StringUtils.isEmpty(key)){
             //attr_id  attr_name
             queryWrapper.and((wrapper)->{
-                wrapper.eq("attr_id",key).or().like("attr_name",key);
-                return null;
+                return wrapper.eq("attr_id",key).or().like("attr_name",key);
             });
         }
 
@@ -375,8 +374,8 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, Attr> implements IA
         String key = (String) params.get("key");
         if(!StringUtils.isEmpty(key)){
             wrapper.and((w)->{
-                w.eq("attr_id",key).or().like("attr_name",key);
-                return null;
+               return w.eq("attr_id",key).or().like("attr_name",key);
+
             });
         }
         IPage<Attr> page = this.page(new Query<Attr>().getPage(params), wrapper);

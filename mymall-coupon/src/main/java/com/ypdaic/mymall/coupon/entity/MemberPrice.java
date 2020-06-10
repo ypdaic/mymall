@@ -46,7 +46,7 @@ public class MemberPrice extends SuperEntity {
     /**
      * 可否叠加其他优惠[0-不可叠加优惠，1-可叠加]
      */
-    private Boolean addOther;
+    private Integer addOther;
 
 
 }

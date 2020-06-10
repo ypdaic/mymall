@@ -46,7 +46,7 @@ public class SkuLadder extends SuperEntity {
     /**
      * 是否叠加其他优惠[0-不可叠加，1-可叠加]
      */
-    private Boolean addOther;
+    private Integer addOther;
 
 
 }

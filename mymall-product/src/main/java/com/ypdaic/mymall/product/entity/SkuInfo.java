@@ -1,9 +1,11 @@
 package com.ypdaic.mymall.product.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,14 +23,14 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pms_sku_info")
-public class SkuInfo extends SuperEntity {
+public class SkuInfo extends Model {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * skuId
      */
-    @TableId(value = "sku_id", type = IdType.AUTO)
+    @TableId(value = "sku_id", type = IdType.INPUT)
     private Long skuId;
 
     /**
@@ -80,6 +82,11 @@ public class SkuInfo extends SuperEntity {
      * 销量
      */
     private Long saleCount;
+
+    @Override
+    protected Serializable pkVal() {
+        return this.skuId;
+    }
 
 
 }

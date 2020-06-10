@@ -3,8 +3,8 @@ package com.ypdaic.mymall.product.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.ypdaic.mymall.common.to.SkuReductionTo;
 import com.ypdaic.mymall.common.to.SpuBoundTo;
-import com.ypdaic.mymall.common.util.PageUtils;
-import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.common.util.*;
+import com.ypdaic.mymall.fegin.coupon.ICouponFeignService;
 import com.ypdaic.mymall.product.entity.*;
 import com.ypdaic.mymall.product.mapper.SpuInfoMapper;
 import com.ypdaic.mymall.product.service.*;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ypdaic.mymall.common.util.ExcelUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
-import com.ypdaic.mymall.common.util.JavaUtils;
+
 import java.util.Date;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -63,8 +62,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
     @Autowired
     ISkuSaleAttrValueService skuSaleAttrValueService;
 
-//    @Autowired
-//    ICouponFeignService couponFeignService;
+    @Autowired
+    ICouponFeignService couponFeignService;
 
     /**
      * 新增spu信息
@@ -238,10 +237,10 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         SpuBoundTo spuBoundTo = new SpuBoundTo();
         BeanUtils.copyProperties(bounds,spuBoundTo);
         spuBoundTo.setSpuId(infoEntity.getId());
-//        R r = couponFeignService.saveSpuBounds(spuBoundTo);
-//        if(r.getCode() != 0){
-//            log.error("远程保存spu积分信息失败");
-//        }
+        R r = couponFeignService.saveSpuBounds(spuBoundTo);
+        if(r.getCode() != 0){
+            log.error("远程保存spu积分信息失败");
+        }
 
 
         //5、保存当前spu对应的所有sku信息；
@@ -301,10 +300,10 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
                 BeanUtils.copyProperties(item,skuReductionTo);
                 skuReductionTo.setSkuId(skuId);
                 if(skuReductionTo.getFullCount() >0 || skuReductionTo.getFullPrice().compareTo(new BigDecimal("0")) == 1){
-//                    R r1 = couponFeignService.saveSkuReduction(skuReductionTo);
-//                    if(r1.getCode() != 0){
-//                        log.error("远程保存sku优惠信息失败");
-//                    }
+                    R r1 = couponFeignService.saveSkuReduction(skuReductionTo);
+                    if(r1.getCode() != 0){
+                        log.error("远程保存sku优惠信息失败");
+                    }
                 }
 
 

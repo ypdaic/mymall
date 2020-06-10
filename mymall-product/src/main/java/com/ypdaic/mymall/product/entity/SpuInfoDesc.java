@@ -30,7 +30,7 @@ public class SpuInfoDesc extends Model {
     /**
      * 商品id
      */
-    @TableId(value = "spu_id", type = IdType.AUTO)
+    @TableId(value = "spu_id", type = IdType.INPUT)
     private Long spuId;
 
     /**

@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.member.entity.MemberLevel;
 import com.ypdaic.mymall.member.mapper.MemberLevelMapper;
 import com.ypdaic.mymall.member.service.IMemberLevelService;
@@ -141,6 +143,16 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper, Membe
      */
     public List<MemberLevel> queryAll(MemberLevelDto memberLevelDto) {
         return baseMapper.queryAll(memberLevelDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<MemberLevel> page = this.page(
+                new Query<MemberLevel>().getPage(params),
+                new QueryWrapper<MemberLevel>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

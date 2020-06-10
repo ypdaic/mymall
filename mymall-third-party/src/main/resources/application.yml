@@ -3,3 +3,12 @@ server:
   port: @third-party.port@
   servlet:
     context-path: /
+
+#spring:
+#  cloud:
+#    alicloud:
+#      access-key: LTAI4FwvfjSycd1APnuG9bjj
+#      secret-key: O6xaxyiWfSIitcOkSuK27ju4hXT5Hl
+#      oss:
+#        endpoint: oss-cn-beijing.aliyuncs.com
+#        bucket: gulimall-hello

@@ -166,8 +166,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
         QueryWrapper<AttrGroup> wrapper = new QueryWrapper<AttrGroup>();
         if(!StringUtils.isEmpty(key)){
             wrapper.and((obj)->{
-                obj.eq("attr_group_id",key).or().like("attr_group_name",key);
-                return null;
+                return obj.eq("attr_group_id",key).or().like("attr_group_name",key);
             });
         }
 

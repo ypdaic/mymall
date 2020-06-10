@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.mapper;
 
+import com.ypdaic.mymall.common.to.SkuReductionTo;
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.coupon.entity.SkuFullReduction;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ypdaic.mymall.coupon.vo.SkuFullReductionDto;
@@ -48,5 +50,10 @@ public interface SkuFullReductionMapper extends BaseMapper<SkuFullReduction> {
      * @return
      */
     List<SkuFullReduction> queryAll(@Param("dto") SkuFullReductionDto skuFullReductionDto);
+
+    PageUtils queryPage(Map<String, Object> params);
+
+    void saveSkuReduction(SkuReductionTo reductionTo);
+
 
 }

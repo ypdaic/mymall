@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.Coupon;
 import com.ypdaic.mymall.coupon.mapper.CouponMapper;
 import com.ypdaic.mymall.coupon.service.ICouponService;
@@ -168,6 +170,16 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
      */
     public List<Coupon> queryAll(CouponDto couponDto) {
         return baseMapper.queryAll(couponDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<Coupon> page = this.page(
+                new Query<Coupon>().getPage(params),
+                new QueryWrapper<Coupon>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/product/sku-info")
+@RequestMapping("/product/skuinfo")
 public class SkuInfoController extends BaseController {
 
     @Autowired

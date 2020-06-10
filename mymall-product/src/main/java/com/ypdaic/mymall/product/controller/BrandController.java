@@ -65,41 +65,41 @@ public class BrandController extends BaseController {
         return ResultUtil.successOfInsert(brand);
     }
 
-    /**
-     *
-     * 修改品牌
-     * @param brandDto
-     * @param httpServletRequest 
-     * @return
-     */
-    @PostMapping("/update")
-    public Result<Brand> update(@RequestBody @Validated BrandDto brandDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            return paramError(bindingResult);
-        }
-        Brand brand = brandService.update(brandDto);
-        if (brand == null) {
-            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
-        }
-        return ResultUtil.successOfUpdate(brand);
-    }
+//    /**
+//     *
+//     * 修改品牌
+//     * @param brandDto
+//     * @param httpServletRequest
+//     * @return
+//     */
+//    @PostMapping("/update")
+//    public Result<Brand> update(@RequestBody @Validated BrandDto brandDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+//        if (bindingResult.hasErrors()) {
+//            return paramError(bindingResult);
+//        }
+//        Brand brand = brandService.update(brandDto);
+//        if (brand == null) {
+//            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+//        }
+//        return ResultUtil.successOfUpdate(brand);
+//    }
 
-    /**
-     *
-     * 删除品牌
-     * @param brandDto
-     * @param httpServletRequest 
-     * @return
-     */
-    @PostMapping("/delete")
-
-    public Result<Brand> delete(@RequestBody BrandDto brandDto, HttpServletRequest httpServletRequest) {
-        Brand brand = brandService.delete(brandDto);
-        if (brand == null) {
-            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
-        }
-        return ResultUtil.successOfDelete(brand);
-    }
+//    /**
+//     *
+//     * 删除品牌
+//     * @param brandDto
+//     * @param httpServletRequest
+//     * @return
+//     */
+//    @PostMapping("/delete")
+//
+//    public Result<Brand> delete(@RequestBody BrandDto brandDto, HttpServletRequest httpServletRequest) {
+//        Brand brand = brandService.delete(brandDto);
+//        if (brand == null) {
+//            return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
+//        }
+//        return ResultUtil.successOfDelete(brand);
+//    }
 
     /**
      *
