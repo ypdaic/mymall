@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/coupon/seckill-session")
+@RequestMapping("/coupon/seckillsession")
 public class SeckillSessionController extends BaseController {
 
     @Autowired

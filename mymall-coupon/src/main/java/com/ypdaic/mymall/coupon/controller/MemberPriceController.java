@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/coupon/member-price")
+@RequestMapping("/coupon/memberprice")
 public class MemberPriceController extends BaseController {
 
     @Autowired

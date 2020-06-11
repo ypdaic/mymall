@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/coupon/home-subject")
+@RequestMapping("/coupon/homesubject")
 public class HomeSubjectController extends BaseController {
 
     @Autowired

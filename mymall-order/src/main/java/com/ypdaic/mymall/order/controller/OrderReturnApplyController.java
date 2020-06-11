@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/order/order-return-apply")
+@RequestMapping("/order/orderreturnapply")
 public class OrderReturnApplyController extends BaseController {
 
     @Autowired

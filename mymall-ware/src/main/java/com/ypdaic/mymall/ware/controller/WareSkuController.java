@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-11
  */
 @RestController
-@RequestMapping("/ware/ware-sku")
+@RequestMapping("/ware/waresku")
 public class WareSkuController extends BaseController {
 
     @Autowired

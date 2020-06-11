@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/ware/ware-order-task")
+@RequestMapping("/ware/wareordertask")
 public class WareOrderTaskController extends BaseController {
 
     @Autowired

@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/order/refund-info")
+@RequestMapping("/order/refundinfo")
 public class RefundInfoController extends BaseController {
 
     @Autowired

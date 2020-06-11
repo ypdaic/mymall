@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/coupon/coupon-history")
+@RequestMapping("/coupon/couponhistory")
 public class CouponHistoryController extends BaseController {
 
     @Autowired

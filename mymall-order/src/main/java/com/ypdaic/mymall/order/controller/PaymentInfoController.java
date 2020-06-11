@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/order/payment-info")
+@RequestMapping("/order/paymentinfo")
 public class PaymentInfoController extends BaseController {
 
     @Autowired

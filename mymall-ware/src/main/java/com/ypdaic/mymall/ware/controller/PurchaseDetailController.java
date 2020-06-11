@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/ware/purchase-detail")
+@RequestMapping("/ware/purchasedetail")
 public class PurchaseDetailController extends BaseController {
 
     @Autowired

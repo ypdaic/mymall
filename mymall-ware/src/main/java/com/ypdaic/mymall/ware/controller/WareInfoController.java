@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/ware/ware-info")
+@RequestMapping("/ware/wareinfo")
 public class WareInfoController extends BaseController {
 
     @Autowired
