@@ -169,7 +169,7 @@ public class PurchaseController extends BaseController {
     }
 
     /**
-     * 领取采购单
+     * 领取采购单，这里领取在其他系统上
      * @return
      */
     @PostMapping("/received")
