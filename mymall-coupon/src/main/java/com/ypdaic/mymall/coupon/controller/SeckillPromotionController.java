@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.coupon.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.coupon.service.ISeckillPromotionService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.coupon.entity.SeckillPromotion;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +158,62 @@ public class SeckillPromotionController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "秒杀活动名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("coupon:seckillpromotion:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = seckillPromotionService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("coupon:seckillpromotion:info")
+    public R info(@PathVariable("id") Long id){
+        SeckillPromotion seckillPromotion = seckillPromotionService.getById(id);
+
+        return R.ok().put("seckillPromotion", seckillPromotion);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("coupon:seckillpromotion:save")
+    public R save(@RequestBody SeckillPromotion seckillPromotion){
+        seckillPromotionService.save(seckillPromotion);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("coupon:seckillpromotion:update")
+    public R update(@RequestBody SeckillPromotion seckillPromotion){
+        seckillPromotionService.updateById(seckillPromotion);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("coupon:seckillpromotion:delete")
+    public R delete(@RequestBody Long[] ids){
+        seckillPromotionService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.CouponSpuCategoryRelation;
 import com.ypdaic.mymall.coupon.mapper.CouponSpuCategoryRelationMapper;
 import com.ypdaic.mymall.coupon.service.ICouponSpuCategoryRelationService;
@@ -126,8 +128,19 @@ public class CouponSpuCategoryRelationServiceImpl extends ServiceImpl<CouponSpuC
      * 查询所有优惠券分类关联
      * @return
      */
+    @Override
     public List<CouponSpuCategoryRelation> queryAll(CouponSpuCategoryRelationDto couponSpuCategoryRelationDto) {
         return baseMapper.queryAll(couponSpuCategoryRelationDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<CouponSpuCategoryRelation> page = this.page(
+                new Query<CouponSpuCategoryRelation>().getPage(params),
+                new QueryWrapper<CouponSpuCategoryRelation>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

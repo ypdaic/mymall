@@ -1,9 +1,12 @@
 package com.ypdaic.mymall.ware.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.ware.vo.MergeVo;
+import com.ypdaic.mymall.ware.vo.PurchaseDoneVo;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.ware.service.IPurchaseService;
@@ -12,8 +15,6 @@ import com.ypdaic.mymall.ware.entity.Purchase;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
 
 /**
  *
@@ -156,6 +157,102 @@ public class PurchaseController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "采购信息名称已存在！");
+    }
+
+    ///ware/purchase/done
+    @PostMapping("/done")
+    public R finish(@RequestBody PurchaseDoneVo doneVo){
+
+        purchaseService.done(doneVo);
+
+        return R.ok();
+    }
+
+    /**
+     * 领取采购单
+     * @return
+     */
+    @PostMapping("/received")
+    public R received(@RequestBody List<Long> ids){
+
+        purchaseService.received(ids);
+
+        return R.ok();
+    }
+
+    ///ware/purchase/unreceive/list
+    ///ware/purchase/merge
+    @PostMapping("/merge")
+    public R merge(@RequestBody MergeVo mergeVo){
+
+        purchaseService.mergePurchase(mergeVo);
+        return R.ok();
+    }
+
+    @RequestMapping("/unreceive/list")
+    //@RequiresPermissions("ware:purchase:list")
+    public R unreceivelist(@RequestParam Map<String, Object> params){
+        PageUtils page = purchaseService.queryPageUnreceivePurchase(params);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("ware:purchase:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = purchaseService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("ware:purchase:info")
+    public R info(@PathVariable("id") Long id){
+        Purchase purchase = purchaseService.getById(id);
+
+        return R.ok().put("purchase", purchase);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("ware:purchase:save")
+    public R save(@RequestBody Purchase purchase){
+        purchase.setUpdateTime(new Date());
+        purchase.setCreateTime(new Date());
+        purchaseService.save(purchase);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("ware:purchase:update")
+    public R update(@RequestBody Purchase purchase){
+        purchaseService.updateById(purchase);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("ware:purchase:delete")
+    public R delete(@RequestBody Long[] ids){
+        purchaseService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

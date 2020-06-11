@@ -172,7 +172,7 @@ public class AttrController extends BaseController {
     // /product/attr/base/listforspu/{spuId}
     @GetMapping("/base/listforspu/{spuId}")
     public R baseAttrlistforspu(@PathVariable("spuId") Long spuId){
-
+        // spu 规格参数查询
         List<ProductAttrValue> entities = productAttrValueService.baseAttrlistforspu(spuId);
 
         return R.ok().put("data",entities);

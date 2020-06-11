@@ -270,6 +270,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
 
                 Long skuId = skuInfoEntity.getSkuId();
 
+                // 保存sku 图片信息
                 List<SkuImages> imagesEntities = item.getImages().stream().map(img -> {
                     SkuImages skuImagesEntity = new SkuImages();
                     skuImagesEntity.setSkuId(skuId);

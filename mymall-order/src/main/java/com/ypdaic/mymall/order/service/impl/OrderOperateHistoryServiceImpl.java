@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.order.entity.OrderItem;
 import com.ypdaic.mymall.order.entity.OrderOperateHistory;
 import com.ypdaic.mymall.order.mapper.OrderOperateHistoryMapper;
 import com.ypdaic.mymall.order.service.IOrderOperateHistoryService;
@@ -133,6 +136,16 @@ public class OrderOperateHistoryServiceImpl extends ServiceImpl<OrderOperateHist
      */
     public List<OrderOperateHistory> queryAll(OrderOperateHistoryDto orderOperateHistoryDto) {
         return baseMapper.queryAll(orderOperateHistoryDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<OrderOperateHistory> page = this.page(
+                new Query<OrderOperateHistory>().getPage(params),
+                new QueryWrapper<OrderOperateHistory>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

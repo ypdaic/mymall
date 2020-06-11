@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.member.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.member.service.IMemberCollectSubjectService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.member.entity.MemberCollectSubject;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +158,62 @@ public class MemberCollectSubjectController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "会员收藏的专题活动名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("member:membercollectsubject:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = memberCollectSubjectService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("member:membercollectsubject:info")
+    public R info(@PathVariable("id") Long id){
+        MemberCollectSubject memberCollectSubject = memberCollectSubjectService.getById(id);
+
+        return R.ok().put("memberCollectSubject", memberCollectSubject);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("member:membercollectsubject:save")
+    public R save(@RequestBody MemberCollectSubject memberCollectSubject){
+        memberCollectSubjectService.save(memberCollectSubject);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("member:membercollectsubject:update")
+    public R update(@RequestBody MemberCollectSubject memberCollectSubject){
+        memberCollectSubjectService.updateById(memberCollectSubject);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("member:membercollectsubject:delete")
+    public R delete(@RequestBody Long[] ids){
+        memberCollectSubjectService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

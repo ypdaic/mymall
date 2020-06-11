@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ypdaic.mymall.member.mapper.MemberStatisticsInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ypdaic.mymall.member.entity.MemberStatisticsInfo">
+    <result column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="consume_amount" property="consumeAmount" />
+        <result column="coupon_amount" property="couponAmount" />
+        <result column="order_count" property="orderCount" />
+        <result column="coupon_count" property="couponCount" />
+        <result column="comment_count" property="commentCount" />
+        <result column="return_order_count" property="returnOrderCount" />
+        <result column="login_count" property="loginCount" />
+        <result column="attend_count" property="attendCount" />
+        <result column="fans_count" property="fansCount" />
+        <result column="collect_product_count" property="collectProductCount" />
+        <result column="collect_subject_count" property="collectSubjectCount" />
+        <result column="collect_comment_count" property="collectCommentCount" />
+        <result column="invite_friend_count" property="inviteFriendCount" />
+    </resultMap>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        select
+            *
+        from
+            ums_member_statistics_info
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.consumeAmount != null">
+                and consume_amount = #{dto.consumeAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.orderCount != null">
+                and order_count = #{dto.orderCount}
+            </if>
+            <if test="dto.couponCount != null">
+                and coupon_count = #{dto.couponCount}
+            </if>
+            <if test="dto.commentCount != null">
+                and comment_count = #{dto.commentCount}
+            </if>
+            <if test="dto.returnOrderCount != null">
+                and return_order_count = #{dto.returnOrderCount}
+            </if>
+            <if test="dto.loginCount != null">
+                and login_count = #{dto.loginCount}
+            </if>
+            <if test="dto.attendCount != null">
+                and attend_count = #{dto.attendCount}
+            </if>
+            <if test="dto.fansCount != null">
+                and fans_count = #{dto.fansCount}
+            </if>
+            <if test="dto.collectProductCount != null">
+                and collect_product_count = #{dto.collectProductCount}
+            </if>
+            <if test="dto.collectSubjectCount != null">
+                and collect_subject_count = #{dto.collectSubjectCount}
+            </if>
+            <if test="dto.collectCommentCount != null">
+                and collect_comment_count = #{dto.collectCommentCount}
+            </if>
+            <if test="dto.inviteFriendCount != null">
+                and invite_friend_count = #{dto.inviteFriendCount}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from ums_member_statistics_info
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.consumeAmount != null">
+                and consume_amount = #{dto.consumeAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.orderCount != null">
+                and order_count = #{dto.orderCount}
+            </if>
+            <if test="dto.couponCount != null">
+                and coupon_count = #{dto.couponCount}
+            </if>
+            <if test="dto.commentCount != null">
+                and comment_count = #{dto.commentCount}
+            </if>
+            <if test="dto.returnOrderCount != null">
+                and return_order_count = #{dto.returnOrderCount}
+            </if>
+            <if test="dto.loginCount != null">
+                and login_count = #{dto.loginCount}
+            </if>
+            <if test="dto.attendCount != null">
+                and attend_count = #{dto.attendCount}
+            </if>
+            <if test="dto.fansCount != null">
+                and fans_count = #{dto.fansCount}
+            </if>
+            <if test="dto.collectProductCount != null">
+                and collect_product_count = #{dto.collectProductCount}
+            </if>
+            <if test="dto.collectSubjectCount != null">
+                and collect_subject_count = #{dto.collectSubjectCount}
+            </if>
+            <if test="dto.collectCommentCount != null">
+                and collect_comment_count = #{dto.collectCommentCount}
+            </if>
+            <if test="dto.inviteFriendCount != null">
+                and invite_friend_count = #{dto.inviteFriendCount}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPageForExport" resultType="java.util.HashMap">
+        select * from ums_member_statistics_info
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.consumeAmount != null">
+                and consume_amount = #{dto.consumeAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.orderCount != null">
+                and order_count = #{dto.orderCount}
+            </if>
+            <if test="dto.couponCount != null">
+                and coupon_count = #{dto.couponCount}
+            </if>
+            <if test="dto.commentCount != null">
+                and comment_count = #{dto.commentCount}
+            </if>
+            <if test="dto.returnOrderCount != null">
+                and return_order_count = #{dto.returnOrderCount}
+            </if>
+            <if test="dto.loginCount != null">
+                and login_count = #{dto.loginCount}
+            </if>
+            <if test="dto.attendCount != null">
+                and attend_count = #{dto.attendCount}
+            </if>
+            <if test="dto.fansCount != null">
+                and fans_count = #{dto.fansCount}
+            </if>
+            <if test="dto.collectProductCount != null">
+                and collect_product_count = #{dto.collectProductCount}
+            </if>
+            <if test="dto.collectSubjectCount != null">
+                and collect_subject_count = #{dto.collectSubjectCount}
+            </if>
+            <if test="dto.collectCommentCount != null">
+                and collect_comment_count = #{dto.collectCommentCount}
+            </if>
+            <if test="dto.inviteFriendCount != null">
+                and invite_friend_count = #{dto.inviteFriendCount}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from ums_member_statistics_info
+        <where>
+            <if test="dto.memberId != null">
+                member_id = #{dto.memberId}
+            </if>
+            <if test="dto.consumeAmount != null">
+                and consume_amount = #{dto.consumeAmount}
+            </if>
+            <if test="dto.couponAmount != null">
+                and coupon_amount = #{dto.couponAmount}
+            </if>
+            <if test="dto.orderCount != null">
+                and order_count = #{dto.orderCount}
+            </if>
+            <if test="dto.couponCount != null">
+                and coupon_count = #{dto.couponCount}
+            </if>
+            <if test="dto.commentCount != null">
+                and comment_count = #{dto.commentCount}
+            </if>
+            <if test="dto.returnOrderCount != null">
+                and return_order_count = #{dto.returnOrderCount}
+            </if>
+            <if test="dto.loginCount != null">
+                and login_count = #{dto.loginCount}
+            </if>
+            <if test="dto.attendCount != null">
+                and attend_count = #{dto.attendCount}
+            </if>
+            <if test="dto.fansCount != null">
+                and fans_count = #{dto.fansCount}
+            </if>
+            <if test="dto.collectProductCount != null">
+                and collect_product_count = #{dto.collectProductCount}
+            </if>
+            <if test="dto.collectSubjectCount != null">
+                and collect_subject_count = #{dto.collectSubjectCount}
+            </if>
+            <if test="dto.collectCommentCount != null">
+                and collect_comment_count = #{dto.collectCommentCount}
+            </if>
+            <if test="dto.inviteFriendCount != null">
+                and invite_friend_count = #{dto.inviteFriendCount}
+            </if>
+        </where>
+    </select>
+
+</mapper>

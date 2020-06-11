@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.order.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.order.service.IOrderSettingService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.order.entity.OrderSetting;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +158,62 @@ public class OrderSettingController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "订单配置信息名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("order:ordersetting:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = orderSettingService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("order:ordersetting:info")
+    public R info(@PathVariable("id") Long id){
+        OrderSetting orderSetting = orderSettingService.getById(id);
+
+        return R.ok().put("orderSetting", orderSetting);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("order:ordersetting:save")
+    public R save(@RequestBody OrderSetting orderSetting){
+        orderSettingService.save(orderSetting);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("order:ordersetting:update")
+    public R update(@RequestBody OrderSetting orderSetting){
+        orderSettingService.updateById(orderSetting);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("order:ordersetting:delete")
+    public R delete(@RequestBody Long[] ids){
+        orderSettingService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

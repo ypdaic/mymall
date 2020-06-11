@@ -30,7 +30,7 @@ public class SkuInfo extends Model {
     /**
      * skuId
      */
-    @TableId(value = "sku_id", type = IdType.INPUT)
+    @TableId(value = "sku_id", type = IdType.AUTO)
     private Long skuId;
 
     /**

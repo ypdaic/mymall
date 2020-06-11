@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.order.entity.Order;
 import com.ypdaic.mymall.order.entity.OrderSetting;
 import com.ypdaic.mymall.order.mapper.OrderSettingMapper;
 import com.ypdaic.mymall.order.service.IOrderSettingService;
@@ -134,6 +137,16 @@ public class OrderSettingServiceImpl extends ServiceImpl<OrderSettingMapper, Ord
      */
     public List<OrderSetting> queryAll(OrderSettingDto orderSettingDto) {
         return baseMapper.queryAll(orderSettingDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<OrderSetting> page = this.page(
+                new Query<OrderSetting>().getPage(params),
+                new QueryWrapper<OrderSetting>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

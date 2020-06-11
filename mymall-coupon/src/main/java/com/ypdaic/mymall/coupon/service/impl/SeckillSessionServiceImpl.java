@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.SeckillSession;
 import com.ypdaic.mymall.coupon.mapper.SeckillSessionMapper;
 import com.ypdaic.mymall.coupon.service.ISeckillSessionService;
@@ -138,6 +140,16 @@ public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionMapper,
      */
     public List<SeckillSession> queryAll(SeckillSessionDto seckillSessionDto) {
         return baseMapper.queryAll(seckillSessionDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SeckillSession> page = this.page(
+                new Query<SeckillSession>().getPage(params),
+                new QueryWrapper<SeckillSession>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

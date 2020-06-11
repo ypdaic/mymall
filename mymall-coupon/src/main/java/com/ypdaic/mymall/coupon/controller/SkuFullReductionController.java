@@ -165,6 +165,11 @@ public class SkuFullReductionController extends BaseController {
         return ResultUtil.failure(40001, "商品满减信息名称已存在！");
     }
 
+    /**
+     * sku 减满信息保存
+     * @param reductionTo
+     * @return
+     */
     @PostMapping("/saveinfo")
     public R saveInfo(@RequestBody SkuReductionTo reductionTo){
 

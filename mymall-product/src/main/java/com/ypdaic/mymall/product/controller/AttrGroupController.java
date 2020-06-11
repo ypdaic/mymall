@@ -193,7 +193,11 @@ public class AttrGroupController extends BaseController {
         return R.ok().put("data",vos);
     }
 
-
+    /**
+     * 查询属性分组关联的规格参数
+     * @param attrgroupId
+     * @return
+     */
     ///product/attrgroup/{attrgroupId}/attr/relation
     @GetMapping("/{attrgroupId}/attr/relation")
     public R attrRelation(@PathVariable("attrgroupId") Long attrgroupId){
@@ -201,6 +205,12 @@ public class AttrGroupController extends BaseController {
         return R.ok().put("data",entities);
     }
 
+    /**
+     * 查询属性分组还没有关联的规格参数
+     * @param attrgroupId
+     * @param params
+     * @return
+     */
     ///product/attrgroup/{attrgroupId}/noattr/relation
     @GetMapping("/{attrgroupId}/noattr/relation")
     public R attrNoRelation(@PathVariable("attrgroupId") Long attrgroupId,
@@ -239,6 +249,7 @@ public class AttrGroupController extends BaseController {
         AttrGroup attrGroup = attrGroupService.getById(attrGroupId);
 
         Long catelogId = attrGroup.getCatelogId();
+        // 查询已经绑定的分类
         Long[] path = categoryService.findCatelogPath(catelogId);
 
         attrGroup.setCatelogPath(path);

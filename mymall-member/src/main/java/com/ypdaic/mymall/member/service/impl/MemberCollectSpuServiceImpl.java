@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.member.entity.IntegrationChangeHistory;
 import com.ypdaic.mymall.member.entity.MemberCollectSpu;
 import com.ypdaic.mymall.member.mapper.MemberCollectSpuMapper;
 import com.ypdaic.mymall.member.service.IMemberCollectSpuService;
@@ -133,6 +136,16 @@ public class MemberCollectSpuServiceImpl extends ServiceImpl<MemberCollectSpuMap
      */
     public List<MemberCollectSpu> queryAll(MemberCollectSpuDto memberCollectSpuDto) {
         return baseMapper.queryAll(memberCollectSpuDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<MemberCollectSpu> page = this.page(
+                new Query<MemberCollectSpu>().getPage(params),
+                new QueryWrapper<MemberCollectSpu>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

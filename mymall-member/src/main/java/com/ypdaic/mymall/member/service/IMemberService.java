@@ -66,4 +66,6 @@ public interface IMemberService extends IService<Member> {
     List<Member> queryAll(MemberDto memberDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+
 }

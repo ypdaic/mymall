@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.member.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.member.service.IMemberReceiveAddressService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.member.entity.MemberReceiveAddress;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +158,62 @@ public class MemberReceiveAddressController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "会员收货地址名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("member:memberreceiveaddress:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = memberReceiveAddressService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("member:memberreceiveaddress:info")
+    public R info(@PathVariable("id") Long id){
+        MemberReceiveAddress memberReceiveAddress = memberReceiveAddressService.getById(id);
+
+        return R.ok().put("memberReceiveAddress", memberReceiveAddress);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("member:memberreceiveaddress:save")
+    public R save(@RequestBody MemberReceiveAddress memberReceiveAddress){
+        memberReceiveAddressService.save(memberReceiveAddress);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("member:memberreceiveaddress:update")
+    public R update(@RequestBody MemberReceiveAddress memberReceiveAddress){
+        memberReceiveAddressService.updateById(memberReceiveAddress);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("member:memberreceiveaddress:delete")
+    public R delete(@RequestBody Long[] ids){
+        memberReceiveAddressService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

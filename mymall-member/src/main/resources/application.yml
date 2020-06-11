@@ -31,4 +31,4 @@ info:
 ribbon:
   eager-load:
     enabled: true
-    clients: springcloud-provider
+    clients: mymall-coupon

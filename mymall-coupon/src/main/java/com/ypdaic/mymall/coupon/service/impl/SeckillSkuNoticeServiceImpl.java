@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.SeckillSkuNotice;
 import com.ypdaic.mymall.coupon.mapper.SeckillSkuNoticeMapper;
 import com.ypdaic.mymall.coupon.service.ISeckillSkuNoticeService;
@@ -138,6 +140,16 @@ public class SeckillSkuNoticeServiceImpl extends ServiceImpl<SeckillSkuNoticeMap
      */
     public List<SeckillSkuNotice> queryAll(SeckillSkuNoticeDto seckillSkuNoticeDto) {
         return baseMapper.queryAll(seckillSkuNoticeDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SeckillSkuNotice> page = this.page(
+                new Query<SeckillSkuNotice>().getPage(params),
+                new QueryWrapper<SeckillSkuNotice>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

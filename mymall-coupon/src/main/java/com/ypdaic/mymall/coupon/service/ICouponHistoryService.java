@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.coupon.service;
 
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.coupon.entity.CouponHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.coupon.vo.CouponHistoryDto;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,4 +64,6 @@ public interface ICouponHistoryService extends IService<CouponHistory> {
      * @return
      */
     List<CouponHistory> queryAll(CouponHistoryDto couponHistoryDto);
+
+    PageUtils queryPage(Map<String, Object> params);
 }

@@ -1,6 +1,9 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.order.entity.Order;
+import com.ypdaic.mymall.order.entity.OrderReturnReason;
 import com.ypdaic.mymall.order.mapper.OrderMapper;
 import com.ypdaic.mymall.order.service.IOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -216,6 +219,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      */
     public List<Order> queryAll(OrderDto orderDto) {
         return baseMapper.queryAll(orderDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<Order> page = this.page(
+                new Query<Order>().getPage(params),
+                new QueryWrapper<Order>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.member.entity.MemberLoginLog;
 import com.ypdaic.mymall.member.entity.MemberReceiveAddress;
 import com.ypdaic.mymall.member.mapper.MemberReceiveAddressMapper;
 import com.ypdaic.mymall.member.service.IMemberReceiveAddressService;
@@ -143,6 +146,16 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
      */
     public List<MemberReceiveAddress> queryAll(MemberReceiveAddressDto memberReceiveAddressDto) {
         return baseMapper.queryAll(memberReceiveAddressDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<MemberReceiveAddress> page = this.page(
+                new Query<MemberReceiveAddress>().getPage(params),
+                new QueryWrapper<MemberReceiveAddress>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

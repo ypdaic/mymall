@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.SkuLadder;
 import com.ypdaic.mymall.coupon.mapper.SkuLadderMapper;
 import com.ypdaic.mymall.coupon.service.ISkuLadderService;
@@ -132,6 +134,16 @@ public class SkuLadderServiceImpl extends ServiceImpl<SkuLadderMapper, SkuLadder
      */
     public List<SkuLadder> queryAll(SkuLadderDto skuLadderDto) {
         return baseMapper.queryAll(skuLadderDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SkuLadder> page = this.page(
+                new Query<SkuLadder>().getPage(params),
+                new QueryWrapper<SkuLadder>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

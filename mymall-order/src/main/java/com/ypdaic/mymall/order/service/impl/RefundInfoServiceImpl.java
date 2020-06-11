@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.order.entity.PaymentInfo;
 import com.ypdaic.mymall.order.entity.RefundInfo;
 import com.ypdaic.mymall.order.mapper.RefundInfoMapper;
 import com.ypdaic.mymall.order.service.IRefundInfoService;
@@ -134,6 +137,16 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
      */
     public List<RefundInfo> queryAll(RefundInfoDto refundInfoDto) {
         return baseMapper.queryAll(refundInfoDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<RefundInfo> page = this.page(
+                new Query<RefundInfo>().getPage(params),
+                new QueryWrapper<RefundInfo>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.member.entity.GrowthChangeHistory;
 import com.ypdaic.mymall.member.entity.IntegrationChangeHistory;
 import com.ypdaic.mymall.member.mapper.IntegrationChangeHistoryMapper;
 import com.ypdaic.mymall.member.service.IIntegrationChangeHistoryService;
@@ -133,6 +136,16 @@ public class IntegrationChangeHistoryServiceImpl extends ServiceImpl<Integration
      */
     public List<IntegrationChangeHistory> queryAll(IntegrationChangeHistoryDto integrationChangeHistoryDto) {
         return baseMapper.queryAll(integrationChangeHistoryDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<IntegrationChangeHistory> page = this.page(
+                new Query<IntegrationChangeHistory>().getPage(params),
+                new QueryWrapper<IntegrationChangeHistory>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

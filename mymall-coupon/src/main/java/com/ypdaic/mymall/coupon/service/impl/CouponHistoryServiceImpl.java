@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.CouponHistory;
 import com.ypdaic.mymall.coupon.mapper.CouponHistoryMapper;
 import com.ypdaic.mymall.coupon.service.ICouponHistoryService;
@@ -141,8 +143,19 @@ public class CouponHistoryServiceImpl extends ServiceImpl<CouponHistoryMapper, C
      * 查询所有优惠券领取历史记录
      * @return
      */
+    @Override
     public List<CouponHistory> queryAll(CouponHistoryDto couponHistoryDto) {
         return baseMapper.queryAll(couponHistoryDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<CouponHistory> page = this.page(
+                new Query<CouponHistory>().getPage(params),
+                new QueryWrapper<CouponHistory>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

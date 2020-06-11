@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.ware.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.ware.entity.PurchaseDetail;
 import com.ypdaic.mymall.ware.mapper.PurchaseDetailMapper;
 import com.ypdaic.mymall.ware.service.IPurchaseDetailService;
@@ -134,6 +137,52 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailMapper,
      */
     public List<PurchaseDetail> queryAll(PurchaseDetailDto purchaseDetailDto) {
         return baseMapper.queryAll(purchaseDetailDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+
+        /**
+         * status: 0,//状态
+         *    wareId: 1,//仓库id
+         */
+
+        QueryWrapper<PurchaseDetail> queryWrapper = new QueryWrapper<PurchaseDetail>();
+
+        String key = (String) params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            //purchase_id  sku_id
+            queryWrapper.and(w->{
+                return w.eq("purchase_id",key).or().eq("sku_id",key);
+            });
+        }
+
+        String status = (String) params.get("status");
+        if(!StringUtils.isEmpty(status)){
+            //purchase_id  sku_id
+            queryWrapper.eq("status",status);
+        }
+
+        String wareId = (String) params.get("wareId");
+        if(!StringUtils.isEmpty(wareId)){
+            //purchase_id  sku_id
+            queryWrapper.eq("ware_id",wareId);
+        }
+
+        IPage<PurchaseDetail> page = this.page(
+                new Query<PurchaseDetail>().getPage(params),
+                queryWrapper
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public List<PurchaseDetail> listDetailByPurchaseId(Long id) {
+
+        List<PurchaseDetail> purchaseId = this.list(new QueryWrapper<PurchaseDetail>().eq("purchase_id", id));
+
+        return purchaseId;
     }
 
 }

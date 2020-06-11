@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.order.service;
 
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.order.entity.OrderReturnApply;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.order.vo.OrderReturnApplyDto;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,4 +64,5 @@ public interface IOrderReturnApplyService extends IService<OrderReturnApply> {
      * @return
      */
     List<OrderReturnApply> queryAll(OrderReturnApplyDto orderReturnApplyDto);
+    PageUtils queryPage(Map<String, Object> params);
 }

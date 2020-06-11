@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.HomeAdv;
 import com.ypdaic.mymall.coupon.mapper.HomeAdvMapper;
 import com.ypdaic.mymall.coupon.service.IHomeAdvService;
@@ -149,6 +151,16 @@ public class HomeAdvServiceImpl extends ServiceImpl<HomeAdvMapper, HomeAdv> impl
      */
     public List<HomeAdv> queryAll(HomeAdvDto homeAdvDto) {
         return baseMapper.queryAll(homeAdvDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<HomeAdv> page = this.page(
+                new Query<HomeAdv>().getPage(params),
+                new QueryWrapper<HomeAdv>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

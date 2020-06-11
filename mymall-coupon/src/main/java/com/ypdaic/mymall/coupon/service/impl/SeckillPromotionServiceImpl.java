@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.SeckillPromotion;
 import com.ypdaic.mymall.coupon.mapper.SeckillPromotionMapper;
 import com.ypdaic.mymall.coupon.service.ISeckillPromotionService;
@@ -139,6 +141,16 @@ public class SeckillPromotionServiceImpl extends ServiceImpl<SeckillPromotionMap
      */
     public List<SeckillPromotion> queryAll(SeckillPromotionDto seckillPromotionDto) {
         return baseMapper.queryAll(seckillPromotionDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<SeckillPromotion> page = this.page(
+                new Query<SeckillPromotion>().getPage(params),
+                new QueryWrapper<SeckillPromotion>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

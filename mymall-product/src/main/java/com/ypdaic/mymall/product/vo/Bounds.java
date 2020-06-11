@@ -16,7 +16,14 @@ import java.math.BigDecimal;
 @Data
 public class Bounds {
 
+    /**
+     * 金币
+     */
     private BigDecimal buyBounds;
+
+    /**
+     * 成长值
+     */
     private BigDecimal growBounds;
 
 

@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.product.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -61,6 +62,7 @@ public class Attr extends Model {
     /**
      * 启用状态[0 - 禁用，1 - 启用]
      */
+    @TableLogic(value = "1", delval = "0")
     private Long enable;
 
     /**

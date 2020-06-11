@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.order.entity.OrderSetting;
 import com.ypdaic.mymall.order.entity.PaymentInfo;
 import com.ypdaic.mymall.order.mapper.PaymentInfoMapper;
 import com.ypdaic.mymall.order.service.IPaymentInfoService;
@@ -147,6 +150,16 @@ public class PaymentInfoServiceImpl extends ServiceImpl<PaymentInfoMapper, Payme
      */
     public List<PaymentInfo> queryAll(PaymentInfoDto paymentInfoDto) {
         return baseMapper.queryAll(paymentInfoDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<PaymentInfo> page = this.page(
+                new Query<PaymentInfo>().getPage(params),
+                new QueryWrapper<PaymentInfo>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

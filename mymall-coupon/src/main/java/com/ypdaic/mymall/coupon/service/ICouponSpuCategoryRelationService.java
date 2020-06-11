@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.coupon.service;
 
+import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.coupon.entity.CouponSpuCategoryRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.coupon.vo.CouponSpuCategoryRelationDto;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,4 +64,7 @@ public interface ICouponSpuCategoryRelationService extends IService<CouponSpuCat
      * @return
      */
     List<CouponSpuCategoryRelation> queryAll(CouponSpuCategoryRelationDto couponSpuCategoryRelationDto);
+
+
+    PageUtils queryPage(Map<String, Object> params);
 }

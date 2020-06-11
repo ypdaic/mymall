@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.order.entity.OrderReturnApply;
 import com.ypdaic.mymall.order.entity.OrderReturnReason;
 import com.ypdaic.mymall.order.mapper.OrderReturnReasonMapper;
 import com.ypdaic.mymall.order.service.IOrderReturnReasonService;
@@ -132,6 +135,16 @@ public class OrderReturnReasonServiceImpl extends ServiceImpl<OrderReturnReasonM
      */
     public List<OrderReturnReason> queryAll(OrderReturnReasonDto orderReturnReasonDto) {
         return baseMapper.queryAll(orderReturnReasonDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<OrderReturnReason> page = this.page(
+                new Query<OrderReturnReason>().getPage(params),
+                new QueryWrapper<OrderReturnReason>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.ware.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.ware.entity.WareInfo;
 import com.ypdaic.mymall.ware.mapper.WareInfoMapper;
 import com.ypdaic.mymall.ware.service.IWareInfoService;
@@ -129,6 +132,26 @@ public class WareInfoServiceImpl extends ServiceImpl<WareInfoMapper, WareInfo> i
      */
     public List<WareInfo> queryAll(WareInfoDto wareInfoDto) {
         return baseMapper.queryAll(wareInfoDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+
+        QueryWrapper<WareInfo> wareInfoEntityQueryWrapper = new QueryWrapper<>();
+        String key = (String) params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            wareInfoEntityQueryWrapper.eq("id",key).or()
+                    .like("name",key)
+                    .or().like("address",key)
+                    .or().like("areacode",key);
+        }
+
+        IPage<WareInfo> page = this.page(
+                new Query<WareInfo>().getPage(params),
+                wareInfoEntityQueryWrapper
+        );
+
+        return new PageUtils(page);
     }
 
 }

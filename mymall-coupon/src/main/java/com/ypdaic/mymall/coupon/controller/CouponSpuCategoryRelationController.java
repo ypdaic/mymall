@@ -1,9 +1,12 @@
 package com.ypdaic.mymall.coupon.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.coupon.entity.CouponSpuRelation;
+import com.ypdaic.mymall.coupon.service.ICouponSpuRelationService;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.coupon.service.ICouponSpuCategoryRelationService;
@@ -12,8 +15,6 @@ import com.ypdaic.mymall.coupon.entity.CouponSpuCategoryRelation;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +160,62 @@ public class CouponSpuCategoryRelationController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "优惠券分类关联名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("coupon:couponspucategoryrelation:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = couponSpuCategoryRelationService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("coupon:couponspucategoryrelation:info")
+    public R info(@PathVariable("id") Long id){
+        CouponSpuCategoryRelation couponSpuCategoryRelation = couponSpuCategoryRelationService.getById(id);
+
+        return R.ok().put("couponSpuCategoryRelation", couponSpuCategoryRelation);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("coupon:couponspucategoryrelation:save")
+    public R save(@RequestBody CouponSpuCategoryRelation couponSpuCategoryRelation){
+        couponSpuCategoryRelationService.save(couponSpuCategoryRelation);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("coupon:couponspucategoryrelation:update")
+    public R update(@RequestBody CouponSpuCategoryRelation couponSpuCategoryRelation){
+        couponSpuCategoryRelationService.updateById(couponSpuCategoryRelation);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("coupon:couponspucategoryrelation:delete")
+    public R delete(@RequestBody Long[] ids){
+        couponSpuCategoryRelationService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

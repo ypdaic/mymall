@@ -66,4 +66,6 @@ public interface IMemberLevelService extends IService<MemberLevel> {
     List<MemberLevel> queryAll(MemberLevelDto memberLevelDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+
 }

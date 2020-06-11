@@ -360,14 +360,15 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, Attr> implements IA
             return item.getAttrGroupId();
         }).collect(Collectors.toList());
 
-        //2.2)、这些分组关联的属性
+        //2.2)、这些分组关联的属性，查询分类下所有的属性分组
         List<AttrAttrgroupRelation> groupId = relationDao.selectList(new QueryWrapper<AttrAttrgroupRelation>().in("attr_group_id", collect));
         List<Long> attrIds = groupId.stream().map(item -> {
             return item.getAttrId();
         }).collect(Collectors.toList());
 
-        //2.3)、从当前分类的所有属性中移除这些属性；
+        //2.3)、从当前分类的所有属性中移除这些属性；也就是只查询还未绑定分组的基本属性
         QueryWrapper<Attr> wrapper = new QueryWrapper<Attr>().eq("catelog_id", catelogId).eq("attr_type",ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode());
+        wrapper.eq("enable", 1);
         if(attrIds!=null && attrIds.size()>0){
             wrapper.notIn("attr_id", attrIds);
         }

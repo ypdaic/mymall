@@ -1,9 +1,10 @@
 package com.ypdaic.mymall.ware.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.R;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.ware.service.IPurchaseDetailService;
@@ -12,8 +13,6 @@ import com.ypdaic.mymall.ware.entity.PurchaseDetail;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,7 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -156,6 +158,62 @@ public class PurchaseDetailController extends BaseController {
             return ResultUtil.success();
         }
         return ResultUtil.failure(40001, "名称已存在！");
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("ware:purchasedetail:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = purchaseDetailService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{id}")
+    //@RequiresPermissions("ware:purchasedetail:info")
+    public R info(@PathVariable("id") Long id){
+        PurchaseDetail purchaseDetail = purchaseDetailService.getById(id);
+
+        return R.ok().put("purchaseDetail", purchaseDetail);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/save")
+    //@RequiresPermissions("ware:purchasedetail:save")
+    public R save(@RequestBody PurchaseDetail purchaseDetail){
+        purchaseDetailService.save(purchaseDetail);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("/update")
+    //@RequiresPermissions("ware:purchasedetail:update")
+    public R update(@RequestBody PurchaseDetail purchaseDetail){
+        purchaseDetailService.updateById(purchaseDetail);
+
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    //@RequiresPermissions("ware:purchasedetail:delete")
+    public R delete(@RequestBody Long[] ids){
+        purchaseDetailService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
     }
 
 }

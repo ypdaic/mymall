@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.member.entity.MemberCollectSubject;
 import com.ypdaic.mymall.member.entity.MemberLoginLog;
 import com.ypdaic.mymall.member.mapper.MemberLoginLogMapper;
 import com.ypdaic.mymall.member.service.IMemberLoginLogService;
@@ -135,4 +138,13 @@ public class MemberLoginLogServiceImpl extends ServiceImpl<MemberLoginLogMapper,
         return baseMapper.queryAll(memberLoginLogDto);
     }
 
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<MemberLoginLog> page = this.page(
+                new Query<MemberLoginLog>().getPage(params),
+                new QueryWrapper<MemberLoginLog>()
+        );
+
+        return new PageUtils(page);
+    }
 }

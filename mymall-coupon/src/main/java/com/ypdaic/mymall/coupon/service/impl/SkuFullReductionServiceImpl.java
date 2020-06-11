@@ -165,6 +165,7 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionMap
     public void saveSkuReduction(SkuReductionTo reductionTo) {
         //1、// //5.4）、sku的优惠、满减等信息；gulimall_sms->sms_sku_ladder\sms_sku_full_reduction\sms_member_price
         //sms_sku_ladder
+        // 保存满几件，打几折信息
         SkuLadder skuLadderEntity = new SkuLadder();
         skuLadderEntity.setSkuId(reductionTo.getSkuId());
         skuLadderEntity.setFullCount(reductionTo.getFullCount());
@@ -176,7 +177,7 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionMap
 
 
 
-
+        // 保存满多少，减多少信息
         //2、sms_sku_full_reduction
         SkuFullReduction reductionEntity = new SkuFullReduction();
         BeanUtils.copyProperties(reductionTo,reductionEntity);

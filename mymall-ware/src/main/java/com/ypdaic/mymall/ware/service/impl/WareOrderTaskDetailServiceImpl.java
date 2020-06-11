@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.ware.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.ware.entity.WareOrderTaskDetail;
 import com.ypdaic.mymall.ware.mapper.WareOrderTaskDetailMapper;
 import com.ypdaic.mymall.ware.service.IWareOrderTaskDetailService;
@@ -130,6 +132,16 @@ public class WareOrderTaskDetailServiceImpl extends ServiceImpl<WareOrderTaskDet
      */
     public List<WareOrderTaskDetail> queryAll(WareOrderTaskDetailDto wareOrderTaskDetailDto) {
         return baseMapper.queryAll(wareOrderTaskDetailDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<WareOrderTaskDetail> page = this.page(
+                new Query<WareOrderTaskDetail>().getPage(params),
+                new QueryWrapper<WareOrderTaskDetail>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

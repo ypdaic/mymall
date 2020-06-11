@@ -3,6 +3,7 @@ package com.ypdaic.mymall.member.service.impl;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.member.entity.Member;
+import com.ypdaic.mymall.member.entity.MemberReceiveAddress;
 import com.ypdaic.mymall.member.mapper.MemberMapper;
 import com.ypdaic.mymall.member.service.IMemberService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -174,5 +175,6 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
         return new PageUtils(page);
     }
+
 
 }

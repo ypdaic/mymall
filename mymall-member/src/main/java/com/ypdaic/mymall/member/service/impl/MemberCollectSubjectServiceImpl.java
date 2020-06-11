@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.member.entity.MemberCollectSpu;
 import com.ypdaic.mymall.member.entity.MemberCollectSubject;
 import com.ypdaic.mymall.member.mapper.MemberCollectSubjectMapper;
 import com.ypdaic.mymall.member.service.IMemberCollectSubjectService;
@@ -130,6 +133,16 @@ public class MemberCollectSubjectServiceImpl extends ServiceImpl<MemberCollectSu
      */
     public List<MemberCollectSubject> queryAll(MemberCollectSubjectDto memberCollectSubjectDto) {
         return baseMapper.queryAll(memberCollectSubjectDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<MemberCollectSubject> page = this.page(
+                new Query<MemberCollectSubject>().getPage(params),
+                new QueryWrapper<MemberCollectSubject>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

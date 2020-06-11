@@ -169,11 +169,12 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
                 return obj.eq("attr_group_id",key).or().like("attr_group_name",key);
             });
         }
-
+        // 分类id为0，查询全部属性分类
         if( catelogId == 0){
             IPage<AttrGroup> page = this.page(new Query<AttrGroup>().getPage(params),
                     wrapper);
             return new PageUtils(page);
+            // 查询指定分类的属性分组
         }else {
             wrapper.eq("catelog_id",catelogId);
             IPage<AttrGroup> page = this.page(new Query<AttrGroup>().getPage(params),

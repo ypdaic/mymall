@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.coupon.service.impl;
 
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.MemberPrice;
 import com.ypdaic.mymall.coupon.mapper.MemberPriceMapper;
 import com.ypdaic.mymall.coupon.service.IMemberPriceService;
@@ -132,6 +134,16 @@ public class MemberPriceServiceImpl extends ServiceImpl<MemberPriceMapper, Membe
      */
     public List<MemberPrice> queryAll(MemberPriceDto memberPriceDto) {
         return baseMapper.queryAll(memberPriceDto);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        IPage<MemberPrice> page = this.page(
+                new Query<MemberPrice>().getPage(params),
+                new QueryWrapper<MemberPrice>()
+        );
+
+        return new PageUtils(page);
     }
 
 }

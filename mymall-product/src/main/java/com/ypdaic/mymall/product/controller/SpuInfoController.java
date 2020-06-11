@@ -162,7 +162,7 @@ public class SpuInfoController extends BaseController {
     }
 
     /**
-     * 列表
+     * 列表，查询spu信息
      */
     @RequestMapping("/list")
     //@RequiresPermissions("product:spuinfo:list")
