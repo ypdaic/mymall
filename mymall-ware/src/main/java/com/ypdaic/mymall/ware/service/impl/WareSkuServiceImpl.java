@@ -7,6 +7,7 @@ import com.ypdaic.mymall.ware.entity.WareSku;
 import com.ypdaic.mymall.ware.mapper.WareSkuMapper;
 import com.ypdaic.mymall.ware.service.IWareSkuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.ware.vo.SkuHasStockVo;
 import com.ypdaic.mymall.ware.vo.WareSkuDto;
 import com.ypdaic.mymall.ware.enums.WareSkuExcelHeadersEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 
@@ -199,6 +201,19 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
             wareSkuDao.addStock(skuId,wareId,skuNum);
         }
 
+    }
+
+    @Override
+    public List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds) {
+
+        List<SkuHasStockVo> skuHasStockVos = skuIds.stream().map(item -> {
+            Long count = this.baseMapper.getSkuStock(item);
+            SkuHasStockVo skuHasStockVo = new SkuHasStockVo();
+            skuHasStockVo.setSkuId(item);
+            skuHasStockVo.setHasStock(count == null?false:count > 0);
+            return skuHasStockVo;
+        }).collect(Collectors.toList());
+        return skuHasStockVos;
     }
 
 }

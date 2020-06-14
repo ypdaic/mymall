@@ -49,4 +49,5 @@ public interface SpuInfoMapper extends BaseMapper<SpuInfo> {
      */
     List<SpuInfo> queryAll(@Param("dto") SpuInfoDto spuInfoDto);
 
+    void updateSpuStatus(@Param("spuId") Long spuId, @Param("code") int code);
 }

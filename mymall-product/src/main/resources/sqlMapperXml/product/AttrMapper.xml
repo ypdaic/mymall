@@ -148,4 +148,12 @@
         </where>
     </select>
 
+    <select id="selectSearchAttrIds" resultType="java.lang.Long">
+        SELECT attr_id FROM pms_attr where attr_id in
+        <foreach collection="attrIds" item="attrid" separator="," close=")" open="(">
+            #{attrid}
+        </foreach>
+        AND search_type = 1
+    </select>
+
 </mapper>

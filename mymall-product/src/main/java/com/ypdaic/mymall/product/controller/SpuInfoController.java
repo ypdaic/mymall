@@ -185,6 +185,16 @@ public class SpuInfoController extends BaseController {
     }
 
     /**
+     * 商品上架功能：https://easydoc.xyz/doc/75716633/ZUqEdvA4/DhOtFr4A
+     * @return
+     */
+    @PostMapping("{spuId}/up")
+    public R spuUp(@PathVariable("spuId") Long spuId){
+        spuInfoService.up(spuId);
+        return R.ok();
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")

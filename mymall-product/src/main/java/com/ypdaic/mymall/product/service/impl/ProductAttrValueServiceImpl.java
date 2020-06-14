@@ -174,4 +174,12 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueMap
         }).collect(Collectors.toList());
         this.saveBatch(collect);
     }
+
+    @Override
+    public List<ProductAttrValue> baseAttrListForSpu(Long spuId) {
+
+        List<ProductAttrValue> valueEntities = this.baseMapper.selectList(new QueryWrapper<ProductAttrValue>().eq("spu_id", spuId));
+
+        return valueEntities;
+    }
 }

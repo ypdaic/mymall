@@ -9,6 +9,9 @@
 package com.ypdaic.mymall.common.util;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +65,23 @@ public class R extends HashMap<String, Object> {
 	}
 	public int getCode() {
 		return (int) get("code");
+	}
+
+	public <T> T  getData(String key, TypeReference<T> tTypeReference){
+		Object data = get(key);
+		String jsonString = JSON.toJSONString(data);
+		T t = JSON.parseObject(jsonString, tTypeReference);
+		return t;
+	}
+	public <T> T  getData(TypeReference<T> tTypeReference){
+		Object data = get("data");
+		String jsonString = JSON.toJSONString(data);
+		T t = JSON.parseObject(jsonString, tTypeReference);
+		return t;
+	}
+	public R setData(Object data){
+		put("data",data);
+		return this;
 	}
 
 }

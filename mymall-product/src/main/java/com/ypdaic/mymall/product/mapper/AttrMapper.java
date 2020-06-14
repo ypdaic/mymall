@@ -49,4 +49,5 @@ public interface AttrMapper extends BaseMapper<Attr> {
      */
     List<Attr> queryAll(@Param("dto") AttrDto attrDto);
 
+    List<Long> selectSearchAttrIds(@Param("attrIds") List<Long> attrIds);
 }

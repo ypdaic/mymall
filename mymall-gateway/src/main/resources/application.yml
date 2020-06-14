@@ -69,6 +69,13 @@ spring:
          filters:
            #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
            - StripPrefix=1 # 效果同上， 截取路径位数
+       - id: thrid-party
+         uri: lb://mymall-search
+         predicates:
+           - Path=/api/search/**
+         filters:
+           #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+           - StripPrefix=1 # 效果同上， 截取路径位数
        - id: admin
          uri: lb://renren-fast
          predicates:

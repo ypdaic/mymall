@@ -3,6 +3,7 @@ package com.ypdaic.mymall.ware.controller;
 
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.ware.vo.SkuHasStockVo;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -214,6 +215,18 @@ public class WareSkuController extends BaseController {
         wareSkuService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    /**
+     * 根据skuId查询是否有库存
+     * @param skuIds
+     * @return
+     */
+    @PostMapping("/hasStock")
+    public R getSkuHasStock(@RequestBody List<Long> skuIds){
+        List<SkuHasStockVo> skuHasStockVos=wareSkuService.getSkuHasStock(skuIds);
+
+        return R.ok().setData(skuHasStockVos);
     }
 
 }

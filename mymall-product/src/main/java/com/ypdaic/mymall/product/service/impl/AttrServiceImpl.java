@@ -386,4 +386,10 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, Attr> implements IA
         return pageUtils;
     }
 
+    @Override
+    public List<Long> selectSearchAttrIds(List<Long> attrIds) {
+
+        return this.baseMapper.selectSearchAttrIds(attrIds);
+    }
+
 }

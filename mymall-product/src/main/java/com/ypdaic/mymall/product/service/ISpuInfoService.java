@@ -76,5 +76,5 @@ public interface ISpuInfoService extends IService<SpuInfo> {
 
     PageUtils queryPageByCondition(Map<String, Object> params);
 
-
+    void up(Long spuId);
 }

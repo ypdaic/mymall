@@ -224,4 +224,11 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         return new PageUtils(page);
     }
 
+    @Override
+    public List<SkuInfo> getSkusBySpuId(Long spuId) {
+        QueryWrapper<SkuInfo> queryWrapper = new QueryWrapper<SkuInfo>().eq("spu_id", spuId);
+        List<SkuInfo> skuInfoEntities = this.list(queryWrapper);
+        return skuInfoEntities;
+    }
+
 }

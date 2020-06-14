@@ -27,6 +27,7 @@
         <module>mymall-gateway</module>
         <module>mymall-third-party</module>
         <module>mymall-fegin-service</module>
+        <module>mymall-search</module>
     </modules>
 
     <properties>
@@ -50,6 +51,7 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <poi.version>3.17</poi.version>
         <collections4.version>4.4</collections4.version>
+        <es.version>7.4.2</es.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -159,6 +161,11 @@
                 <artifactId>commons-collections4</artifactId>
                 <version>${collections4.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${es.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -180,6 +187,7 @@
                 <gateway.port>8086</gateway.port>
                 <third-party.port>8087</third-party.port>
                 <renren-fast.port>8088</renren-fast.port>
+                <search.port>8089</search.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -204,6 +212,7 @@
                 <gateway.port>8086</gateway.port>
                 <third-party.port>8087</third-party.port>
                 <renren-fast.port>8088</renren-fast.port>
+                <search.port>8089</search.port>
             </properties>
         </profile>
         <profile>
@@ -221,6 +230,7 @@
                 <gateway.port>8086</gateway.port>
                 <third-party.port>8087</third-party.port>
                 <renren-fast.port>8088</renren-fast.port>
+                <search.port>8089</search.port>
             </properties>
         </profile>
     </profiles>
