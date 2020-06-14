@@ -8,6 +8,7 @@ import com.ypdaic.mymall.product.vo.AttrGroupDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ypdaic.mymall.product.vo.AttrGroupWithAttrsDto;
+import com.ypdaic.mymall.product.vo.SpuItemAttrGroupVo;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -74,4 +75,6 @@ public interface IAttrGroupService extends IService<AttrGroup> {
 
 
     List<AttrGroupWithAttrsDto> getAttrGroupWithAttrsByCatelogId(Long catelogId);
+
+    List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId);
 }

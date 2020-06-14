@@ -6,6 +6,7 @@ import com.ypdaic.mymall.product.entity.SkuSaleAttrValue;
 import com.ypdaic.mymall.product.mapper.SkuSaleAttrValueMapper;
 import com.ypdaic.mymall.product.service.ISkuSaleAttrValueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.product.vo.SkuItemSaleAttrVo;
 import com.ypdaic.mymall.product.vo.SkuSaleAttrValueDto;
 import com.ypdaic.mymall.product.enums.SkuSaleAttrValueExcelHeadersEnum;
 import org.springframework.stereotype.Service;
@@ -144,6 +145,11 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMap
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(Long spuId) {
+        return null;
     }
 
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ypdaic.mymall.product.vo.AttrGroupDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ypdaic.mymall.product.vo.SpuItemAttrGroupVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -52,4 +53,5 @@ public interface AttrGroupMapper extends BaseMapper<AttrGroup> {
      */
     List<AttrGroup> queryAll(@Param("dto") AttrGroupDto attrGroupDto);
 
+    List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(@Param("spuId") Long spuId, @Param("catalogId") Long catalogId);
 }

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.product.vo.SkuInfoDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ypdaic.mymall.product.vo.SkuItemVo;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -72,4 +74,6 @@ public interface ISkuInfoService extends IService<SkuInfo> {
     PageUtils queryPageByCondition(Map<String, Object> params);
 
     List<SkuInfo> getSkusBySpuId(Long spuId);
+
+    SkuItemVo item(Long skuId);
 }

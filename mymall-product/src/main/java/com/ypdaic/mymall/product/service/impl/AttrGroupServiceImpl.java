@@ -12,6 +12,7 @@ import com.ypdaic.mymall.product.vo.AttrAttrgroupRelationDto;
 import com.ypdaic.mymall.product.vo.AttrGroupDto;
 import com.ypdaic.mymall.product.enums.AttrGroupExcelHeadersEnum;
 import com.ypdaic.mymall.product.vo.AttrGroupWithAttrsDto;
+import com.ypdaic.mymall.product.vo.SpuItemAttrGroupVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,6 +208,13 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
         return collect;
 
 
+    }
+
+    @Override
+    public List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId) {
+
+        //1.查询出当前SPU对应的所有属性的分组信息，以及当前分组下的所有属性对应的值
+        return this.baseMapper.getAttrGroupWithAttrsBySpuId(spuId,catalogId);
     }
 
 }

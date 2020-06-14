@@ -144,4 +144,10 @@ public class SkuImagesServiceImpl extends ServiceImpl<SkuImagesMapper, SkuImages
         return new PageUtils(page);
     }
 
+    @Override
+    public List<SkuImages> getImagesBySkuId(Long skuId) {
+        List<SkuImages> skuImagesEntities = this.baseMapper.selectList(new QueryWrapper<SkuImages>().eq("sku_id", skuId));
+        return skuImagesEntities;
+    }
+
 }

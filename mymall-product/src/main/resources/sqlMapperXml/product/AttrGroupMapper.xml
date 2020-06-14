@@ -111,4 +111,12 @@
         </where>
     </select>
 
+    <select id="getAttrGroupWithAttrsBySpuId" resultMap="spuAttrGroup">
+        select product.spu_id,pag.attr_group_id,pag.attr_group_name,product.attr_id,product.attr_name,product.attr_value
+        from pms_product_attr_value product
+        left join pms_attr_attrgroup_relation paar on product.attr_id = paar.attr_id
+        left join pms_attr_group pag on paar.attr_group_id = pag.attr_group_id
+        where product.spu_id=#{spuId} and pag.catelog_id=#{catalogId};
+    </select>
+
 </mapper>

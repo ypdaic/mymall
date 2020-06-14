@@ -3,6 +3,7 @@ package com.ypdaic.mymall.product.service;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.product.entity.SkuSaleAttrValue;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ypdaic.mymall.product.vo.SkuItemSaleAttrVo;
 import com.ypdaic.mymall.product.vo.SkuSaleAttrValueDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -66,4 +67,6 @@ public interface ISkuSaleAttrValueService extends IService<SkuSaleAttrValue> {
     List<SkuSaleAttrValue> queryAll(SkuSaleAttrValueDto skuSaleAttrValueDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(Long spuId);
 }

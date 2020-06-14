@@ -66,4 +66,6 @@ public interface ISkuImagesService extends IService<SkuImages> {
     List<SkuImages> queryAll(SkuImagesDto skuImagesDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<SkuImages> getImagesBySkuId(Long skuId);
 }
