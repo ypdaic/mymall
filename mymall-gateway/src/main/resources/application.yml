@@ -30,7 +30,7 @@ spring:
        - id: product
          uri: lb://mymall-product
          predicates:
-           - Path=/api/product/**
+           - Path=/api/product/**,/test/test
          filters:
            #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
            - StripPrefix=1 # 效果同上， 截取路径位数
@@ -82,6 +82,11 @@ spring:
            - Path=/api/**  #前端项目直接先走renren-fast
          filters:
            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment} #路径重写
+       - id: product-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
+         uri: lb://mymall-product
+         predicates:
+           - Host=**.gulimall.com #域名转发
+
 
 
 

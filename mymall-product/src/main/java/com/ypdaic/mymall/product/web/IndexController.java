@@ -109,4 +109,11 @@ public class IndexController {
         }
         return uuid;
     }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public String test(){
+
+        return "test";
+    }
 }

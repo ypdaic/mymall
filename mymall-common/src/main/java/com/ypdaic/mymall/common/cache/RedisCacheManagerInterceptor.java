@@ -65,9 +65,9 @@ public class RedisCacheManagerInterceptor extends AbstractCacheInterceptor imple
 
                     LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor = (LocalFirstLevelCacheInterceptor) beanFactory.getBean(beanName);
 
-                    factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelCacheInterceptor));
-//                    factory.addAdvisor(new DefaultPointcutAdvisor(localLockCacheInterceptor));
-                    factory.addAdvisor(new DefaultPointcutAdvisor(redisLockCacheInterceptor));
+//                    factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelCacheInterceptor));
+                    factory.addAdvisor(new DefaultPointcutAdvisor(localLockCacheInterceptor));
+//                    factory.addAdvisor(new DefaultPointcutAdvisor(redisLockCacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(redisCacheTTLInterceptor));
                     factory.setTarget(redisCache);
                     cache = (Cache) factory.getProxy(Cache.class.getClassLoader());
