@@ -40,4 +40,7 @@ info:
 ribbon:
   eager-load:
     enabled: true
-    clients: mymall-coupon
+    clients:
+      - mymall-coupon
+      - mymall-search
+      - mymall-ware
