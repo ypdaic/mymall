@@ -56,7 +56,11 @@ public abstract class AbstractCacheTimeInterceptor {
         remove();
     }
 
-    protected long getFirstCacheTime() {
+    /**
+     * 获取二级缓存时间
+     * @return
+     */
+    protected long getSecondCacheTime() {
         return getCacheTime();
     }
 

@@ -55,19 +55,16 @@ public class RedisCacheManagerInterceptor extends AbstractCacheInterceptor imple
                     factory.setExposeProxy(true);
                     RedisLockCacheInterceptor redisLockCacheInterceptor = beanFactory.getBean(RedisLockCacheInterceptor.class);
                     LocalLockCacheInterceptor localLockCacheInterceptor = beanFactory.getBean(LocalLockCacheInterceptor.class);
-                    ArrayList<String> cacheNames = new ArrayList<>(1);
-                    cacheNames.add("APP_CACHE");
-                    RedisCacheTTLInterceptor redisCacheTTLInterceptor = beanFactory.getBean(RedisCacheTTLInterceptor.class);
-                    redisCacheTTLInterceptor.setCacheNames(cacheNames);
 
+                    RedisCacheTTLInterceptor redisCacheTTLInterceptor = beanFactory.getBean(RedisCacheTTLInterceptor.class);
 
                     String beanName = LocalFirstLevelCacheInterceptor.registerBeanDefinition(beanFactory, name);
 
                     LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor = (LocalFirstLevelCacheInterceptor) beanFactory.getBean(beanName);
 
-//                    factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelCacheInterceptor));
+                    factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelCacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(localLockCacheInterceptor));
-//                    factory.addAdvisor(new DefaultPointcutAdvisor(redisLockCacheInterceptor));
+                    factory.addAdvisor(new DefaultPointcutAdvisor(redisLockCacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(redisCacheTTLInterceptor));
                     factory.setTarget(redisCache);
                     cache = (Cache) factory.getProxy(Cache.class.getClassLoader());

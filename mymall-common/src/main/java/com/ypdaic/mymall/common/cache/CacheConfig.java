@@ -1,4 +1,4 @@
-package com.ypdaic.mymall.common.config;
+package com.ypdaic.mymall.common.cache;
 
 import org.springframework.cache.interceptor.CacheInterceptor;
 import org.springframework.cache.interceptor.CacheOperationInvoker;
@@ -27,6 +27,9 @@ public class CacheConfig {
         return interceptor;
     }
 
+    /**
+     * 用于@MyCacheable 注解自定义属性获取
+     */
     public static class MyCacheInterceptor extends CacheInterceptor {
         @Override
         protected Object execute(CacheOperationInvoker invoker, Object target, Method method, Object[] args) {

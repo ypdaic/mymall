@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
 import com.rabbitmq.client.Channel;
+import com.ypdaic.mymall.common.annotation.MyCacheable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInvocation;
@@ -24,11 +25,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.cache.transaction.TransactionAwareCacheDecorator;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 本地一级缓存
@@ -42,6 +48,8 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
     protected static final String beanName = "LocalFirstLevelCacheInterceptor";
 
     private static final String FIRST_LEVEL_CACHE = "FIRST_LEVEL_CACHE";
+
+    private static final ThreadLocal<org.springframework.cache.Cache> cacheLocal = new ThreadLocal<>();
 
     /**
      * 一级缓存
@@ -105,6 +113,19 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
 
     @Override
     protected Object invokeMethod(MethodInvocation invocation) throws Throwable {
+        Method targetMethod = CacheConfig.getMethod();
+        MyCacheable myCache = targetMethod.getAnnotation(MyCacheable.class);
+        if (Objects.nonNull(myCache)) {
+            // 走一级缓存
+            if (myCache.useFirstCache()) {
+                return getCacheValue(invocation);
+            }
+        }
+
+        return invocation.proceed();
+    }
+
+    private Object getCacheValue(MethodInvocation invocation) {
         Method method = invocation.getMethod();
         String name = method.getName();
         if (!"clear".equals(name)) {
@@ -112,7 +133,14 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
             String key = (String) objects[0];
             switch (name) {
                 case "get":
-
+                    org.springframework.cache.Cache targetCache = (org.springframework.cache.Cache) invocation.getThis();
+                    RedisCache redisCache = null;
+                    if (targetCache instanceof TransactionAwareCacheDecorator) {
+                        redisCache = (RedisCache) ((TransactionAwareCacheDecorator) targetCache).getTargetCache();
+                    } else {
+                        redisCache = (RedisCache) targetCache;
+                    }
+                    cacheLocal.set(redisCache);
                     return cache.get(key, key2 -> {
                         try {
                             return invocation.proceed();
@@ -121,9 +149,13 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
                             throw new RuntimeException("缓存获取异常");
                         }
                     });
+
                 case "evict":
                     rabbitTemplate.convertAndSend(exchange, "", key);
                     return null;
+                default :
+                    return null;
+
             }
         } else {
             rabbitTemplate.convertAndSend(exchange, "", clearKey);
@@ -203,11 +235,49 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
             this.localFirstLevelCacheInterceptor = localFirstLevelCacheInterceptor;
         }
 
+        /**
+         * 设置过期时间
+         * @param key
+         * @param value
+         * @param currentTime
+         * @return
+         */
         @Override
         public long expireAfterCreate(@NonNull Object key, @NonNull Object value, long currentTime) {
-            long firstCacheTime = localFirstLevelCacheInterceptor.getFirstCacheTime();
-            localFirstLevelCacheInterceptor.cleanThreadLocal();
-            return currentTime + firstCacheTime;
+            try {
+                Method method = CacheConfig.getMethod();
+                MyCacheable myCache = method.getAnnotation(MyCacheable.class);
+                long secondCacheTime = 0L;
+                if (Objects.nonNull(myCache) && myCache.syncSecondCacheTime()) {
+                    secondCacheTime = localFirstLevelCacheInterceptor.getSecondCacheTime();
+                } else {
+                    if (Objects.nonNull(myCache) ) {
+                        // 使用MyCacheable注解的情况
+                        if (!myCache.useCustomExpireDate()) {
+                            org.springframework.cache.Cache cache = cacheLocal.get();
+                            RedisCache redisCache = (RedisCache) cache;
+                            Duration ttl = redisCache.getCacheConfiguration().getTtl();
+                            secondCacheTime = ttl.toMillis();
+                        } else {
+                            secondCacheTime =  TimeUnit.SECONDS.toNanos(myCache.expireDate());
+                        }
+
+                    } else {
+                        // 使用Cacheable注解的情况
+                        org.springframework.cache.Cache cache = cacheLocal.get();
+                        RedisCache redisCache = (RedisCache) cache;
+                        Duration ttl = redisCache.getCacheConfiguration().getTtl();
+                        secondCacheTime = ttl.toMillis();
+                    }
+
+                }
+
+
+                return Math.max((secondCacheTime - TimeUnit.SECONDS.toNanos(1L)), 0L);
+            } finally {
+                localFirstLevelCacheInterceptor.cleanThreadLocal();
+                cacheLocal.remove();
+            }
 
         }
 
@@ -230,26 +300,6 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
      */
     public static String registerBeanDefinition(BeanFactory beanFactory, String cacheName) {
         DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
-//        CachingMetadataReaderFactory cachingMetadataReaderFactory = new CachingMetadataReaderFactory();
-//        MetadataReader metadataReader = null;
-//        String name1 = LocalFirstLevelCacheInterceptor.class.getName();
-//        String classpathAllUrlPrefix = ResourceLoader.CLASSPATH_URL_PREFIX;
-//        String replace = name1.replace(".", "/");
-//        PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
-//        Resource resource = pathMatchingResourcePatternResolver.getResource(classpathAllUrlPrefix + replace + ".class");
-//
-//        try {
-//            metadataReader = cachingMetadataReaderFactory.getMetadataReader(resource);
-//        } catch (IOException e) {
-//            log.error("一级缓存初始化失败", e);
-//            throw new RuntimeException("一级缓存初始化失败");
-//        }
-//        ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
-//        sbd.setResource(resource);
-//        sbd.setSource(resource);
-//        //一定要设置为prototype 否则main 线程和 AbstractMessageListenerContainer 中的 SimpleAsyncTaskExecutor 线程池中的线程会形成等待
-//        sbd.setScope("prototype");
-
         AnnotatedGenericBeanDefinition annotatedBeanDefinition = new AnnotatedGenericBeanDefinition(LocalFirstLevelCacheInterceptor.class);
         MutablePropertyValues propertyValues = new MutablePropertyValues();
         propertyValues.add("cacheName", cacheName);

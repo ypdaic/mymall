@@ -61,9 +61,6 @@ public class RedisConfig {
     @Autowired
     private CacheProperties cacheProperties;
 
-    @Autowired
-    RedisCacheManagerInterceptor redisCacheManagerInterceptor;
-
     @Bean
     public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -100,15 +97,6 @@ public class RedisConfig {
         RedisCacheManager redisCacheManager = builder
                 .transactionAware()
                 .build();
-
-
-        ProxyFactory factory = new ProxyFactory();
-        factory.setExposeProxy(true);
-        redisCacheManagerInterceptor.setRedisCacheManager(redisCacheManager);
-        factory.addAdvisor(new DefaultPointcutAdvisor(redisCacheManagerInterceptor));
-        factory.setTarget(redisCacheManager);
-        redisCacheManager = (RedisCacheManager) factory.getProxy(RedisCacheManager.class.getClassLoader());
-
 
         return redisCacheManager;
     }

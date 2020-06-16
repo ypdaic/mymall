@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.common.cache;
 
+import com.ypdaic.mymall.common.annotation.MyCacheable;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,12 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 缓存本地锁支持
@@ -51,7 +55,20 @@ public class LocalLockCacheInterceptor extends AbstractCacheLockInterceptor{
      * @param <T>
      * @return
      */
+    @Override
     public <T> T get(Object key, Callable<T> valueLoader, MethodInvocation invocation) throws Throwable {
+        Method targetMethod = CacheConfig.getMethod();
+        MyCacheable myCache = targetMethod.getAnnotation(MyCacheable.class);
+        if (Objects.nonNull(myCache)) {
+            // 不使用一级缓存就走本地锁
+            if (!myCache.useFirstCache()) {
+                return getCacheValue(key, invocation);
+            }
+        }
+        return getCacheValue(key, invocation);
+    }
+
+    private <T> T getCacheValue(Object key, MethodInvocation invocation) throws Throwable {
         Cache cache = (Cache) invocation.getThis();
         // 获取到结果立马返回
         Cache.ValueWrapper result = cache.get(key);
@@ -65,8 +82,9 @@ public class LocalLockCacheInterceptor extends AbstractCacheLockInterceptor{
         Object o = lockMap.computeIfAbsent(lock, (k) -> {
             return new Object();
         });
-        // 先使用本地锁
-        synchronized (o) {
+
+//         先使用本地锁
+        synchronized (key) {
 //            本地锁再次尝试获取结果，有就立马返回
             result = cache.get(key);
             if (result != null) {
@@ -75,7 +93,5 @@ public class LocalLockCacheInterceptor extends AbstractCacheLockInterceptor{
             }
             return (T) invocation.proceed();
         }
-
-
     }
 }

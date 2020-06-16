@@ -1,7 +1,7 @@
 package com.ypdaic.mymall.common.cache;
 
 import com.ypdaic.mymall.common.annotation.MyCacheable;
-import com.ypdaic.mymall.common.config.CacheConfig;
+
 import lombok.Data;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.cache.Cache;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -31,8 +29,6 @@ public class RedisCacheTTLInterceptor extends AbstractCacheInterceptor {
     private volatile MyRedisCache myRedisCache;
 
     private final Object lockMonitor = new Object();
-
-    private List<String> cacheNames = new ArrayList<String>(0);
 
     @Override
     protected boolean matchMethod(Method method) {
@@ -75,15 +71,13 @@ public class RedisCacheTTLInterceptor extends AbstractCacheInterceptor {
             if (useCustomize) {
                 long i = myCache.expireDate();
                 ttl = Duration.ofSeconds(i);
+            } else {
+
+                ttl = getTtl(myCache);
             }
 
         }else {
-            ttl = myRedisCache.getCacheConfiguration().getTtl();
-            if (shouldAddRandom(cache.getName())) {
-                Random random = new Random();
-                int i = random.nextInt(30);
-                ttl = ttl.plusMinutes(i);
-            }
+            ttl = getTtl(myCache);
 
         }
 
@@ -93,12 +87,19 @@ public class RedisCacheTTLInterceptor extends AbstractCacheInterceptor {
     }
 
     /**
-     * 需要设置随机值的缓存
-     * @param cacheName
+     * 获取ttl
+     * @param myCache
      * @return
      */
-    private boolean shouldAddRandom(String cacheName) {
-        return this.cacheNames.contains(cacheName);
+    private Duration getTtl(MyCacheable myCache) {
+        Duration ttl;
+        ttl = myRedisCache.getCacheConfiguration().getTtl();
+        if (Objects.nonNull(myCache) && myCache.useRandom() && !myCache.useCustomExpireDate()) {
+            Random random = new Random();
+            int i = random.nextInt(30);
+            ttl = ttl.plusMinutes(i);
+        }
+        return ttl;
     }
 
     private static class MyRedisCache extends RedisCache {

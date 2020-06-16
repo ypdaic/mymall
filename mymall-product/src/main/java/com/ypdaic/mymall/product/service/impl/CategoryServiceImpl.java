@@ -2,6 +2,7 @@ package com.ypdaic.mymall.product.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.ypdaic.mymall.common.annotation.MyCacheable;
 import com.ypdaic.mymall.product.entity.Category;
 import com.ypdaic.mymall.product.mapper.CategoryMapper;
 import com.ypdaic.mymall.product.service.ICategoryBrandRelationService;
@@ -239,7 +240,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
 
-    @Cacheable(value = {"category"},key = "#root.methodName")
+//    @Cacheable(value = {"category"},key = "#root.methodName")
+    @MyCacheable(value = {"category"},key = "#root.methodName", sync = true, useFirstCache = true, expireDate = 60L, useCustomExpireDate = true)
     @Override
     public Map<String, List<Catelog2Vo>> getCatelogJson() {
         log.info("查询数据库");

@@ -36,6 +36,7 @@ public class RedisLockCacheInterceptor extends AbstractCacheLockInterceptor{
      * @param <T>
      * @return
      */
+    @Override
     public <T> T get(Object key, Callable<T> valueLoader, MethodInvocation invocation) throws Throwable{
         Cache cache = (Cache) invocation.getThis();
         Cache.ValueWrapper result = cache.get(key);

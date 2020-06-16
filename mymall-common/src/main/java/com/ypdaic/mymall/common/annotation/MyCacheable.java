@@ -138,15 +138,32 @@ public @interface MyCacheable {
     boolean sync() default false;
 
     /**
-     * 过期时间
+     * 过期时间，秒
      * @return
      */
-    long expireDate() default  1000l;
+    long expireDate() default  1000L;
 
     /**
-     * 是否使用自定义时间
+     * 是否使用自定义过期时间
      * @return
      */
-    boolean useCustomExpireDate() default true;
+    boolean useCustomExpireDate() default false;
+
+    /**
+     * 是否添加随机值，只是针对全局过期时间，使用自定义过期时间后，则该项不支持
+     */
+    boolean useRandom() default true;
+
+    /**
+     * 是否使用一级缓存
+     * @return
+     */
+    boolean useFirstCache() default false;
+
+    /**
+     * 是否同步二级缓存时间，如果不同步，则使用配置的缓存时间，而不是二级缓存剩余的缓存时间
+     */
+    boolean syncSecondCacheTime() default false;
+
 
 }

@@ -1,4 +1,4 @@
-package com.ypdaic.mymall.common.config;
+package com.ypdaic.mymall.common.cache;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import static org.springframework.cache.config.CacheManagementConfigUtils.CACHE_ADVISOR_BEAN_NAME;
 
 /**
- * 必须继承
+ * 必须继承Ordered，否则无法自定义
  */
 @Component
 public class BeanFactoryCacheOperationSourceAdvisorBeanPostProcess implements BeanPostProcessor, Ordered {
