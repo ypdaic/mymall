@@ -11,6 +11,7 @@ import org.springframework.cache.Cache;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /**
@@ -36,14 +37,20 @@ public class RedisLockCacheInterceptor extends AbstractCacheLockInterceptor{
      * @return
      */
     public <T> T get(Object key, Callable<T> valueLoader, MethodInvocation invocation) throws Throwable{
+        Cache cache = (Cache) invocation.getThis();
+        Cache.ValueWrapper result = cache.get(key);
+        String name = cache.getName();
+        if (Objects.nonNull(result)) {
+            syncCacheTimeForTwoCache(name, (String) key);
+            return (T) result.get();
+        }
         String lock = key + lockSuffix;
 //      使用分布式锁
         RLock fairLock = redissonClient.getFairLock(lock);
         fairLock.lock();
-        Cache.ValueWrapper result = null;
+
         try {
-            Cache cache = (Cache) invocation.getThis();
-            String name = cache.getName();
+
 //          分布式锁再次尝试获取结果，有就立马返回
             result = cache.get(key);
             if (result != null) {
