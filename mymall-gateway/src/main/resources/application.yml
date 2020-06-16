@@ -85,7 +85,11 @@ spring:
        - id: product-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
          uri: lb://mymall-product
          predicates:
-           - Host=**.gulimall.com #域名转发
+           - Host= gulimall.com #域名转发
+       - id: search-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
+         uri: lb://mymall-search
+         predicates:
+           - Host= search.gulimall.com #域名转发
 
 
 
