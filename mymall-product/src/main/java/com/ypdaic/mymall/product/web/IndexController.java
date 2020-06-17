@@ -42,7 +42,7 @@ public class IndexController {
     @ResponseBody
     @GetMapping("index/catalog.json")
     public Map<String, List<Catelog2Vo>> getCatelogJson(){
-
+        System.out.println("请求开始");
         Map<String, List<Catelog2Vo>> map=categoryService.getCatelogJson();
         return map;
     }
