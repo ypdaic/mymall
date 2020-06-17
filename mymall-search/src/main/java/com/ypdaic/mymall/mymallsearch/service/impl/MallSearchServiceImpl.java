@@ -229,18 +229,20 @@ public class MallSearchServiceImpl implements MallSearchService {
         //1. 构建bool-query
         BoolQueryBuilder boolQueryBuilder=new BoolQueryBuilder();
 
-        //1.1 bool-must
+        //1.1 bool-must，必须满足skuTitle
         if(!StringUtils.isEmpty(param.getKeyword())){
+            // match 表示对文本字段的匹配
             boolQueryBuilder.must(QueryBuilders.matchQuery("skuTitle",param.getKeyword()));
         }
 
         //1.2 bool-fiter
-        //1.2.1 catelogId
+        //1.2.1 catelogId 对结果进行过滤
         if(null != param.getCatalog3Id()){
+            // term 表示非文本类型的匹配
             boolQueryBuilder.filter(QueryBuilders.termQuery("catelogId",param.getCatalog3Id()));
         }
 
-        //1.2.2 brandId
+        //1.2.2 brandId 对结果进行过滤
         if(null != param.getBrandId() && param.getBrandId().size() >0){
             boolQueryBuilder.filter(QueryBuilders.termsQuery("brandId",param.getBrandId()));
         }
