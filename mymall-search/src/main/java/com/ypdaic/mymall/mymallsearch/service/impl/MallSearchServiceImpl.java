@@ -215,6 +215,307 @@ public class MallSearchServiceImpl implements MallSearchService {
     }
 
     /**
+     * GET product/_search
+     * {
+     *   "from": 0,
+     *   "size": 4,
+     *   "query": {
+     *     "bool": {
+     *       "must": [
+     *         {
+     *           "match": {
+     *             "skuTitle": {
+     *               "query": "小米",
+     *               "operator": "OR",
+     *               "prefix_length": 0,
+     *               "max_expansions": 50,
+     *               "fuzzy_transpositions": true,
+     *               "lenient": false,
+     *               "zero_terms_query": "NONE",
+     *               "auto_generate_synonyms_phrase_query": true,
+     *               "boost": 1
+     *             }
+     *           }
+     *         }
+     *       ],
+     *       "filter": [
+     *         {
+     *           "term": {
+     *             "catelogId": {
+     *               "value": 225,
+     *               "boost": 1
+     *             }
+     *           }
+     *         },
+     *         {
+     *           "terms": {
+     *             "brandId": [
+     *               5
+     *             ],
+     *             "boost": 1
+     *           }
+     *         },
+     *         {
+     *           "nested": {
+     *             "query": {
+     *               "bool": {
+     *                 "must": [
+     *                   {
+     *                     "term": {
+     *                       "attrs.attrId": {
+     *                         "value": "6",
+     *                         "boost": 1
+     *                       }
+     *                     }
+     *                   },
+     *                   {
+     *                     "terms": {
+     *                       "attrs.attrValue": [
+     *                         "156.5"
+     *                       ],
+     *                       "boost": 1
+     *                     }
+     *                   }
+     *                 ],
+     *                 "adjust_pure_negative": true,
+     *                 "boost": 1
+     *               }
+     *             },
+     *             "path": "attrs",
+     *             "ignore_unmapped": false,
+     *             "score_mode": "none",
+     *             "boost": 1
+     *           }
+     *         },
+     *         {
+     *           "nested": {
+     *             "query": {
+     *               "bool": {
+     *                 "must": [
+     *                   {
+     *                     "term": {
+     *                       "attrs.attrId": {
+     *                         "value": "7",
+     *                         "boost": 1
+     *                       }
+     *                     }
+     *                   },
+     *                   {
+     *                     "terms": {
+     *                       "attrs.attrValue": [
+     *                         "192"
+     *                       ],
+     *                       "boost": 1
+     *                     }
+     *                   }
+     *                 ],
+     *                 "adjust_pure_negative": true,
+     *                 "boost": 1
+     *               }
+     *             },
+     *             "path": "attrs",
+     *             "ignore_unmapped": false,
+     *             "score_mode": "none",
+     *             "boost": 1
+     *           }
+     *         },
+     *         {
+     *           "term": {
+     *             "hasStock": {
+     *               "value": true,
+     *               "boost": 1
+     *             }
+     *           }
+     *         },
+     *         {
+     *           "range": {
+     *             "skuPrice": {
+     *               "from": "0",
+     *               "to": "1000",
+     *               "include_lower": true,
+     *               "include_upper": true,
+     *               "boost": 1
+     *             }
+     *           }
+     *         }
+     *       ],
+     *       "adjust_pure_negative": true,
+     *       "boost": 1
+     *     }
+     *   },
+     *   "sort": [
+     *     {
+     *       "hotScore": {
+     *         "order": "asc"
+     *       }
+     *     }
+     *   ],
+     *   "aggregations": {
+     *     "brand_agg": {
+     *       "terms": {
+     *         "field": "brandId",
+     *         "size": 50,
+     *         "min_doc_count": 1,
+     *         "shard_min_doc_count": 0,
+     *         "show_term_doc_count_error": false,
+     *         "order": [
+     *           {
+     *             "_count": "desc"
+     *           },
+     *           {
+     *             "_key": "asc"
+     *           }
+     *         ]
+     *       },
+     *       "aggregations": {
+     *         "brand_Name_agg": {
+     *           "terms": {
+     *             "field": "brandName",
+     *             "size": 1,
+     *             "min_doc_count": 1,
+     *             "shard_min_doc_count": 0,
+     *             "show_term_doc_count_error": false,
+     *             "order": [
+     *               {
+     *                 "_count": "desc"
+     *               },
+     *               {
+     *                 "_key": "asc"
+     *               }
+     *             ]
+     *           }
+     *         },
+     *         "brand_img_agg": {
+     *           "terms": {
+     *             "field": "brandImg",
+     *             "size": 1,
+     *             "min_doc_count": 1,
+     *             "shard_min_doc_count": 0,
+     *             "show_term_doc_count_error": false,
+     *             "order": [
+     *               {
+     *                 "_count": "desc"
+     *               },
+     *               {
+     *                 "_key": "asc"
+     *               }
+     *             ]
+     *           }
+     *         }
+     *       }
+     *     },
+     *     "catelog_agg": {
+     *       "terms": {
+     *         "field": "catelogId",
+     *         "size": 20,
+     *         "min_doc_count": 1,
+     *         "shard_min_doc_count": 0,
+     *         "show_term_doc_count_error": false,
+     *         "order": [
+     *           {
+     *             "_count": "desc"
+     *           },
+     *           {
+     *             "_key": "asc"
+     *           }
+     *         ]
+     *       },
+     *       "aggregations": {
+     *         "catelog_name_agg": {
+     *           "terms": {
+     *             "field": "catelogName",
+     *             "size": 1,
+     *             "min_doc_count": 1,
+     *             "shard_min_doc_count": 0,
+     *             "show_term_doc_count_error": false,
+     *             "order": [
+     *               {
+     *                 "_count": "desc"
+     *               },
+     *               {
+     *                 "_key": "asc"
+     *               }
+     *             ]
+     *           }
+     *         }
+     *       }
+     *     },
+     *     "attr_agg": {
+     *       "nested": {
+     *         "path": "attrs"
+     *       },
+     *       "aggregations": {
+     *         "attr_id_agg": {
+     *           "terms": {
+     *             "field": "attrs.attrId",
+     *             "size": 10,
+     *             "min_doc_count": 1,
+     *             "shard_min_doc_count": 0,
+     *             "show_term_doc_count_error": false,
+     *             "order": [
+     *               {
+     *                 "_count": "desc"
+     *               },
+     *               {
+     *                 "_key": "asc"
+     *               }
+     *             ]
+     *           },
+     *           "aggregations": {
+     *             "attr_name_agg": {
+     *               "terms": {
+     *                 "field": "attrs.attrName",
+     *                 "size": 1,
+     *                 "min_doc_count": 1,
+     *                 "shard_min_doc_count": 0,
+     *                 "show_term_doc_count_error": false,
+     *                 "order": [
+     *                   {
+     *                     "_count": "desc"
+     *                   },
+     *                   {
+     *                     "_key": "asc"
+     *                   }
+     *                 ]
+     *               }
+     *             },
+     *             "attr_value_agg": {
+     *               "terms": {
+     *                 "field": "attrs.attrValue",
+     *                 "size": 50,
+     *                 "min_doc_count": 1,
+     *                 "shard_min_doc_count": 0,
+     *                 "show_term_doc_count_error": false,
+     *                 "order": [
+     *                   {
+     *                     "_count": "desc"
+     *                   },
+     *                   {
+     *                     "_key": "asc"
+     *                   }
+     *                 ]
+     *               }
+     *             }
+     *           }
+     *         }
+     *       }
+     *     }
+     *   },
+     *   "highlight": {
+     *     "pre_tags": [
+     *       "<b style='color:red'>"
+     *     ],
+     *     "post_tags": [
+     *       "</b>"
+     *     ],
+     *     "fields": {
+     *       "skuTitle": {}
+     *     }
+     *   }
+     * }
+     */
+
+    /**
      * 准备检索请求
      * 模糊匹配，过滤（按照属性，分类，品牌，价格区间，库存），排序，分页，高亮，聚合分析
      * @return
@@ -229,7 +530,7 @@ public class MallSearchServiceImpl implements MallSearchService {
         //1. 构建bool-query
         BoolQueryBuilder boolQueryBuilder=new BoolQueryBuilder();
 
-        //1.1 bool-must，必须满足skuTitle
+        //1.1 bool-must，必须满足skuTitle，存在关键字搜索
         if(!StringUtils.isEmpty(param.getKeyword())){
             // match 表示对文本字段的匹配
             boolQueryBuilder.must(QueryBuilders.matchQuery("skuTitle",param.getKeyword()));
