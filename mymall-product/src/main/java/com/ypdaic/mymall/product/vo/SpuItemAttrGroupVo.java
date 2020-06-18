@@ -1,6 +1,6 @@
 package com.ypdaic.mymall.product.vo;
 
-import com.ypdaic.mymall.product.entity.Attr;
+import com.ypdaic.mymall.product.vo.Attr;
 import lombok.Data;
 import lombok.ToString;
 

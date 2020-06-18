@@ -12,6 +12,7 @@ import com.ypdaic.mymall.fegin.coupon.ICouponFeignService;
 import com.ypdaic.mymall.fegin.search.ISearchFeignService;
 import com.ypdaic.mymall.fegin.ware.IWareFeignService;
 import com.ypdaic.mymall.product.entity.*;
+import com.ypdaic.mymall.product.entity.Attr;
 import com.ypdaic.mymall.product.mapper.SpuInfoMapper;
 import com.ypdaic.mymall.product.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

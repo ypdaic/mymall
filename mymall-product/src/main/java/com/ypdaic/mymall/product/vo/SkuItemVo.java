@@ -15,6 +15,9 @@ public class SkuItemVo {
     //1. SKU基本信息获取，pms_sku_info
     SkuInfo info;
 
+    // 有货无货
+    boolean hasStock = true;
+
     //2.SKU的图片信息获取，pms_sku_images
     List<SkuImages> images;
 
