@@ -149,7 +149,7 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMap
 
     @Override
     public List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(Long spuId) {
-        return null;
+        return this.baseMapper.getSaleAttrsBySpuId(spuId);
     }
 
 }

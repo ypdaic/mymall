@@ -2,6 +2,7 @@ package com.ypdaic.mymall.product.mapper;
 
 import com.ypdaic.mymall.product.entity.SkuSaleAttrValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ypdaic.mymall.product.vo.SkuItemSaleAttrVo;
 import com.ypdaic.mymall.product.vo.SkuSaleAttrValueDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -49,4 +50,5 @@ public interface SkuSaleAttrValueMapper extends BaseMapper<SkuSaleAttrValue> {
      */
     List<SkuSaleAttrValue> queryAll(@Param("dto") SkuSaleAttrValueDto skuSaleAttrValueDto);
 
+    List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(@Param("spuId") Long spuId);
 }

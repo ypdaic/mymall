@@ -12,7 +12,7 @@ import com.ypdaic.mymall.fegin.coupon.ICouponFeignService;
 import com.ypdaic.mymall.fegin.search.ISearchFeignService;
 import com.ypdaic.mymall.fegin.ware.IWareFeignService;
 import com.ypdaic.mymall.product.entity.*;
-import com.ypdaic.mymall.product.entity.Attr;
+import com.ypdaic.mymall.product.vo.Attr;
 import com.ypdaic.mymall.product.mapper.SpuInfoMapper;
 import com.ypdaic.mymall.product.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -238,7 +238,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         List<ProductAttrValue> collect = baseAttrs.stream().map(attr -> {
             ProductAttrValue valueEntity = new ProductAttrValue();
             valueEntity.setAttrId(attr.getAttrId());
-            Attr id = attrService.getById(attr.getAttrId());
+            com.ypdaic.mymall.product.entity.Attr id = attrService.getById(attr.getAttrId());
             valueEntity.setAttrName(id.getAttrName());
             valueEntity.setAttrValue(attr.getAttrValues());
             valueEntity.setQuickShow(attr.getShowDesc());

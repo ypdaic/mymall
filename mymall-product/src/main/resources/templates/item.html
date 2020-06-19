@@ -233,7 +233,7 @@
 <!--											  摩卡金-->
 <!--										</div>-->
 <!--									</dd>-->
-									<dt>选择[[${spuSaleAttr.attrName}}]]</dt>
+									<dt>选择[[${spuSaleAttr.attrName}]]</dt>
 									<dd th:each="val:${#strings.listSplit(spuSaleAttr.attrValues, ',')}">
 										<a href="/static/item/#">
 											[[${val}]]
@@ -463,27 +463,27 @@
 									</table>
 									<img class="xiaoguo" th:src="${descp}" th:each="descp:${#strings.listSplit(item.desp.decript, ',')}"/>
 									<div class="guiGebox guiGebox1">
-										<div class="guiGe" th:each="guige:${item.groupAttrs}">
-											<h3 th:text="${guige.groupName}">主体</h3>
-											<dl>
-												<dt>品牌</dt>
-												<dd>华为(HUAWEI)</dd>
-												<dt>型号</dt>
-												<dd class="Ptable-tips">
-													<a href="#"><i>？</i></a>
-												</dd>
-												<dd>ALP-AL00</dd>
-												<dt>入网型号</dt>
-												<dd class="Ptable-tips">
-													<a href="#"><i>？</i></a>
-												</dd>
-												<dd>ALP-AL00</dd>
-												<dt>上市年份</dt>
-												<dd>2017年</dd>
-												<dt>上市时间</dt>
-												<dd>10月</dd>
-											</dl>
-										</div>
+<!--										<div class="guiGe" th:each="guige:${item.groupAttrs}">-->
+<!--											<h3 th:text="${guige.groupName}">主体</h3>-->
+<!--											<dl>-->
+<!--												<dt>品牌</dt>-->
+<!--												<dd>华为(HUAWEI)</dd>-->
+<!--												<dt>型号</dt>-->
+<!--												<dd class="Ptable-tips">-->
+<!--													<a href="#"><i>？</i></a>-->
+<!--												</dd>-->
+<!--												<dd>ALP-AL00</dd>-->
+<!--												<dt>入网型号</dt>-->
+<!--												<dd class="Ptable-tips">-->
+<!--													<a href="#"><i>？</i></a>-->
+<!--												</dd>-->
+<!--												<dd>ALP-AL00</dd>-->
+<!--												<dt>上市年份</dt>-->
+<!--												<dd>2017年</dd>-->
+<!--												<dt>上市时间</dt>-->
+<!--												<dd>10月</dd>-->
+<!--											</dl>-->
+<!--										</div>-->
 <!--										<div class="guiGe">-->
 <!--											<h3>基本信息</h3>-->
 <!--											<dl>-->
@@ -1006,7 +1006,7 @@
 		</div>
 
 
-		<input id="skuId" type="text"  th:value= " ${item.info.skuId}"  />
+<!--		<input id="skuId" type="text"  th:value= " ${item.info.skuId}"  />-->
 
 		<div class="Fixedbian">
 			<ul>
