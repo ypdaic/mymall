@@ -28,6 +28,10 @@
         <module>mymall-third-party</module>
         <module>mymall-fegin-service</module>
         <module>mymall-search</module>
+        <module>mymall-auth-server</module>
+        <module>mymall-oss-server</module>
+        <module>mymall-oss-client</module>
+        <module>mymall-oss-client2</module>
     </modules>
 
     <properties>
@@ -52,6 +56,9 @@
         <poi.version>3.17</poi.version>
         <collections4.version>4.4</collections4.version>
         <es.version>7.4.2</es.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+<!--        <slf4j-api.version>1.7.25</slf4j-api.version>-->
+        <jedis.version>2.9.0</jedis.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -166,7 +173,19 @@
                 <artifactId>elasticsearch-rest-high-level-client</artifactId>
                 <version>${es.version}</version>
             </dependency>
+            <!-- servlet -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet-api.version}</version>
+            </dependency>
 
+            <!-- jedis -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -188,6 +207,10 @@
                 <third-party.port>8087</third-party.port>
                 <renren-fast.port>8088</renren-fast.port>
                 <search.port>8089</search.port>
+                <auth.port>8090</auth.port>
+                <oss-server.port>8091</oss-server.port>
+                <oss-client1.port>8092</oss-client1.port>
+                <oss-client2.port>8093</oss-client2.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -213,6 +236,10 @@
                 <third-party.port>8087</third-party.port>
                 <renren-fast.port>8088</renren-fast.port>
                 <search.port>8089</search.port>
+                <auth.port>8090</auth.port>
+                <oss-server.port>8091</oss-server.port>
+                <oss-client1.port>8092</oss-client1.port>
+                <oss-client2.port>8093</oss-client2.port>
             </properties>
         </profile>
         <profile>
@@ -231,6 +258,10 @@
                 <third-party.port>8087</third-party.port>
                 <renren-fast.port>8088</renren-fast.port>
                 <search.port>8089</search.port>
+                <auth.port>8090</auth.port>
+                <oss-server.port>8091</oss-server.port>
+                <oss-client1.port>8092</oss-client1.port>
+                <oss-client2.port>8093</oss-client2.port>
             </properties>
         </profile>
     </profiles>

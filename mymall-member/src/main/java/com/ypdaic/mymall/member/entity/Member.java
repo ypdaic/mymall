@@ -108,5 +108,12 @@ public class Member extends SuperEntity {
      */
     private Date createTime;
 
+    /**
+     * 微博uid
+     */
+    private String socialUid;
+    private String accessToken;
+    private Long expiresIn;
+
 
 }

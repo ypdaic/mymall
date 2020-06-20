@@ -1,0 +1,14 @@
+server:
+  port: @oss-client1.port@
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: oss-client1
+  profiles:
+    active: @env@
+
+oss:
+  server:
+    url: http://oss.com:8091/login.html
+    tokenInfoUrl: http://oss.com:8091/tokenInfo?token={token}

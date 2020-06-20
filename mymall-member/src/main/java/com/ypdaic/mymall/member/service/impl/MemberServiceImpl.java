@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.member.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.member.entity.Member;
@@ -9,19 +10,26 @@ import com.ypdaic.mymall.member.service.IMemberService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.member.vo.MemberDto;
 import com.ypdaic.mymall.member.enums.MemberExcelHeadersEnum;
+import com.ypdaic.mymall.member.vo.WeiboOauth2UserVo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ypdaic.mymall.common.util.ExcelUtil;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.util.JavaUtils;
-import java.util.Date;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.Date;
 
 /**
@@ -32,9 +40,12 @@ import java.util.Date;
  * @author daiyanping
  * @since 2020-06-08
  */
+@Slf4j
 @Service
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> implements IMemberService {
 
+    @Autowired
+    RestTemplate restTemplate;
 
     /**
      * 新增会员
@@ -174,6 +185,64 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         );
 
         return new PageUtils(page);
+    }
+
+    /**
+     * 微博登录
+     * @param weiboOauth2UserVo
+     * @return
+     */
+    @Override
+    public Member login(WeiboOauth2UserVo weiboOauth2UserVo) {
+
+        QueryWrapper<Member> memberQueryWrapper = new QueryWrapper<>();
+        memberQueryWrapper.eq("social_uid", weiboOauth2UserVo.getUid());
+        Member member = baseMapper.selectOne(memberQueryWrapper);
+        // 存在则更新
+        if (Objects.nonNull(member) ) {
+            try {
+
+                ResponseEntity<JSONObject> responseEntity = restTemplate.getForEntity("https://api.weibo.com/2/users/show.json?access_token={access_token}&uid={uid}", JSONObject.class, weiboOauth2UserVo.getAccess_token(), weiboOauth2UserVo.getUid());
+                if (responseEntity.getStatusCode().value() == HttpStatus.OK.value()) {
+                    JSONObject body = responseEntity.getBody();
+                    String name = body.getString("name");
+                    String gender = body.getString("gender");
+                    member.setNickname(name);
+                    member.setUsername(name);
+                    member.setGender("m".equals(gender) ? 1 : 0);
+
+                }
+            } catch (Exception e) {
+                log.error("调用微博接口异常", e);
+            }
+            member.setAccessToken(weiboOauth2UserVo.getAccess_token());
+            member.setExpiresIn(weiboOauth2UserVo.getExpires_in());
+            member.updateById();
+        } else {
+            member = new Member();
+            try {
+
+                ResponseEntity<JSONObject> responseEntity = restTemplate.getForEntity("https://api.weibo.com/2/users/show.json?access_token={access_token}&uid={uid}", JSONObject.class, weiboOauth2UserVo.getAccess_token(), weiboOauth2UserVo.getUid());
+                if (responseEntity.getStatusCode().value() == HttpStatus.OK.value()) {
+                    JSONObject body = responseEntity.getBody();
+                    String name = body.getString("name");
+                    String gender = body.getString("gender");
+                    member.setNickname(name);
+                    member.setUsername(name);
+                    member.setGender("m".equals(gender) ? 1 : 0);
+
+                }
+            } catch (Exception e) {
+                log.error("调用微博接口异常", e);
+            }
+            member.setSocialUid(weiboOauth2UserVo.getUid());
+            member.setAccessToken(weiboOauth2UserVo.getAccess_token());
+            member.setExpiresIn(weiboOauth2UserVo.getExpires_in());
+            member.insert();
+
+        }
+
+        return member;
     }
 
 

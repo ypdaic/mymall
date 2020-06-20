@@ -1,0 +1,34 @@
+server:
+  port: @auth.port@
+  servlet:
+    context-path: /
+    session:
+      timeout: 30m
+
+spring:
+
+ #security:
+  #user:
+  #  name: admin  # 认证用户名
+  #  password: test1234  # 认证密码
+ main:
+   allow-bean-definition-overriding: true
+ session:
+   store-type: redis
+
+info:
+  app.name: @project.name@
+  company.name: daiyanping
+  build.artifactId: @project.artifactId@
+  build.modelVersion: @project.modelVersion@
+
+# 配置ribbon 饥饿加载
+ribbon:
+  eager-load:
+    enabled: true
+    clients: mymall-member
+
+third-app-config:
+  weibo:
+    appKey: 896181347
+    appSecret: ae9abbda63eba9505d7db76711dd8217

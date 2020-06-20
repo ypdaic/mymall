@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.member.vo.MemberDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ypdaic.mymall.member.vo.WeiboOauth2UserVo;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -67,5 +69,11 @@ public interface IMemberService extends IService<Member> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    /**
+     * 微博登录
+     * @param weiboOauth2UserVo
+     * @return
+     */
+    Member login(WeiboOauth2UserVo weiboOauth2UserVo);
 
 }

@@ -11,6 +11,8 @@ spring:
   #  password: test1234  # 认证密码
  main:
    allow-bean-definition-overriding: true
+ session:
+   store-type: redis
 
  cloud:
   sentinel:

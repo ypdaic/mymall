@@ -22,6 +22,9 @@
         <result column="growth" property="growth" />
         <result column="status" property="status" />
         <result column="create_time" property="createTime" />
+        <result column="social_uid" property="socialUid" />
+        <result column="access_token" property="accessToken" />
+        <result column="expires_in" property="expiresIn" />
     </resultMap>
 
     <select id="queryPage" resultMap="BaseResultMap">

@@ -95,6 +95,10 @@ spring:
         uri: lb://mymall-search
         predicates:
           - Host= search.mymall.com #域名转发
+      - id: auth-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
+        uri: lb://mymall-auth-server
+        predicates:
+          - Host= auth.mymall.com #域名转发
 
 
 logging:

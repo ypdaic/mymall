@@ -4,6 +4,7 @@ package com.ypdaic.mymall.member.controller;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
 import com.ypdaic.mymall.fegin.coupon.ICouponFeignService;
+import com.ypdaic.mymall.member.vo.WeiboOauth2UserVo;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -228,6 +229,15 @@ public class MemberController extends BaseController {
         memberService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    /**
+     * 社交账号登录，微博登录
+     */
+    @PostMapping("/oauth2/login")
+    public R oauth2Login(@RequestBody WeiboOauth2UserVo weiboOauth2UserVo){
+        Member member = memberService.login(weiboOauth2UserVo);
+        return R.ok().setData(member);
     }
 
 

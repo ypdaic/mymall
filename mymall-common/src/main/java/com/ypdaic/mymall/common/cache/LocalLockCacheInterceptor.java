@@ -4,10 +4,12 @@ import com.ypdaic.mymall.common.annotation.MyCacheable;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.config.TaskManagementConfigUtils;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 

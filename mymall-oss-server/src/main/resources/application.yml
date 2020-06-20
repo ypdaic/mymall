@@ -1,0 +1,9 @@
+server:
+  port: @oss-server.port@
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: oss-server
+  profiles:
+    active: @env@
