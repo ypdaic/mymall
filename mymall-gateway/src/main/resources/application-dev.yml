@@ -99,6 +99,14 @@ spring:
         uri: lb://mymall-auth-server
         predicates:
           - Host= auth.mymall.com #域名转发
+      - id: cart-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
+        uri: lb://mymall-cart
+        predicates:
+          - Host= cart.mymall.com #域名转发
+      - id: cart-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
+        uri: lb://mymall-order
+        predicates:
+          - Host= order.mymall.com #域名转发
 
 
 logging:

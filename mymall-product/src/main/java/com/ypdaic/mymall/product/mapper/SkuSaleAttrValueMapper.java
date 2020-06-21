@@ -51,4 +51,6 @@ public interface SkuSaleAttrValueMapper extends BaseMapper<SkuSaleAttrValue> {
     List<SkuSaleAttrValue> queryAll(@Param("dto") SkuSaleAttrValueDto skuSaleAttrValueDto);
 
     List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(@Param("spuId") Long spuId);
+
+    List<String> getSkuSaleAttrValues(Long skuId);
 }

@@ -1,0 +1,46 @@
+server:
+  port: @cart.port@
+  servlet:
+    context-path: /
+
+spring:
+
+ #security:
+  #user:
+  #  name: admin  # 认证用户名
+  #  password: test1234  # 认证密码
+ main:
+   allow-bean-definition-overriding: true
+ session:
+   store-type: redis
+
+ cloud:
+  sentinel:
+    transport:
+      port: 8719
+      dashboard: localhost:8080
+ thymeleaf:
+   cache: false
+   suffix: .html
+
+mybatis-plus:
+  mapperLocations: classpath:/sqlMapperXml/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+
+
+info:
+  app.name: @project.name@
+  company.name: daiyanping
+  build.artifactId: @project.artifactId@
+  build.modelVersion: @project.modelVersion@
+
+ #配置ribbon 饥饿加载
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+      - mymall-product

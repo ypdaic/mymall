@@ -1,9 +1,8 @@
 package com.ypdaic.mymall.product.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.ypdaic.mymall.common.base.BaseController;
 
 import com.ypdaic.mymall.product.service.ISkuSaleAttrValueService;
@@ -12,8 +11,6 @@ import com.ypdaic.mymall.product.entity.SkuSaleAttrValue;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -158,5 +155,10 @@ public class SkuSaleAttrValueController extends BaseController {
         return ResultUtil.failure(40001, "sku销售属性&值名称已存在！");
     }
 
+    @GetMapping("/stringlist/{skuId}")
+    public List<String> getSkuSaleAttrValues(@PathVariable("skuId") Long skuId) {
+        List<String> list = skuSaleAttrValueService.getSkuSaleAttrValues(skuId);
+        return list;
+    }
 }
 

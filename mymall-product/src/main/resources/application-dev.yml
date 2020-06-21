@@ -54,7 +54,7 @@ spring:
       min-idle: 0
   host: 192.168.109.128
   port: 6380
-#      password: test1234
+  password: test1234
  cache:
   type: redis
   redis:

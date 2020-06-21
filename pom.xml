@@ -32,6 +32,7 @@
         <module>mymall-oss-server</module>
         <module>mymall-oss-client</module>
         <module>mymall-oss-client2</module>
+        <module>mymall-cart</module>
     </modules>
 
     <properties>
@@ -211,6 +212,7 @@
                 <oss-server.port>8091</oss-server.port>
                 <oss-client1.port>8092</oss-client1.port>
                 <oss-client2.port>8093</oss-client2.port>
+                <cart.port>8094</cart.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -240,6 +242,7 @@
                 <oss-server.port>8091</oss-server.port>
                 <oss-client1.port>8092</oss-client1.port>
                 <oss-client2.port>8093</oss-client2.port>
+                <cart.port>8094</cart.port>
             </properties>
         </profile>
         <profile>
@@ -262,6 +265,7 @@
                 <oss-server.port>8091</oss-server.port>
                 <oss-client1.port>8092</oss-client1.port>
                 <oss-client2.port>8093</oss-client2.port>
+                <cart.port>8094</cart.port>
             </properties>
         </profile>
     </profiles>
