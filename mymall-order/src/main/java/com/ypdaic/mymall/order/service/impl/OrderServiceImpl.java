@@ -1,32 +1,53 @@
 package com.ypdaic.mymall.order.service.impl;
 
-import com.ypdaic.mymall.common.util.PageUtils;
-import com.ypdaic.mymall.common.util.Query;
+import com.alibaba.fastjson.TypeReference;
+import com.ypdaic.mymall.common.to.MemberRespVo;
+import com.ypdaic.mymall.common.to.SkuHasStockVo;
+import com.ypdaic.mymall.common.util.*;
+import com.ypdaic.mymall.fegin.cart.ICartFeginService;
+import com.ypdaic.mymall.fegin.member.IMemberFeginService;
+import com.ypdaic.mymall.fegin.ware.IWareFeignService;
 import com.ypdaic.mymall.order.entity.Order;
 import com.ypdaic.mymall.order.entity.OrderReturnReason;
+import com.ypdaic.mymall.order.interceptor.LoginUserInterceptor;
 import com.ypdaic.mymall.order.mapper.OrderMapper;
 import com.ypdaic.mymall.order.service.IOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.order.vo.MemberReceiveAddressVo;
+import com.ypdaic.mymall.order.vo.OrderConfirmVo;
 import com.ypdaic.mymall.order.vo.OrderDto;
 import com.ypdaic.mymall.order.enums.OrderExcelHeadersEnum;
+import com.ypdaic.mymall.order.vo.OrderItemVo;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ypdaic.mymall.common.util.ExcelUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
-import com.ypdaic.mymall.common.util.JavaUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+
 import java.util.Date;
 import java.util.Date;
 import java.util.Date;
 import java.util.Date;
 import java.util.Date;
 import java.util.Date;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
+
+import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME;
 
 /**
  * <p>
@@ -36,9 +57,22 @@ import java.util.Date;
  * @author daiyanping
  * @since 2020-06-08
  */
+@Slf4j
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
+    @Autowired
+    IMemberFeginService memberFeginService;
+
+    @Autowired
+    ICartFeginService cartFeginService;
+
+    @Autowired
+    @Qualifier(APPLICATION_TASK_EXECUTOR_BEAN_NAME)
+    Executor executor;
+
+    @Autowired
+    IWareFeignService wareFeignService;
 
     /**
      * 新增订单
@@ -229,6 +263,77 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public OrderConfirmVo confirmOrder() {
+        MemberRespVo memberRespVo = LoginUserInterceptor.threadLocal.get();
+        OrderConfirmVo orderConfirmVo = new OrderConfirmVo();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        log.warn("当前线程id：{}, 当前线程名称：{}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        CompletableFuture<Void> voidCompletableFuture = CompletableFuture.runAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                // 远程获取用户收货地址
+                R address = memberFeginService.getAddress(memberRespVo.getId());
+                List<MemberReceiveAddressVo> memberReceiveAddressVos = address.getData(new TypeReference<List<MemberReceiveAddressVo>>() {
+                });
+                orderConfirmVo.setMemberReceiveAddressVoList(memberReceiveAddressVos);
+            } catch (Exception e) {
+                log.error("获取收货地址异常", e);
+                throw new RuntimeException("获取收货地址异常");
+            }
+
+        }, executor);
+
+        CompletableFuture<Void> voidCompletableFuture1 = CompletableFuture.runAsync(() -> {
+            try {
+                RequestContextHolder.setRequestAttributes(requestAttributes);
+                // 远程查询购物车所有选中的购物项
+                R currentUserCartItems = cartFeginService.getCurrentUserCartItems();
+                List<OrderItemVo> orderItemVo = currentUserCartItems.getData(new TypeReference<List<OrderItemVo>>() {
+                });
+                orderConfirmVo.setOrderItemVos(orderItemVo);
+            } catch (Exception e) {
+                log.error("获取购物车信息异常", e);
+                throw new RuntimeException("获取购物车信息异常");
+            }
+
+        }, executor).thenRunAsync(() -> {
+            log.warn("调用远程服务：当前线程id：{}, 当前线程名称：{}", Thread.currentThread().getId(), Thread.currentThread().getName());
+            List<OrderItemVo> orderItemVos = orderConfirmVo.getOrderItemVos();
+            if (CollectionUtils.isNotEmpty(orderItemVos)){
+                List<Long> collect = orderItemVos.stream().map(orderItemVo -> orderItemVo.getSkuId()).collect(Collectors.toList());
+                R skuHasStock = wareFeignService.getSkuHasStock(collect);
+                List<SkuHasStockVo> data = skuHasStock.getData(new TypeReference<List<SkuHasStockVo>>() {
+                });
+                if (CollectionUtils.isNotEmpty(data)) {
+                    for (OrderItemVo orderItemVo : orderItemVos) {
+                        for (SkuHasStockVo datum : data) {
+                            if (datum.getSkuId().equals(orderItemVo.getSkuId())) {
+                                orderItemVo.setHasStock(datum.getHasStock());
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }, executor);
+
+
+        Integer integration = memberRespVo.getIntegration();
+        orderConfirmVo.setIntegration(integration);
+
+
+        try {
+            CompletableFuture.allOf(voidCompletableFuture, voidCompletableFuture1).get();
+        } catch (Exception e) {
+            log.error("调用远程服务异常", e);
+            throw new RuntimeException("调用远程服务异常");
+        }
+        // TODO 防重令牌
+        return orderConfirmVo;
     }
 
 }

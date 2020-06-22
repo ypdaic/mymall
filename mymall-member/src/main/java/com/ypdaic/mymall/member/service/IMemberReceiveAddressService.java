@@ -66,4 +66,6 @@ public interface IMemberReceiveAddressService extends IService<MemberReceiveAddr
     List<MemberReceiveAddress> queryAll(MemberReceiveAddressDto memberReceiveAddressDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<MemberReceiveAddress> getAddress(Long memberId);
 }

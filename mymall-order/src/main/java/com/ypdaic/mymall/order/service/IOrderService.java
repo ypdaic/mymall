@@ -3,6 +3,7 @@ package com.ypdaic.mymall.order.service;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.order.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ypdaic.mymall.order.vo.OrderConfirmVo;
 import com.ypdaic.mymall.order.vo.OrderDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -66,4 +67,10 @@ public interface IOrderService extends IService<Order> {
     List<Order> queryAll(OrderDto orderDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 订单确认页返回的数据
+     * @return
+     */
+    OrderConfirmVo confirmOrder();
 }

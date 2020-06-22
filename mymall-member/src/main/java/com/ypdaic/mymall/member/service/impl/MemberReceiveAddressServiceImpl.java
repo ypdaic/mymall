@@ -158,4 +158,13 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
         return new PageUtils(page);
     }
 
+    @Override
+    public List<MemberReceiveAddress> getAddress(Long memberId) {
+        QueryWrapper<MemberReceiveAddress> memberReceiveAddressQueryWrapper = new QueryWrapper<>();
+        memberReceiveAddressQueryWrapper.eq("member_id", memberId);
+        List<MemberReceiveAddress> list = baseMapper.selectList(memberReceiveAddressQueryWrapper);
+        return list;
+
+    }
+
 }

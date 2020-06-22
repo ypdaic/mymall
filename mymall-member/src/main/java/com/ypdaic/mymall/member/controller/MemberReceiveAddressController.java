@@ -216,5 +216,11 @@ public class MemberReceiveAddressController extends BaseController {
         return R.ok();
     }
 
+    @GetMapping("/{memberId}/addresses")
+    public R getAddress(@PathVariable("memberId") Long memberId) {
+        List<MemberReceiveAddress> list = memberReceiveAddressService.getAddress(memberId);
+        return R.ok().setData(list);
+    }
+
 }
 

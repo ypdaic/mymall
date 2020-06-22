@@ -2,12 +2,20 @@ package com.ypdaic.mymall.fegin.member;
 
 import com.ypdaic.mymall.common.to.WeiboOauth2UserVo;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.fegin.config.FeginConfig;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(value = "mymall-member", path = "/member/member")
+import java.util.List;
+
+@FeignClient(value = "mymall-member", configuration = {FeginConfig.class})
 public interface IMemberFeginService {
 
-    @PostMapping("/oauth2/login")
+    @PostMapping("/member/member/oauth2/login")
     R login(WeiboOauth2UserVo weiboOauth2User);
+
+    @GetMapping("/member/member-receive-address/{memberId}/addresses")
+    R getAddress(@PathVariable("memberId") Long memberId);
 }

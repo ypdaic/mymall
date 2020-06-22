@@ -1,11 +1,9 @@
 package com.ypdaic.mymall.cart.controller;
 
-import com.sun.org.apache.bcel.internal.generic.LLOAD;
-import com.ypdaic.mymall.cart.interceptor.CartInterceptor;
 import com.ypdaic.mymall.cart.service.ICartService;
 import com.ypdaic.mymall.cart.vo.Cart;
 import com.ypdaic.mymall.cart.vo.CartItem;
-import com.ypdaic.mymall.cart.vo.UserInfo;
+import com.ypdaic.mymall.common.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
-import java.util.Objects;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -82,6 +80,17 @@ public class CartController {
         cartService.countItem(skuId, num);
 
         return "redirect:http://cart.mymall.com/cart.html";
+    }
+
+    /**
+     * 获取当前用户的所有购物车数据
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/currentUserCartItems")
+    public R getCurrentUserCartItems() {
+        List<CartItem> list =  cartService.getUserCartItems();
+        return R.ok().setData(list);
     }
 
 

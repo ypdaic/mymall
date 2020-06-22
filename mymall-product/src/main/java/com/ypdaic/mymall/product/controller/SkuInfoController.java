@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -215,6 +216,14 @@ public class SkuInfoController extends BaseController {
         skuInfoService.removeByIds(Arrays.asList(skuIds));
 
         return R.ok();
+    }
+
+    @GetMapping("/{skuId}/price")
+    public R getPrice(@PathVariable("skuId") Long skuId) {
+        SkuInfo skuInfo = skuInfoService.getById(skuId);
+        BigDecimal price = skuInfo.getPrice();
+        return R.ok().setData(price);
+
     }
 
 }

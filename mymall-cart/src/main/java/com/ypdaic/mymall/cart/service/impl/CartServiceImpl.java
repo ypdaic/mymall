@@ -7,6 +7,7 @@ import com.ypdaic.mymall.cart.vo.Cart;
 import com.ypdaic.mymall.cart.vo.CartItem;
 import com.ypdaic.mymall.cart.vo.SkuInfoVo;
 import com.ypdaic.mymall.cart.vo.UserInfo;
+import com.ypdaic.mymall.common.constant.CartConstant;
 import com.ypdaic.mymall.common.util.R;
 import com.ypdaic.mymall.fegin.product.IProductFeignService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,12 @@ import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -159,6 +162,37 @@ public class CartServiceImpl implements ICartService {
         CartItem cartItem = getCartItem(skuId);
         cartItem.setCount(num);
         cartOps.put(skuId.toString(), cartItem);
+    }
+
+    /**
+     * 查询购物项
+     * @return
+     */
+    @Override
+    public List<CartItem> getUserCartItems() {
+
+        UserInfo userInfo = CartInterceptor.threadLocal.get();
+        if (userInfo.getUserId() == null) {
+            return null;
+        } else {
+            String format = String.format(CART_PREFIX, userInfo.getUserId().toString());
+            BoundHashOperations boundHashOperations = redisTemplate.boundHashOps(format);
+            List<CartItem> values = boundHashOperations.values();
+            // 只选中勾选中的商品
+            List<CartItem> collect = values.stream().filter(cartItem -> cartItem.getCheck())
+                    .map(cartItem -> {
+
+                        R price = productFeignService.getPrice(cartItem.getSkuId());
+                        BigDecimal data = price.getData(new TypeReference<BigDecimal>() {
+                        });
+                        // 获取最新的价格
+                        cartItem.setPrice(data);
+                        return cartItem;
+                    })
+                    .collect(Collectors.toList());
+
+            return collect;
+        }
     }
 
     /**

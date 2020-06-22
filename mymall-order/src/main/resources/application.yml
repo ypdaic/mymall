@@ -32,4 +32,8 @@ info:
 ribbon:
   eager-load:
     enabled: true
-    clients: springcloud-provider
+    clients:
+    - mymall-member
+    - mymall-product
+    - mymall-cart
+    - mymall-ware
