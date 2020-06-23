@@ -1,51 +1,51 @@
 package com.ypdaic.mymall.order.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.to.MemberRespVo;
 import com.ypdaic.mymall.common.to.SkuHasStockVo;
-import com.ypdaic.mymall.common.util.*;
+import com.ypdaic.mymall.common.util.JavaUtils;
+import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.common.util.R;
 import com.ypdaic.mymall.fegin.cart.ICartFeginService;
 import com.ypdaic.mymall.fegin.member.IMemberFeginService;
 import com.ypdaic.mymall.fegin.ware.IWareFeignService;
 import com.ypdaic.mymall.order.entity.Order;
-import com.ypdaic.mymall.order.entity.OrderReturnReason;
+import com.ypdaic.mymall.order.entity.OrderItem;
 import com.ypdaic.mymall.order.interceptor.LoginUserInterceptor;
 import com.ypdaic.mymall.order.mapper.OrderMapper;
 import com.ypdaic.mymall.order.service.IOrderService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ypdaic.mymall.order.vo.MemberReceiveAddressVo;
-import com.ypdaic.mymall.order.vo.OrderConfirmVo;
-import com.ypdaic.mymall.order.vo.OrderDto;
-import com.ypdaic.mymall.order.enums.OrderExcelHeadersEnum;
-import com.ypdaic.mymall.order.vo.OrderItemVo;
+import com.ypdaic.mymall.order.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-import com.ypdaic.mymall.common.enums.EnableEnum;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.Collections;
 import java.util.Date;
-import java.util.Date;
-import java.util.Date;
-import java.util.Date;
-import java.util.Date;
-import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import com.ypdaic.mymall.order.vo.OrderCreateTo;
 
 import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME;
 
@@ -73,6 +73,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     IWareFeignService wareFeignService;
+
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Autowired
+    @Qualifier("orderTokenCheckScript")
+    RedisScript<Boolean> redisScript;
+
+    private static final String TOKEN = "ORDER_TOKEN:";
+
 
     /**
      * 新增订单
@@ -322,6 +333,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }, executor);
 
 
+
         Integer integration = memberRespVo.getIntegration();
         orderConfirmVo.setIntegration(integration);
 
@@ -333,7 +345,84 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             throw new RuntimeException("调用远程服务异常");
         }
         // TODO 防重令牌
+        String uuid = UUID.fastUUID().toString();
+        BoundValueOperations boundValueOperations = redisTemplate.boundValueOps(String.format(TOKEN, memberRespVo.getId().toString()));
+        boundValueOperations.set(uuid, 30, TimeUnit.MINUTES);
+        orderConfirmVo.setOrderToken(uuid);
         return orderConfirmVo;
     }
+
+    /**
+     * 下单
+     * @param orderSubmitVo
+     * @return
+     */
+    @Override
+    public SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo) {
+        SubmitResponVo submitResponVo = new SubmitResponVo();
+        MemberRespVo memberRespVo = LoginUserInterceptor.threadLocal.get();
+        // 1.验证令牌
+        Boolean result = (Boolean) redisTemplate.execute(redisScript, Collections.singletonList(String.format(TOKEN, memberRespVo.getId())), orderSubmitVo.getOrderToken());
+        // 令牌不通过
+        if (!result) {
+            submitResponVo.setCode(0);
+            return submitResponVo;
+        }
+
+        return submitResponVo;
+
+    }
+
+
+    private OrderCreateTo createOrder(OrderSubmitVo orderSubmitVo) {
+        OrderCreateTo orderCreateTo = new OrderCreateTo();
+
+
+        // 创建订单号
+        String timeId = IdWorker.getTimeId();
+        Order order = new Order();
+        order.setOrderSn(timeId);
+
+        // 获取收货地址
+        R fare = wareFeignService.getFare(orderSubmitVo.getAddrId());
+        FareVo fareVo = fare.getData(new TypeReference<FareVo>() {
+        });
+
+        order.setFreightAmount(fareVo.getFare());
+        order.setReceiverCity(fareVo.getMemberReceiveAddressVo().getCity());
+        order.setReceiverDetailAddress(fareVo.getMemberReceiveAddressVo().getDetailAddress());
+        order.setReceiverName(fareVo.getMemberReceiveAddressVo().getName());
+        order.setReceiverPhone(fareVo.getMemberReceiveAddressVo().getPhone());
+        order.setReceiverPostCode(fareVo.getMemberReceiveAddressVo().getPostCode());
+        order.setReceiverProvince(fareVo.getMemberReceiveAddressVo().getProvince());
+        order.setReceiverRegion(fareVo.getMemberReceiveAddressVo().getRegion());
+
+
+
+        return orderCreateTo;
+
+
+    }
+
+    /**
+     * 构建所有订单项数据
+     * @return
+     */
+    private List<OrderItem> buidOrderItem() {
+        // 获取到所有的订单项
+        R currentUserCartItems = cartFeginService.getCurrentUserCartItems();
+        List<CartItem> cartItems = currentUserCartItems.getData(new TypeReference<List<CartItem>>(){});
+        if (CollectionUtils.isNotEmpty(cartItems)) {
+            List<OrderItem> collect = cartItems.stream().map(cartItem -> {
+                OrderItem orderItem = new OrderItem();
+                return orderItem;
+            }).collect(Collectors.toList());
+
+            return collect;
+        }
+
+        return null;
+    }
+
 
 }

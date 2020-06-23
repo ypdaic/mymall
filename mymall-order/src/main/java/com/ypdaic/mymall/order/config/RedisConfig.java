@@ -137,5 +137,17 @@ public class RedisConfig {
         return RedisScript.of("", Boolean.class);
     }
 
+    @Bean
+    public RedisScript<Boolean> orderTokenCheckScript() {
+
+        ScriptSource scriptSource = new ResourceScriptSource(new ClassPathResource("lua/orderTokenCheck.lua"));
+        try {
+            return RedisScript.of(scriptSource.getScriptAsString(), Boolean.class);
+        } catch (IOException e) {
+            log.error("lua 脚本加载失败", e);
+        }
+        return RedisScript.of("", Boolean.class);
+    }
+
 
 }

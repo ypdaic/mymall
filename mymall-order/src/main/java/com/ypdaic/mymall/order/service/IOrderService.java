@@ -7,6 +7,9 @@ import com.ypdaic.mymall.order.vo.OrderConfirmVo;
 import com.ypdaic.mymall.order.vo.OrderDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ypdaic.mymall.order.vo.OrderSubmitVo;
+import com.ypdaic.mymall.order.vo.SubmitResponVo;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -73,4 +76,6 @@ public interface IOrderService extends IService<Order> {
      * @return
      */
     OrderConfirmVo confirmOrder();
+
+    SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo);
 }

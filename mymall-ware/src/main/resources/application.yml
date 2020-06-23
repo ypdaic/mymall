@@ -31,4 +31,6 @@ info:
 ribbon:
   eager-load:
     enabled: true
-    clients: mymall-product
+    clients:
+    - mymall-product
+    - mymall-member

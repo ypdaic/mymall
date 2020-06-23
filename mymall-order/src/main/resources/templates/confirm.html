@@ -597,8 +597,8 @@
 			</div>
 
 			<!--地址-->
-			<div class="top-3" th:each="addr:${orderConfirmData.memberReceiveAddressVoList}">
-				<p>[[${addr.name}]]</p><span>[[${addr.name}]] [[${addr.province}]] [[${addr.detailAddress}]] [[${addr.phone}]]</span>
+			<div class="top-3 addr-item" th:each="addr:${orderConfirmData.memberReceiveAddressVoList}">
+				<p th:attr="def=${addr.defaultStatus}, addrId=${addr.id}">[[${addr.name}]]</p><span>[[${addr.name}]] [[${addr.province}]] [[${addr.detailAddress}]] [[${addr.phone}]]</span>
 			</div>
 			<p class="p2">更多地址︾</p>
 			<div class="hh1"/></div>
@@ -716,7 +716,7 @@
 				</p>
 				<p class="qian_y">
 					<span>运费： </span>
-					<span class="rmb"> &nbsp ￥0.00</span>
+					<span class="rmb" > &nbsp ￥<b id="fareEle"></b></span>
 				</p>
 				<p class="qian_y">
 					<span>服务费： </span>
@@ -730,10 +730,16 @@
 			</div>
 
 			<div class="yfze">
-				<p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥[[${orderConfirmData.payPrice}]]</span></p>
-				<p class="yfze_b">寄送至： 北京 朝阳区 三环到四环之间 朝阳北路复兴国际大厦23层麦田房产 IT-中心研发二部 收货人：赵存权 188****5052</p>
+				<p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥<b id="payPriceEle">[[${orderConfirmData.payPrice}]]</b></span></p>
+				<p class="yfze_b">寄送至： <span id="recieverAddrEle"></span> 收货人：<span id="recieverEle"></span></p>
 			</div>
-			<button class="tijiao">提交订单</button>
+			<form action="http://order.mymall.com/submitOrder" method="post">
+				<input id="addrIdInput" type="hidden" name="addId">
+				<input id="payPriceInput" type="hidden" name="payPrice">
+				<input name="orderToken" th:value="${orderConfirmData.orderToken}" type="hidden">
+				<button class="tijiao" >提交订单</button>
+			</form>
+
 		</div>
 		</div>
 
@@ -966,8 +972,44 @@
                 },function(){
                     $('.h-r-1').css('display','none')
                 })
+				highlight();
+				let addrId = $(".addr-item p[def='true']").attr("addrId");
+				fare(addrId);
             })
 
+			function highlight() {
+				$(".addr-item p").css({"border": "2px solid gray"});
+				$(".addr-item p[def='true']").css({"border": "2px solid red"})
+
+			}
+
+			$(".addr-item p").click(function () {
+				$(".addr-item p").attr("def", "false")
+				$(this).attr("def", "true");
+				highlight();
+				// 获取到当前地址id
+				var addId = $(this).attr("addrId");
+						fare();
+					}
+
+			)
+
+			function fare(addId) {
+				$("#addrIdInput").val(addId);
+				$.get("http://mymall.com/api/ware/wareinfo/fare?addrId=" + addId, function (data) {
+							$("#fareEle").text(data.data.fare);
+							let newVar = [[${orderConfirmData.payPrice}]];
+							let number = newVar * 1 + data.data.fare * 1;
+							$("#payPriceEle").text(number);
+							$("#payPriceInput").val(number);
+
+							$("#recieverAddrEle").text(data.data.memberReceiveAddressVo.province + " " + data.data.memberReceiveAddressVo.detailAddress );
+							$("#recieverEle").text(data.data.memberReceiveAddressVo.name);
+
+
+						}
+				)
+			}
 
 		</script>
 	</body>

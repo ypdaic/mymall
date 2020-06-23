@@ -3,10 +3,12 @@ package com.ypdaic.mymall.ware.service;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.ware.entity.WareInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ypdaic.mymall.ware.vo.FareVo;
 import com.ypdaic.mymall.ware.vo.WareInfoDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -66,4 +68,6 @@ public interface IWareInfoService extends IService<WareInfo> {
     List<WareInfo> queryAll(WareInfoDto wareInfoDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    FareVo getFare(Long id);
 }

@@ -1,26 +1,30 @@
 package com.ypdaic.mymall.ware.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
-import com.ypdaic.mymall.common.util.PageUtils;
-import com.ypdaic.mymall.common.util.Query;
+import com.alibaba.fastjson.TypeReference;
+import com.ypdaic.mymall.common.util.*;
+import com.ypdaic.mymall.fegin.member.IMemberFeginService;
 import com.ypdaic.mymall.ware.entity.WareInfo;
 import com.ypdaic.mymall.ware.mapper.WareInfoMapper;
 import com.ypdaic.mymall.ware.service.IWareInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.ware.vo.FareVo;
+import com.ypdaic.mymall.ware.vo.MemberReceiveAddressVo;
 import com.ypdaic.mymall.ware.vo.WareInfoDto;
 import com.ypdaic.mymall.ware.enums.WareInfoExcelHeadersEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ypdaic.mymall.common.util.ExcelUtil;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
-import com.ypdaic.mymall.common.util.JavaUtils;
 
 /**
  * <p>
@@ -33,6 +37,8 @@ import com.ypdaic.mymall.common.util.JavaUtils;
 @Service
 public class WareInfoServiceImpl extends ServiceImpl<WareInfoMapper, WareInfo> implements IWareInfoService {
 
+    @Autowired
+    IMemberFeginService memberFeginService;
 
     /**
      * 新增仓库信息
@@ -152,6 +158,21 @@ public class WareInfoServiceImpl extends ServiceImpl<WareInfoMapper, WareInfo> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public FareVo getFare(Long id) {
+        FareVo fareVo = new FareVo();
+        R info = memberFeginService.info(id);
+        MemberReceiveAddressVo data = info.getData("memberReceiveAddress", new TypeReference<MemberReceiveAddressVo>() {
+        });
+
+        String phone = data.getPhone();
+        String substring = phone.substring(phone.length() - 1, phone.length());
+        fareVo.setMemberReceiveAddressVo(data);
+        fareVo.setFare(new BigDecimal(substring));
+        return fareVo;
+
     }
 
 }

@@ -3,6 +3,7 @@ package com.ypdaic.mymall.ware.controller;
 
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.ware.vo.FareVo;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ypdaic.mymall.common.annotation.NeedAuth;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -214,6 +216,14 @@ public class WareInfoController extends BaseController {
         wareInfoService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    @GetMapping("/fare")
+    public R getFare(@RequestParam("addrId") Long id) {
+
+        FareVo fare = wareInfoService.getFare(id);
+        return R.ok().setData(fare);
+
     }
 
 }
