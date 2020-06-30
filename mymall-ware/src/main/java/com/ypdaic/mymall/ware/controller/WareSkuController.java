@@ -1,9 +1,12 @@
 package com.ypdaic.mymall.ware.controller;
 
 
+import com.ypdaic.mymall.common.exception.BizCodeEnum;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.ware.vo.LockStockResult;
 import com.ypdaic.mymall.ware.vo.SkuHasStockVo;
+import com.ypdaic.mymall.ware.vo.WareSkuLockVo;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -229,7 +232,16 @@ public class WareSkuController extends BaseController {
         return R.ok().setData(skuHasStockVos);
     }
 
+    @PostMapping("/lock/order")
+    public R orderLockStock(@RequestBody WareSkuLockVo wareSkuLockVo) {
+        try {
+            Boolean aBoolean = wareSkuService.orderLockStock(wareSkuLockVo);
+            return R.ok();
+        } catch (Exception e) {
+            return R.error(BizCodeEnum.NO_STOCK_EXCEPTION.getCode(), BizCodeEnum.NO_STOCK_EXCEPTION.getMsg());
+        }
 
+    }
 
 }
 

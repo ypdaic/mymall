@@ -19,7 +19,9 @@ public enum BizCodeEnum {
 
     VALID_EXCEPTION( 10001,"参数格式校验失败"),
 
-    PRODUCT_EXCEPTION(11000,"商品上架异常");
+    PRODUCT_EXCEPTION(11000,"商品上架异常"),
+
+    NO_STOCK_EXCEPTION(21000,"没有库存异常");
 
     private int code;
     private String msg;

@@ -486,4 +486,13 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
 
     }
 
+    @Override
+    public SpuInfo getSpuInfoBySkuId(Long skuId) {
+        SkuInfo skuInfo = skuInfoService.getById(skuId);
+        SpuInfo spuInfo = baseMapper.selectById(skuInfo.getSpuId());
+        return spuInfo;
+
+
+    }
+
 }

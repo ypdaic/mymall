@@ -3,11 +3,13 @@ package com.ypdaic.mymall.ware.service;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.ware.entity.WareSku;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ypdaic.mymall.ware.vo.LockStockResult;
 import com.ypdaic.mymall.ware.vo.SkuHasStockVo;
 import com.ypdaic.mymall.ware.vo.WareSkuDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import javax.servlet.http.HttpServletResponse;
+import com.ypdaic.mymall.ware.vo.WareSkuLockVo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -71,4 +73,6 @@ public interface IWareSkuService extends IService<WareSku> {
     void addStock(Long skuId, Long wareId, Integer skuNum);
 
     List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds);
+
+    Boolean orderLockStock(WareSkuLockVo wareSkuLockVo);
 }

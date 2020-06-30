@@ -229,5 +229,11 @@ public class SpuInfoController extends BaseController {
         return R.ok();
     }
 
+    @GetMapping("/skuId/{id}")
+    public R getSpuInfoBySkuId(@PathVariable("id")  Long skuId) {
+        SpuInfo spuInfo = spuInfoService.getSpuInfoBySkuId(skuId);
+        return R.ok().setData(spuInfo);
+    }
+
 }
 

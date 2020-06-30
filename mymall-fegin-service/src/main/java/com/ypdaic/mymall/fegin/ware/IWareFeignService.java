@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.fegin.ware;
 
+import com.ypdaic.mymall.common.to.WareSkuLockVo;
 import com.ypdaic.mymall.common.util.R;
 import com.ypdaic.mymall.fegin.config.FeginConfig;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -18,5 +19,8 @@ public interface IWareFeignService {
 
     @GetMapping("/ware/wareinfo/fare")
     R getFare(@RequestParam("addrId") Long id);
+
+    @PostMapping("/ware/waresku/lock/order")
+    R orderLockStock(@RequestBody WareSkuLockVo wareSkuLockVo);
 
 }
