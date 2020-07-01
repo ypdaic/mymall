@@ -31,7 +31,7 @@ public class OrderItemVo {
     /**
      * 价格
      */
-    private BigDecimal price;
+    private BigDecimal price = new BigDecimal(0);
 
     /**
      * 数量
@@ -41,12 +41,12 @@ public class OrderItemVo {
     /**
      * 总价
      */
-    private BigDecimal totalPrice;
+    private BigDecimal totalPrice = new BigDecimal(0);
 
     /**
      * 商品重量
      */
-    private BigDecimal weight;
+    private BigDecimal weight = new BigDecimal(0);
 
     /**
      * TODO 是否有货待处理

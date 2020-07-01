@@ -46,3 +46,19 @@ ribbon:
       - mymall-coupon
       - mymall-search
       - mymall-ware
+# feign配置
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types:
+        - text/xml
+        - application/xml
+        - application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true

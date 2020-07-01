@@ -18,7 +18,7 @@ public interface IWareFeignService {
     R getSkuHasStock(@RequestBody List<Long> skuIds);
 
     @GetMapping("/ware/wareinfo/fare")
-    R getFare(@RequestParam("addrId") Long id);
+    R getFare(@RequestParam("addrId") Long addrId);
 
     @PostMapping("/ware/waresku/lock/order")
     R orderLockStock(@RequestBody WareSkuLockVo wareSkuLockVo);

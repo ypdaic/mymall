@@ -88,7 +88,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Qualifier("orderTokenCheckScript")
     RedisScript<Boolean> redisScript;
 
-    private static final String TOKEN = "ORDER_TOKEN:";
+    private static final String TOKEN = "ORDER_TOKEN:%s";
 
     @Autowired
     IProductFeignService productFeignService;
@@ -465,14 +465,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         BigDecimal growth = new BigDecimal("0.0");
         for (OrderItem orderItem : orderItems) {
             BigDecimal realAmount = orderItem.getRealAmount();
-            BigDecimal add = total.add(realAmount);
+            total = total.add(realAmount);
 
             // 商品优惠信息
             coupon = coupon.add(orderItem.getCouponAmount());
             integration = integration.add(orderItem.getIntegrationAmount());
             promotion = promotion.add(orderItem.getPromotionAmount());
             gift = gift.add(new BigDecimal(orderItem.getGiftIntegration()));
-            growth = growth.add(new BigDecimal(order.getGrowth()));
+            growth = growth.add(new BigDecimal(orderItem.getGiftGrowth()));
 
         }
         // 1,订单价格相关
@@ -512,6 +512,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setReceiverRegion(fareVo.getMemberReceiveAddressVo().getRegion());
         // 设置订单状态
         order.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+
 
 
         return order;

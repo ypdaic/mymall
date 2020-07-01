@@ -32,3 +32,20 @@ third-app-config:
   weibo:
     appKey: 896181347
     appSecret: ae9abbda63eba9505d7db76711dd8217
+
+# feign配置
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types:
+        - text/xml
+        - application/xml
+        - application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
