@@ -27,6 +27,7 @@ import com.ypdaic.mymall.order.mapper.OrderMapper;
 import com.ypdaic.mymall.order.service.IOrderItemService;
 import com.ypdaic.mymall.order.service.IOrderService;
 import com.ypdaic.mymall.order.vo.*;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.aspectj.weaver.ast.Or;
@@ -369,6 +370,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @param orderSubmitVo
      * @return
      */
+    @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     @Override
     public SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo) {
