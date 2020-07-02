@@ -366,7 +366,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     /**
-     * 下单
+     * 下单，这里使用seata 分布式事务不能保证高并发
      * @param orderSubmitVo
      * @return
      */
@@ -409,6 +409,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 if (r.getCode() == 0) {
                     //锁成功了
                     submitResponVo.setOrder(order.getOrder());
+                    throw new RuntimeException("模拟异常");
                 } else {
                     throw new RuntimeException("库存锁定失败");
 //                    // 锁定失败
@@ -430,8 +431,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public   void saveOrder(OrderCreateTo order) {
         order.getOrder().setModifyTime(new Date());
         baseMapper.insert(order.getOrder());
+        // seata 0.7.1 还不支持批量插入
         List<OrderItem> orderItemList = order.getOrderItemList();
-        orderItemService.saveBatch(orderItemList);
+        orderItemList.forEach(orderItem -> {
+            orderItem.insert();
+        });
 
     }
 
@@ -514,6 +518,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setReceiverRegion(fareVo.getMemberReceiveAddressVo().getRegion());
         // 设置订单状态
         order.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+        order.setAutoConfirmDay(7);
 
 
 

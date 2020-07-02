@@ -7,6 +7,7 @@ import com.ypdaic.mymall.common.util.R;
 import com.ypdaic.mymall.ware.vo.LockStockResult;
 import com.ypdaic.mymall.ware.vo.SkuHasStockVo;
 import com.ypdaic.mymall.ware.vo.WareSkuLockVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -44,6 +45,7 @@ import java.util.Objects;
  * @author daiyanping
  * @since 2020-06-11
  */
+@Slf4j
 @RestController
 @RequestMapping("/ware/waresku")
 public class WareSkuController extends BaseController {
@@ -238,6 +240,7 @@ public class WareSkuController extends BaseController {
             Boolean aBoolean = wareSkuService.orderLockStock(wareSkuLockVo);
             return R.ok();
         } catch (Exception e) {
+            log.error("库存锁定异常", e);
             return R.error(BizCodeEnum.NO_STOCK_EXCEPTION.getCode(), BizCodeEnum.NO_STOCK_EXCEPTION.getMsg());
         }
 

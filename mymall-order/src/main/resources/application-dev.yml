@@ -39,6 +39,8 @@ spring:
     simple:
       retry:
         enabled: true
+  template:
+    mandatory: true #开启手动确认
   host: 192.168.109.128
   port: 5672
   username: root

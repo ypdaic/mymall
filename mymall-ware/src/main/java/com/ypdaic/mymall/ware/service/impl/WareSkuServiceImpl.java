@@ -9,6 +9,7 @@ import com.ypdaic.mymall.ware.service.IWareSkuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.ware.vo.*;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import com.ypdaic.mymall.common.enums.EnableEnum;
  * @author daiyanping
  * @since 2020-06-11
  */
+@Slf4j
 @Service
 public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> implements IWareSkuService {
 
@@ -217,6 +219,10 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
 
     /**
      * 锁库存
+     * 库存解锁场景：
+     * 1. 下订单成功，订单过期没有支付被系统自动取消，被用户手动取消，都需要解锁库存
+     * 2. 下订单成功，库存锁定成功，接下来的业务调用失败，导致订单回滚
+     *     之前锁定的库存就要自动解锁
      * @param wareSkuLockVo
      * @return
      */
@@ -244,6 +250,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
             Long skuId = skuWareHasStock.getSkuId();
             List<Long> wareIds = skuWareHasStock.getWareId();
             if (CollectionUtils.isEmpty(wareIds)) {
+                log.error("没有库存：{}", skuId.toString());
                 // 没有任何仓库有这个商品的库存
                 throw new RuntimeException(skuId + "没有库存");
             }
@@ -252,14 +259,18 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
                 Long count = baseMapper.lockSkuStock(skuId, wareId, skuWareHasStock.getNum());
                 if (count == 1) {
                     skuStocked = true;
+
+                    // TODO 告诉MQ 库存锁定成功  
                     break;
                 } else {
                     // 当前仓库锁定失败，重试下一个仓库
+                    log.error("没有库存，wareId:{}，skuId:{}", wareId.toString(), skuId.toString());
                 }
 
             }
 
             if (!skuStocked) {
+                log.error("锁定库存失败");
                 throw new RuntimeException("锁定失败");
             }
 

@@ -32,7 +32,6 @@ public class MybatisPlusConfig {
     @Bean(
             initMethod = "init"
     )
-    @ConditionalOnMissingBean
     public DruidDataSource druidDataSource() {
         return new DruidDataSourceWrapper();
     }
