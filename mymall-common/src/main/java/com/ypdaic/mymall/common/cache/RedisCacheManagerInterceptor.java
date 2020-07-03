@@ -7,6 +7,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.cache.Cache;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
@@ -59,8 +60,13 @@ public class RedisCacheManagerInterceptor extends AbstractCacheInterceptor imple
                     RedisCacheTTLInterceptor redisCacheTTLInterceptor = beanFactory.getBean(RedisCacheTTLInterceptor.class);
 
                     String beanName = LocalFirstLevelCacheInterceptor.registerBeanDefinition(beanFactory, name);
+                    LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor = (LocalFirstLevelCacheInterceptor) this.beanFactory.getBean(beanName);
 
-                    LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor = (LocalFirstLevelCacheInterceptor) beanFactory.getBean(beanName);
+//                    ListableBeanFactory listableBeanFactory = (ListableBeanFactory) this.beanFactory;
+//                    if (!listableBeanFactory.containsBeanDefinition(DelayDoubleDeletionInterceptor.BEAN_NAME)) {
+//                        String delayDoubleDeletionInterceptorBeanName = DelayDoubleDeletionInterceptor.registerBeanDefinition(beanFactory, name);
+//                        DelayDoubleDeletionInterceptor delayDoubleDeletionInterceptor = (DelayDoubleDeletionInterceptor) this.beanFactory.getBean(delayDoubleDeletionInterceptorBeanName);
+//                    }
 
                     factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelCacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(localLockCacheInterceptor));

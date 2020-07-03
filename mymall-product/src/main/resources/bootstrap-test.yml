@@ -12,3 +12,5 @@ spring:
         # 如果Data Id没有使用后缀，需要指定为空字符串
         file-extension: yml
         server-addr: 127.0.0.1:8848
+        ext-config:
+          - dataId: test2.yml

@@ -47,7 +47,7 @@ public class LocalFirstLevelCacheInterceptor extends AbstractCacheInterceptor im
 
     protected static final String beanName = "LocalFirstLevelCacheInterceptor";
 
-    private static final String FIRST_LEVEL_CACHE = "FIRST_LEVEL_CACHE";
+    public static final String FIRST_LEVEL_CACHE = "FIRST_LEVEL_CACHE";
 
     private static final ThreadLocal<org.springframework.cache.Cache> cacheLocal = new ThreadLocal<>();
 
