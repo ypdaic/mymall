@@ -44,4 +44,14 @@ public class WareOrderTaskDetailDto extends BaseDto {
      */
 	private Boolean isAdd;
 
+	/**
+	 * 库存id
+	 */
+	private Long wareId;
+
+	/**
+	 * 锁定状态 1-锁定 2-解锁 3-扣减
+	 */
+	private Integer lockStatus;
+
 }

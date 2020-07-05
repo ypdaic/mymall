@@ -34,6 +34,7 @@ ribbon:
     clients:
     - mymall-product
     - mymall-member
+    - mymall-order
 
 # feign配置
 feign:

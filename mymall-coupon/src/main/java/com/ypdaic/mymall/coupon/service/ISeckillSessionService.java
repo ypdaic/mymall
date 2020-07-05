@@ -66,4 +66,6 @@ public interface ISeckillSessionService extends IService<SeckillSession> {
     List<SeckillSession> queryAll(SeckillSessionDto seckillSessionDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<SeckillSession> getLates3DaySession();
 }

@@ -165,4 +165,13 @@ public class WareOrderTaskServiceImpl extends ServiceImpl<WareOrderTaskMapper, W
         return new PageUtils(page);
     }
 
+    @Override
+    public WareOrderTask getOrderTaskByOrderSn(String orderSn) {
+
+        QueryWrapper<WareOrderTask> wareOrderTaskQueryWrapper = new QueryWrapper<>();
+        wareOrderTaskQueryWrapper.eq("order_sn", orderSn);
+        return baseMapper.selectOne(wareOrderTaskQueryWrapper);
+
+    }
+
 }

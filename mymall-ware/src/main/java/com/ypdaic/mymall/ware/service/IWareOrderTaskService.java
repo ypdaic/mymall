@@ -66,4 +66,6 @@ public interface IWareOrderTaskService extends IService<WareOrderTask> {
     List<WareOrderTask> queryAll(WareOrderTaskDto wareOrderTaskDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    WareOrderTask getOrderTaskByOrderSn(String orderSn);
 }

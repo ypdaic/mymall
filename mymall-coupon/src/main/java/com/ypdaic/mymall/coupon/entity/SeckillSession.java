@@ -1,7 +1,10 @@
 package com.ypdaic.mymall.coupon.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+import java.util.List;
+
 import com.ypdaic.mymall.common.base.SuperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,12 +44,15 @@ public class SeckillSession extends SuperEntity {
     /**
      * 启用状态
      */
-    private Boolean status;
+    private Integer status;
 
     /**
      * 创建时间
      */
     private Date createTime;
+
+    @TableField(exist = false)
+    private List<SeckillSkuRelation> list;
 
 
 }

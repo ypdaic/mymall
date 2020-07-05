@@ -41,7 +41,7 @@ import java.util.Objects;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/coupon/seckill-sku-relation")
+@RequestMapping("/coupon/seckillskurelation")
 public class SeckillSkuRelationController extends BaseController {
 
     @Autowired

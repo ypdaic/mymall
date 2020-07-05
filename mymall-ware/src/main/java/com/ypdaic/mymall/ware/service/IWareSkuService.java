@@ -1,5 +1,8 @@
 package com.ypdaic.mymall.ware.service;
 
+import com.rabbitmq.client.Channel;
+import com.ypdaic.mymall.common.to.mq.OrderTo;
+import com.ypdaic.mymall.common.to.mq.StockLockedTo;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.ware.entity.WareSku;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -9,6 +12,8 @@ import com.ypdaic.mymall.ware.vo.WareSkuDto;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ypdaic.mymall.ware.vo.WareSkuLockVo;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.List;
 import java.util.Map;
@@ -75,4 +80,11 @@ public interface IWareSkuService extends IService<WareSku> {
     List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds);
 
     Boolean orderLockStock(WareSkuLockVo wareSkuLockVo);
+
+    /**
+     * 解锁库存
+     */
+    void releaseLockStock(StockLockedTo stockLockedTo);
+
+    void unLockStock(OrderTo orderTo);
 }

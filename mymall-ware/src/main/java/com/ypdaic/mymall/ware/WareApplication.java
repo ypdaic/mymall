@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @ComponentScan(value = {"com.ypdaic.mymall.ware.**", "com.ypdaic.mymall.common.**"})
 @SpringBootApplication
-@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.product", "com.ypdaic.mymall.fegin.member"})
+@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.product", "com.ypdaic.mymall.fegin.member", "com.ypdaic.mymall.fegin.order"})
 public class WareApplication {
 
     public static void main(String[] args) {

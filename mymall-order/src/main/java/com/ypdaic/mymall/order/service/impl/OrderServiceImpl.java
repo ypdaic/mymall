@@ -11,6 +11,7 @@ import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.to.MemberRespVo;
 import com.ypdaic.mymall.common.to.SkuHasStockVo;
 import com.ypdaic.mymall.common.to.WareSkuLockVo;
+import com.ypdaic.mymall.common.to.mq.OrderTo;
 import com.ypdaic.mymall.common.util.JavaUtils;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.Query;
@@ -31,6 +32,8 @@ import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.aspectj.weaver.ast.Or;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -38,6 +41,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -96,6 +101,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     IOrderItemService orderItemService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
 
     /**
@@ -370,7 +378,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @param orderSubmitVo
      * @return
      */
-    @GlobalTransactional
+//    @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     @Override
     public SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo) {
@@ -409,7 +417,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 if (r.getCode() == 0) {
                     //锁成功了
                     submitResponVo.setOrder(order.getOrder());
-                    throw new RuntimeException("模拟异常");
+//                    throw new RuntimeException("模拟异常");
                 } else {
                     throw new RuntimeException("库存锁定失败");
 //                    // 锁定失败
@@ -427,8 +435,53 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     }
 
+    @Override
+    public Order getOrderStatus(String orderSn) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setOrderSn(orderSn);
+        List<Order> orders = queryAll(orderDto);
+        if (CollectionUtils.isNotEmpty(orders)){
+            return orders.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public void closeOrder(Order order) {
+        Order order1 = baseMapper.selectById(order.getId());
+        // 查询订单当前状态
+        if (order1.getStatus() == OrderStatusEnum.CREATE_NEW.getCode()) {
+            order1.setStatus(OrderStatusEnum.CANCLED.getCode());
+            saveOrUpdate(order1);
+            OrderTo orderTo = new OrderTo();
+            BeanUtils.copyProperties(order1, orderTo);
+            rabbitTemplate.convertAndSend("order.event.exchange", "order.release.other", orderTo);
+        }
+    }
+
+    @Override
+    public PayVo getOrderPay(String orderSn) {
+        Order order = this.getOrderStatus(orderSn);
+        BigDecimal payAmount = order.getPayAmount();
+        BigDecimal bigDecimal = payAmount.setScale(2, BigDecimal.ROUND_UP);
+        PayVo payVo = new PayVo();
+        payVo.setOut_trade_no(orderSn);
+
+        payVo.setTotal_amount(bigDecimal.toString());
+
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setOrderSn(orderSn);
+
+        List<OrderItem> orderItems = orderItemService.queryAll(orderItemDto);
+        OrderItem orderItem = orderItems.get(0);
+
+        payVo.setSubject(orderItem.getSkuName());
+        payVo.setBody(orderItem.getSkuAttrsVals());
+        return payVo;
+    }
+
     @Transactional(rollbackFor = Exception.class)
-    public   void saveOrder(OrderCreateTo order) {
+    public void saveOrder(OrderCreateTo order) {
         order.getOrder().setModifyTime(new Date());
         baseMapper.insert(order.getOrder());
         // seata 0.7.1 还不支持批量插入
@@ -436,6 +489,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         orderItemList.forEach(orderItem -> {
             orderItem.insert();
         });
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    rabbitTemplate.convertAndSend("order.event.exchange", "order.create.order", order.getOrder());
+                }
+            });
+
+        }
 
     }
 

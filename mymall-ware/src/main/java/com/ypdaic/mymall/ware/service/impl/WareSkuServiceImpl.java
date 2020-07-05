@@ -1,16 +1,31 @@
 package com.ypdaic.mymall.ware.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.rabbitmq.client.Channel;
+import com.ypdaic.mymall.common.to.mq.OrderTo;
+import com.ypdaic.mymall.common.to.mq.StockDetailTo;
+import com.ypdaic.mymall.common.to.mq.StockLockedTo;
 import com.ypdaic.mymall.common.util.*;
+import com.ypdaic.mymall.fegin.order.IOrderFeginService;
 import com.ypdaic.mymall.fegin.product.IProductFeignService;
+import com.ypdaic.mymall.ware.entity.WareOrderTask;
+import com.ypdaic.mymall.ware.entity.WareOrderTaskDetail;
 import com.ypdaic.mymall.ware.entity.WareSku;
 import com.ypdaic.mymall.ware.mapper.WareSkuMapper;
+import com.ypdaic.mymall.ware.service.IWareOrderTaskDetailService;
+import com.ypdaic.mymall.ware.service.IWareOrderTaskService;
 import com.ypdaic.mymall.ware.service.IWareSkuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.ware.vo.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +33,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.ypdaic.mymall.common.enums.EnableEnum;
@@ -41,6 +58,18 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
 
     @Autowired
     IProductFeignService productFeignService;
+
+    @Autowired
+    IWareOrderTaskService wareOrderTaskService;
+
+    @Autowired
+    IWareOrderTaskDetailService wareOrderTaskDetailService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    IOrderFeginService orderFeginService;
 
     /**
      * 新增商品库存
@@ -229,6 +258,14 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean orderLockStock(WareSkuLockVo wareSkuLockVo) {
+        /**
+         * 创建库存工作单详情
+         */
+
+        WareOrderTask wareOrderTask = new WareOrderTask();
+        wareOrderTask.setOrderSn(wareSkuLockVo.getOrderSn());
+        wareOrderTaskService.save(wareOrderTask);
+
         // 1，按照下单的收货地址，找到一个就近的仓库，锁定库存。
 
         // 1，找到每个商品在那个仓库都有库存
@@ -254,13 +291,31 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
                 // 没有任何仓库有这个商品的库存
                 throw new RuntimeException(skuId + "没有库存");
             }
+            // 1，如果每一个商品都锁定成功，将当前商品锁定了几件的工作单记录发给mq
+            // 2, 锁定失败，前保存的工作单信息就回滚了，发送出去的消息，即使解锁记录，由于去数据库查不到id，所以就不用解锁
             for (Long wareId : wareIds) {
                 // 成功就返回1，否则就是0
                 Long count = baseMapper.lockSkuStock(skuId, wareId, skuWareHasStock.getNum());
                 if (count == 1) {
                     skuStocked = true;
 
-                    // TODO 告诉MQ 库存锁定成功  
+                    // 保存工作单详情
+                    WareOrderTaskDetail wareOrderTaskDetail = new WareOrderTaskDetail();
+                    wareOrderTaskDetail.setSkuId(skuWareHasStock.getSkuId());
+                    wareOrderTaskDetail.setWareId(wareId);
+                    wareOrderTaskDetail.setTaskId(wareOrderTask.getId());
+                    wareOrderTaskDetail.setSkuNum(skuWareHasStock.getNum());
+                    wareOrderTaskDetail.setLockStatus(1);
+                    wareOrderTaskDetail.setSkuName("");
+                    wareOrderTaskDetailService.save(wareOrderTaskDetail);
+
+                    // TODO 告诉MQ 库存锁定成功
+                    StockLockedTo stockLockedTo = new StockLockedTo();
+                    stockLockedTo.setId(wareOrderTask.getId());
+                    StockDetailTo stockDetailTo = new StockDetailTo();
+                    BeanUtils.copyProperties(wareOrderTaskDetail, stockDetailTo);
+                    stockLockedTo.setStockDetailTo(stockDetailTo);
+                    rabbitTemplate.convertAndSend("stock.event.exchange", "stock.locked", stockLockedTo);
                     break;
                 } else {
                     // 当前仓库锁定失败，重试下一个仓库
@@ -278,6 +333,90 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
         }
         // 全部锁定成功
         return true;
+    }
+
+    /**
+     * 1. 库存自动解锁
+     *  下单成功，库存锁定成功，接下来的业务调用失败，导致订单回滚，之前锁定的库存就要自动解锁。
+     *   订单失败，锁定库存失败
+     * @param stockLockedTo
+     */
+    @Override
+    public void releaseLockStock(StockLockedTo stockLockedTo) {
+        // 库存工作单id
+        Long id = stockLockedTo.getId();
+        StockDetailTo stockDetailTo = stockLockedTo.getStockDetailTo();
+        // 解锁
+        // 1.查询数据库关于这个订单的锁定库存信息
+        // 有：证明库存锁定成功
+        /**
+         *    解锁： 订单情况
+         *          1. 没有这个订单，必须解锁
+         *          2. 有这个订单
+         *             订单状态：已取消：解锁库存
+         *                      没取消：不能解锁
+         */
+        // 没有，库存锁定失败了，库存回滚了，这种请情况无需解锁
+        WareOrderTaskDetail wareOrderTaskDetail = wareOrderTaskDetailService.getById(stockDetailTo.getId());
+        if (Objects.nonNull(wareOrderTaskDetail)) {
+            // 解锁
+            WareOrderTask wareOrderTask = wareOrderTaskService.getById(id);
+            String orderSn = wareOrderTask.getOrderSn();
+            R orderStatus = orderFeginService.getOrderStatus(orderSn);
+            OrderVo orderVo = orderStatus.getData(new TypeReference<OrderVo>() {
+            });
+            if (orderStatus.getCode() == 0) {
+                if (Objects.isNull(orderVo) || orderVo.getStatus() == 4) {
+                    // 当前库存工单详情，状态为已锁定才可以解锁
+                    if (wareOrderTaskDetail.getLockStatus() == 1) {
+                        // 订单已经取消了，或者订单都没有生成，才能解锁库存
+                        unLockStock(stockDetailTo);
+                    }
+                }
+            } else {
+                throw new RuntimeException("远程调用失败");
+            }
+        }
+
+    }
+
+    /**
+     * 防止订单服务卡顿，导致订单状态消息一直改不了，库存消息优先到期，查订单状态新建状态，什么都不做就走了
+     * 导致卡顿的订单，永远不能解锁库存
+     * @param orderTo
+     */
+    @Transactional
+    @Override
+    public void unLockStock(OrderTo orderTo) {
+        String orderSn = orderTo.getOrderSn();
+        // 查询一下最新的库存状态，防止重新解锁库存
+        WareOrderTask wareOrderTask = wareOrderTaskService.getOrderTaskByOrderSn(orderSn);
+        Long id = wareOrderTask.getId();
+        //按照工作单找到所有没有解锁的库存，进行解锁
+        WareOrderTaskDetailDto wareOrderTaskDetailDto = new WareOrderTaskDetailDto();
+        wareOrderTaskDetailDto.setTaskId(id);
+        wareOrderTaskDetailDto.setLockStatus(1);
+        List<WareOrderTaskDetail> wareOrderTaskDetails = wareOrderTaskDetailService.queryAll(wareOrderTaskDetailDto);
+        wareOrderTaskDetails.forEach(wareOrderTaskDetail -> {
+            StockDetailTo stockDetailTo = new StockDetailTo();
+            stockDetailTo.setId(wareOrderTaskDetail.getId());
+            stockDetailTo.setSkuId(wareOrderTaskDetail.getSkuId());
+            stockDetailTo.setWareId(wareOrderTaskDetail.getWareId());
+            stockDetailTo.setSkuNum(wareOrderTaskDetail.getSkuNum());
+            unLockStock(stockDetailTo);
+        });
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void unLockStock(StockDetailTo stockDetailTo) {
+        // 库存解锁
+        baseMapper.unLockStock(stockDetailTo.getSkuId(), stockDetailTo.getWareId(), stockDetailTo.getSkuNum());
+
+        WareOrderTaskDetail wareOrderTaskDetail = new WareOrderTaskDetail();
+        wareOrderTaskDetail.setId(stockDetailTo.getId());
+        wareOrderTaskDetail.setLockStatus(2);
+        wareOrderTaskDetailService.saveOrUpdate(wareOrderTaskDetail);
+
     }
 
     @Data

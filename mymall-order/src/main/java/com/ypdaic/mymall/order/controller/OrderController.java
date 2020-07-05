@@ -215,5 +215,12 @@ public class OrderController extends BaseController {
 
         return R.ok();
     }
+
+    @GetMapping("/status/{orderSn}")
+    public R getOrderStatus(@PathVariable("orderSn") String orderSn) {
+        Order order = orderService.getOrderStatus(orderSn);
+        return R.ok().setData(order);
+    }
+
 }
 

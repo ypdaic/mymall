@@ -216,5 +216,12 @@ public class SeckillSessionController extends BaseController {
         return R.ok();
     }
 
+    @GetMapping("/getLates3DaySession")
+    public R getLates3DaySession() {
+        List<SeckillSession> seckillSessions = seckillSessionService.getLates3DaySession();
+        return R.ok().setData(seckillSessions);
+    }
+
+
 }
 

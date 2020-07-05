@@ -3,12 +3,9 @@ package com.ypdaic.mymall.order.service;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.order.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ypdaic.mymall.order.vo.OrderConfirmVo;
-import com.ypdaic.mymall.order.vo.OrderDto;
+import com.ypdaic.mymall.order.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ypdaic.mymall.order.vo.OrderSubmitVo;
-import com.ypdaic.mymall.order.vo.SubmitResponVo;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -78,4 +75,10 @@ public interface IOrderService extends IService<Order> {
     OrderConfirmVo confirmOrder();
 
     SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo);
+
+    Order getOrderStatus(String orderSn);
+
+    void closeOrder(Order order);
+
+    PayVo getOrderPay(String orderSn);
 }

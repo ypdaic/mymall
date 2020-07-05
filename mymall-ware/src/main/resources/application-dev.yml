@@ -39,6 +39,9 @@ spring:
     simple:
       retry:
         enabled: true
+      acknowledge-mode: manual #开启手动确认
+  template:
+    mandatory: true #开启失败通知
   host: 192.168.109.128
   port: 5672
   username: root

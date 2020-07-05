@@ -33,6 +33,7 @@
         <module>mymall-oss-client</module>
         <module>mymall-oss-client2</module>
         <module>mymall-cart</module>
+        <module>mymall-seckill</module>
     </modules>
 
     <properties>
@@ -194,6 +195,12 @@
                 <artifactId>feign-okhttp</artifactId>
                 <version>${okhttp.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>4.10.38.ALL</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -220,6 +227,7 @@
                 <oss-client1.port>8092</oss-client1.port>
                 <oss-client2.port>8093</oss-client2.port>
                 <cart.port>8094</cart.port>
+                <seckill.port>8095</seckill.port>
             </properties>
             <!--如果properties很多，可以通过下面的方法进行加载,如果不存在配置文件
             则需要关闭该配置，否则编译不过-->
@@ -250,6 +258,7 @@
                 <oss-client1.port>8092</oss-client1.port>
                 <oss-client2.port>8093</oss-client2.port>
                 <cart.port>8094</cart.port>
+                <seckill.port>8095</seckill.port>
             </properties>
         </profile>
         <profile>
@@ -273,6 +282,7 @@
                 <oss-client1.port>8092</oss-client1.port>
                 <oss-client2.port>8093</oss-client2.port>
                 <cart.port>8094</cart.port>
+                <seckill.port>8095</seckill.port>
             </properties>
         </profile>
     </profiles>

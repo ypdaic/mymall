@@ -3,17 +3,24 @@ package com.ypdaic.mymall.coupon.service.impl;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.coupon.entity.SeckillSession;
+import com.ypdaic.mymall.coupon.entity.SeckillSkuRelation;
 import com.ypdaic.mymall.coupon.mapper.SeckillSessionMapper;
 import com.ypdaic.mymall.coupon.service.ISeckillSessionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ypdaic.mymall.coupon.service.ISeckillSkuRelationService;
 import com.ypdaic.mymall.coupon.vo.SeckillSessionDto;
 import com.ypdaic.mymall.coupon.enums.SeckillSessionExcelHeadersEnum;
+import com.ypdaic.mymall.coupon.vo.SeckillSkuRelationDto;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ypdaic.mymall.common.util.ExcelUtil;
+
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +30,7 @@ import com.ypdaic.mymall.common.util.JavaUtils;
 import java.util.Date;
 import java.util.Date;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -35,6 +43,8 @@ import java.util.Date;
 @Service
 public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionMapper, SeckillSession> implements ISeckillSessionService {
 
+    @Autowired
+    ISeckillSkuRelationService seckillSkuRelationService;
 
     /**
      * 新增秒杀活动场次
@@ -150,6 +160,47 @@ public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionMapper,
         );
 
         return new PageUtils(page);
+    }
+
+    /**
+     * 查询3天内的秒杀
+     * @return
+     */
+    @Override
+    public List<SeckillSession> getLates3DaySession() {
+        LocalDate now = LocalDate.now();
+        LocalDate plus = now.plus(Duration.ofDays(2));
+
+        LocalTime min = LocalTime.MIN;
+        LocalTime max = LocalTime.MAX;
+
+        LocalDateTime of = LocalDateTime.of(now, min);
+
+        LocalDateTime of1 = LocalDateTime.of(plus, max);
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        ZonedDateTime zdt = of.atZone(zoneId);
+        ZonedDateTime zonedDateTime = of1.atZone(zoneId);
+
+        SeckillSessionDto seckillSessionDto = new SeckillSessionDto();
+        seckillSessionDto.setStartTime(Date.from(zdt.toInstant()));
+        seckillSessionDto.setEndTime(Date.from(zonedDateTime.toInstant()));
+        List<SeckillSession> seckillSessions = queryAll(seckillSessionDto);
+
+        if (CollectionUtils.isNotEmpty(seckillSessions)) {
+            List<SeckillSession> collect = seckillSessions.stream().map(seckillSession -> {
+                Long id = seckillSession.getId();
+                SeckillSkuRelationDto seckillSkuRelationDto = new SeckillSkuRelationDto();
+                seckillSkuRelationDto.setPromotionSessionId(id);
+                List<SeckillSkuRelation> seckillSkuRelations = seckillSkuRelationService.queryAll(seckillSkuRelationDto);
+                seckillSession.setList(seckillSkuRelations);
+                return seckillSession;
+            }).collect(Collectors.toList());
+
+            return collect;
+        }
+
+        return null;
     }
 
 }

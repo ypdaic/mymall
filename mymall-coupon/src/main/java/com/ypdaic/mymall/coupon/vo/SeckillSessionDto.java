@@ -40,7 +40,7 @@ public class SeckillSessionDto extends BaseDto {
 	/**
 	 * 启用状态
 	 */
-	private Boolean status;
+	private Integer status;
 
 	/**
 	 * 创建时间
