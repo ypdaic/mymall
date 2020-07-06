@@ -14,7 +14,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 //@SpringBootApplication
 @EnableScheduling
 @EnableRedisHttpSession
-@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.coupon", "com.ypdaic.mymall.fegin.ware", "com.ypdaic.mymall.fegin.search"})
+@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.coupon", "com.ypdaic.mymall.fegin.ware", "com.ypdaic.mymall.fegin.search", "com.ypdaic.mymall.fegin.product"})
 public class SeckillApplication {
 
     public static void main(String[] args) {

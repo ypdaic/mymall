@@ -169,7 +169,7 @@ public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionMapper,
     @Override
     public List<SeckillSession> getLates3DaySession() {
         LocalDate now = LocalDate.now();
-        LocalDate plus = now.plus(Duration.ofDays(2));
+        LocalDate plus = now.plusDays(2);
 
         LocalTime min = LocalTime.MIN;
         LocalTime max = LocalTime.MAX;

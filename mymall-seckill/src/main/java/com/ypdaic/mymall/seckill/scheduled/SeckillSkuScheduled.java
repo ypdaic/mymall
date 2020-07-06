@@ -19,12 +19,12 @@ public class SeckillSkuScheduled {
      * 明天00:00:00 - 23:59:59
      * 后天00:00:00 - 23:59:59
      */
-    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void uploadSeckillSkuLatest3Days() {
         /**
          * 1. 处理重复上架功能
          */
-
+        log.info("上架商品信息");
         seckillService.uploadSeckillSkuLatest3Days();
 
     }

@@ -1,11 +1,11 @@
-package com.ypdaic.mymall.seckill.vo;
+package com.ypdaic.mymall.common.to;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class SeckillSkuRelationVo {
+public class SecKillSkuRedisTo {
 
     private Long id;
 
@@ -33,16 +33,27 @@ public class SeckillSkuRelationVo {
     /**
      * 秒杀总量
      */
-    private Integer seckillCount;
+    private BigDecimal seckillCount;
 
     /**
      * 每人限购数量
      */
-    private Integer seckillLimit;
+    private BigDecimal seckillLimit;
 
     /**
      * 排序
      */
     private Integer seckillSort;
 
+    // SKU的详细信息
+    private SkuInfoVo skuInfoVo;
+
+    private Long startTime;
+
+    private Long endTime;
+
+    /**
+     * 秒杀随机码
+     */
+    private String randomCode;
 }

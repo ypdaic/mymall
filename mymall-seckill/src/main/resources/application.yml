@@ -46,6 +46,7 @@ ribbon:
       - mymall-coupon
       - mymall-search
       - mymall-ware
+      - mymall-product
 # feign配置
 feign:
   compression:

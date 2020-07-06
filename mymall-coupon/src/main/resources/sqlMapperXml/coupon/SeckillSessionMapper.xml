@@ -85,10 +85,10 @@
                 name = #{dto.name}
             </if>
             <if test="dto.startTime != null">
-                and start_time = #{dto.startTime}
+                and start_time <![CDATA[ >= ]]> #{dto.startTime}
             </if>
             <if test="dto.endTime != null">
-                and end_time = #{dto.endTime}
+                and end_time <![CDATA[ <= ]]> #{dto.endTime}
             </if>
             <if test="dto.status != null">
                 and status = #{dto.status}
