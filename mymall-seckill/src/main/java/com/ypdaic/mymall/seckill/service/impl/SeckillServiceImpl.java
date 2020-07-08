@@ -70,9 +70,16 @@ public class SeckillServiceImpl implements SeckillService {
             long time1 = endTime.getTime();
 
             String key = SESSIONS_CACHE_PREFIX + time + "_" + time1;
-            List<Long> collect = seckillSessionVo.getList().stream().map(SeckillSkuRelationVo::getSkuId).collect(Collectors.toList());
-            // 缓存活动信息
-            redisTemplate.opsForList().leftPushAll(key, collect);
+
+
+            Boolean aBoolean = redisTemplate.hasKey(key);
+            if (!aBoolean) {
+                List<Long> collect = seckillSessionVo.getList().stream().map(SeckillSkuRelationVo::getSkuId).collect(Collectors.toList());
+                // 缓存活动信息
+                redisTemplate.opsForList().leftPushAll(key, collect);
+            }
+
+
 
 
         });
@@ -83,28 +90,32 @@ public class SeckillServiceImpl implements SeckillService {
             BoundHashOperations boundHashOperations = redisTemplate.boundHashOps(SKUKILL_CACHE_PREFIX);
 
             seckillSessionVo.getList().stream().forEach(seckillSkuRelationVo -> {
-                //缓存商品
-                // 1. sku的基本数据
-                SecKillSkuRedisTo secKillSkuRedisTo = new SecKillSkuRedisTo();
-                BeanUtils.copyProperties(seckillSkuRelationVo, secKillSkuRedisTo);
-                R skuinfo = productFeignService.skuinfo(secKillSkuRedisTo.getSkuId());
-                SkuInfoVo data1 = skuinfo.getData(new TypeReference<SkuInfoVo>() {
-                });
-                secKillSkuRedisTo.setSkuInfoVo(data1);
+                if (!boundHashOperations.hasKey(seckillSkuRelationVo.getSkuId().toString())) {
+                    //缓存商品
+                    // 1. sku的基本数据
+                    SecKillSkuRedisTo secKillSkuRedisTo = new SecKillSkuRedisTo();
+                    BeanUtils.copyProperties(seckillSkuRelationVo, secKillSkuRedisTo);
+                    R skuinfo = productFeignService.skuinfo(secKillSkuRedisTo.getSkuId());
+                    SkuInfoVo data1 = skuinfo.getData(new TypeReference<SkuInfoVo>() {
+                    });
+                    secKillSkuRedisTo.setSkuInfoVo(data1);
 
 
 
-                // 2. sku的秒杀信息
-                // 3.设置当前商品的秒杀时间信息
-                secKillSkuRedisTo.setStartTime(seckillSessionVo.getStartTime().getTime());
-                secKillSkuRedisTo.setEndTime(seckillSessionVo.getEndTime().getTime());
-                String token = UUID.fastUUID().toString();
-                // 4. 随机码
-                secKillSkuRedisTo.setRandomCode(token);
+                    // 2. sku的秒杀信息
+                    // 3.设置当前商品的秒杀时间信息
+                    secKillSkuRedisTo.setStartTime(seckillSessionVo.getStartTime().getTime());
+                    secKillSkuRedisTo.setEndTime(seckillSessionVo.getEndTime().getTime());
+                    String token = UUID.fastUUID().toString();
+                    // 4. 随机码
+                    secKillSkuRedisTo.setRandomCode(token);
 
-                RSemaphore semaphore = redisson.getSemaphore(SKU_STOCK_SEMAPHORE + token);
-                semaphore.trySetPermits(seckillSkuRelationVo.getSeckillCount());
-                boundHashOperations.put(seckillSkuRelationVo.getSkuId().toString(), secKillSkuRedisTo);
+
+                    RSemaphore semaphore = redisson.getSemaphore(SKU_STOCK_SEMAPHORE + token);
+                    semaphore.trySetPermits(seckillSkuRelationVo.getSeckillCount());
+                    boundHashOperations.put(seckillSkuRelationVo.getSkuId().toString(), secKillSkuRedisTo);
+                }
+
             });
 
         });
