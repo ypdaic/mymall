@@ -5,6 +5,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCacheAspect;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheRemove;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
+import com.ypdaic.mymall.fegin.ware.IWareFeignService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,16 @@ import org.springframework.stereotype.Service;
 @Import(HystrixCacheAspect.class)
 public class HystrixServiceImpl {
 
+    @Autowired
+    IWareFeignService wareFeignService;
+
     @HystrixCommand(
             fallbackMethod = "queryContentsFallback",
             // 用于区分不同的commandProperties配置，相同的commandKey，使用相同的commandProperties配置
+            // command key ，代表了一类 command，一般来说，代表了下游依赖服务的某个接口。
             commandKey = "queryContents",
             //服务分组
+            // 代表了某一个下游依赖服务，这是很合理的，一个依赖服务可能会暴露出来多个接口，每个接口就是一个 command key。command group 在逻辑上对一堆 command key 的调用次数、成功次数、timeout 次数、失败次数等进行统计，可以看到某一个服务整体的一些访问情况。一般来说，推荐根据一个服务区划分出一个线程池，command key 默认都是属于同一个线程池的。
             groupKey = "querygroup-one",
             commandProperties = {
                     // 信号量隔离模式，信号量大小，默认10
@@ -177,5 +184,9 @@ public class HystrixServiceImpl {
 
     public String cacheKey() {
         return "test";
+    }
+
+    public void test5() {
+        wareFeignService.getFare(1L);
     }
 }

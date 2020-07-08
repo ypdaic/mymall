@@ -62,3 +62,18 @@ feign:
     enabled: false
   okhttp:
     enabled: true
+  hystrix: #fegin 开启hystrix后配置参数都是使用的默认值,且commandKey为接口名加方法名如：IWareFeignService#getSkuHasStock(List)
+    enabled: true
+
+hystrix:
+  command:
+    # 自定义feign的command参数
+    IWareFeignService#getSkuHasStock(List):
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+
+    IWareFeignService#getFare(Long):
+      execution:
+        isolation:
+          strategy: SEMAPHORE

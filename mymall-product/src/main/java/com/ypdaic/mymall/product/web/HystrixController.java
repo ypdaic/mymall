@@ -37,5 +37,17 @@ public class HystrixController {
         return hystrixService.test();
     }
 
+    @ResponseBody
+    @GetMapping("/test/hystrix-fegin")
+    public String test2() {
+//        hystrixService.test();
+        // 清空缓存
+//        hystrixService.test2();
+//        hystrixService.test();
+//        hystrixService.test4();
+        hystrixService.test5();
+        return "ok";
+    }
+
 
 }
