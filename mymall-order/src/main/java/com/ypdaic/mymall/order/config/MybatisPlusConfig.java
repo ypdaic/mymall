@@ -38,6 +38,7 @@ public class MybatisPlusConfig {
 
     /**
      * 需要将 DataSourceProxy 设置为主数据源，否则事务无法回滚
+     * 1.0版本后不再需要改代理类
      *
      * @param druidDataSource The DruidDataSource
      * @return The default datasource

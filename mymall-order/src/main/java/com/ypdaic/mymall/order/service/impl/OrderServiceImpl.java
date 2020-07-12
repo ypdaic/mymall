@@ -378,7 +378,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @param orderSubmitVo
      * @return
      */
-//    @GlobalTransactional
+    @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     @Override
     public SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo) {
