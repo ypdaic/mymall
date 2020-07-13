@@ -480,6 +480,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return payVo;
     }
 
+    @GlobalTransactional
+    @Override
+    public void seataTest() {
+        Order order = new Order();
+        order.setOrderSn("test");
+        order.insert();
+        wareFeignService.seateTest();
+        throw new RuntimeException();
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void saveOrder(OrderCreateTo order) {
         order.getOrder().setModifyTime(new Date());
