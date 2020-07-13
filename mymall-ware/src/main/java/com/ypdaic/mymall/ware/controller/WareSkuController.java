@@ -246,5 +246,17 @@ public class WareSkuController extends BaseController {
 
     }
 
+    @PostMapping("/seata/test")
+    public R seataTest() {
+        WareSkuDto wareSkuDto = new WareSkuDto();
+        wareSkuDto.setSkuId(1L);
+        wareSkuDto.setSkuName("test");
+        wareSkuDto.setStockLocked(0);
+        wareSkuDto.setStock(10);
+        wareSkuService.add(wareSkuDto);
+        return R.ok();
+
+    }
+
 }
 
