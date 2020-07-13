@@ -26,4 +26,6 @@ public interface IWareFeignService {
     @PostMapping("/ware/waresku/lock/order")
     R orderLockStock(@RequestBody WareSkuLockVo wareSkuLockVo);
 
+    @PostMapping("/ware/waresku/seata/test")
+    R seateTest();
 }

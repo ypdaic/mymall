@@ -81,4 +81,6 @@ public interface IOrderService extends IService<Order> {
     void closeOrder(Order order);
 
     PayVo getOrderPay(String orderSn);
+
+    void seataTest();
 }
