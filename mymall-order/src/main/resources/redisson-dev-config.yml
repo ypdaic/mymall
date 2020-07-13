@@ -8,11 +8,11 @@ singleServerConfig:
   password: test1234
   subscriptionsPerConnection: 1
   clientName: null
-  address: "redis://192.168.109.128:6380"
+  address: "redis://192.168.109.129:6380"
   subscriptionConnectionMinimumIdleSize: 1
   subscriptionConnectionPoolSize: 1
   connectionMinimumIdleSize: 1
-  connectionPoolSize: 1
+  connectionPoolSize: 10
   database: 0
   dnsMonitoringInterval: 5000
 threads: 0

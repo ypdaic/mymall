@@ -4,8 +4,11 @@ spring:
   type: com.alibaba.druid.pool.DruidDataSource
   druid:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.109.128:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: root
+#    url: jdbc:mysql://192.168.109.128:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: 123456
+    url: jdbc:mysql://127.0.0.1:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: enjoy
     password: 123456
     initial-size: 1
     max-active: 20
@@ -42,7 +45,7 @@ spring:
       acknowledge-mode: manual #开启手动确认
   template:
     mandatory: true #开启失败通知
-  host: 192.168.109.128
+  host: 192.168.109.129
   port: 5672
   username: root
   password: test1234
@@ -57,7 +60,7 @@ spring:
       max-idle: 10
       max-wait: 3000ms
       min-idle: 0
-  host: 192.168.109.128
+  host: 192.168.109.129
   port: 6380
   password: test1234
  cache:
