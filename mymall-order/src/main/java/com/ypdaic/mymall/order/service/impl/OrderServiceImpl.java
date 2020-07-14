@@ -481,6 +481,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @GlobalTransactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void seataTest() {
         Order order = new Order();
