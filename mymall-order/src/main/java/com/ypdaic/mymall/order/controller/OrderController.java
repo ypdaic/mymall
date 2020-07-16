@@ -3,6 +3,10 @@ package com.ypdaic.mymall.order.controller;
 
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.order.service.IOrderItemService;
+import com.ypdaic.mymall.order.util.SnowflakeUtil;
+import com.ypdaic.mymall.order.vo.OrderItemDto;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -47,6 +51,9 @@ public class OrderController extends BaseController {
     @Autowired
     IOrderService orderService;
 
+    @Autowired
+    IOrderItemService orderItemService;
+
     /**
      *
      * 新增订单
@@ -55,13 +62,19 @@ public class OrderController extends BaseController {
      * @return
      */
     @PostMapping("/add")
+    @Transactional
     public Result<Order> add(@RequestBody @Validated OrderDto orderDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             return paramError(bindingResult);
         }
-
+        orderDto.setId(SnowflakeUtil.nextId());
         Order order = orderService.add(orderDto);
 
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setId(SnowflakeUtil.nextId());
+        orderItemDto.setOrderId(order.getId());
+        orderItemDto.setOrderSn(order.getOrderSn());
+        orderItemService.add(orderItemDto);
         return ResultUtil.successOfInsert(order);
     }
 

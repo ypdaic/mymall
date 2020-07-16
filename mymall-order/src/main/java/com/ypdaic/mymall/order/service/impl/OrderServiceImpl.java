@@ -116,6 +116,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Order add(OrderDto orderDto) {
 
         Order order = new Order();
+        order.setId(orderDto.getId());
         order.setMemberId(orderDto.getMemberId());
         order.setOrderSn(orderDto.getOrderSn());
         order.setCouponId(orderDto.getCouponId());

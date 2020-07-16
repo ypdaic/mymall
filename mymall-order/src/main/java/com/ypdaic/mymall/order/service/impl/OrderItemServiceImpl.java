@@ -43,6 +43,7 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
     public OrderItem add(OrderItemDto orderItemDto) {
 
         OrderItem orderItem = new OrderItem();
+        orderItem.setId(orderItemDto.getId());
         orderItem.setOrderId(orderItemDto.getOrderId());
         orderItem.setOrderSn(orderItemDto.getOrderSn());
         orderItem.setSpuId(orderItemDto.getSpuId());
