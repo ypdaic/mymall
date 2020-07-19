@@ -43,8 +43,8 @@ spring:
   #sharding jdbc 分表配置
   shardingsphere:
     datasource:
-      names: ds0,ds1
-      ds0:
+      names: master,slave0
+      master:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://192.168.109.129:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
@@ -82,10 +82,10 @@ spring:
           wall:
             config:
               multi-statement-allow: true
-      ds1:
+      slave0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.109.129:3310/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://192.168.109.129:3311/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
         #    username: root
         #    password: 123456
         #    url: jdbc:mysql://192.168.109.129:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
@@ -120,28 +120,10 @@ spring:
           wall:
             config:
               multi-statement-allow: true
-
-    sharding:
-      tables:
-        oms_order:
-          actual-data-nodes: ds$->{0..1}.oms_order
-#          key-generator:
-#            column: id
-#            type: SNOWFLAKE
-          inline:
-            sharding-column: id
-            algorithm-expression: ds$->{id % 2 + 1}
-        oms_order_item:
-          actual-data-nodes: ds$->{0..1}.oms_order_item
-#          key-generator:
-#            column: id
-#            type: SNOWFLAKE
-          inline:
-            sharding-column: id
-            algorithm-expression: ds$->{id % 2 + 1}
-
-
-
+    masterslave:
+      name: ms
+      master-data-source-name: master
+      slave-data-source-names: slave0
     props:
       sql:
         show: true
@@ -177,11 +159,7 @@ spring:
     type: redis
     redis:
       time-to-live: 12h
-sharding:
-  jdbc:
-    config:
-      sharding:
-        default-data-source-name: ds
+
 
 logging:
   config: classpath:logs/logback-dev.xml

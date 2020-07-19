@@ -68,6 +68,7 @@ public class OrderController extends BaseController {
             return paramError(bindingResult);
         }
         orderDto.setId(SnowflakeUtil.nextId());
+        orderDto.setOrderSn(SnowflakeUtil.nextId() + "");
         Order order = orderService.add(orderDto);
 
         OrderItemDto orderItemDto = new OrderItemDto();
