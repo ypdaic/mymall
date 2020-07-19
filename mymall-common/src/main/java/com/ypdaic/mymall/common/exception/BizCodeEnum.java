@@ -1,5 +1,7 @@
 package com.ypdaic.mymall.common.exception;
 
+import com.ypdaic.mymall.common.util.R;
+
 /***
  * 错误码和错误信息定义类
  * 1. 错误码定义规则为5为数字
@@ -21,7 +23,9 @@ public enum BizCodeEnum {
 
     PRODUCT_EXCEPTION(11000,"商品上架异常"),
 
-    NO_STOCK_EXCEPTION(21000,"没有库存异常");
+    NO_STOCK_EXCEPTION(21000,"没有库存异常"),
+
+    TO_MANY_REQUEST(21001,"请求数量太多了");
 
     private int code;
     private String msg;

@@ -54,3 +54,10 @@ feign:
     enabled: false
   okhttp:
     enabled: true
+
+    # 审计信息暴露，sentinel 实时监控有用
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
