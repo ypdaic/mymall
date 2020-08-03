@@ -30,6 +30,14 @@ spring:
       discovery:
         locator:
           enabled: true
+          # 可以为所有服务统一配置
+#          predicates:
+#            - name : Path
+#              args:
+#                patterns: "'/api/product/**,/test/test'"
+#          filters:
+#            #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
+#            #- StripPrefix=1 # 效果同上， 截取路径位数
       # 注意优先级问题，配置最前面的最先匹配
       routes:
         - id: product
@@ -39,6 +47,10 @@ spring:
           filters:
             #- RewritePath=/api/(?<segment>.*),/$\{segment} #路径重写,去除/api 前缀路径
             - StripPrefix=1 # 效果同上， 截取路径位数
+            - name: Hystrix
+              args:
+                name: test # 对应commandKey
+                fallbackUri: "http://test" # 降级uri
         - id: coupon
           uri: lb://mymall-coupon
           predicates:
@@ -98,4 +110,10 @@ spring:
 logging:
   config: classpath:logs/logback-dev.xml
 
+hystrix:
+  command:
+    test:
+      execution:
+        isolation:
+          strategy: THREAD
 
