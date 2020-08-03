@@ -8,7 +8,9 @@ import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.ypdaic.mymall.fegin.ware.IWareFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @ClassName HystrixServiceImpl
@@ -188,5 +190,11 @@ public class HystrixServiceImpl {
 
     public void test5() {
         wareFeignService.getFare(1L);
+    }
+
+    @Scheduled(cron = "*/5 * * * * ?")
+    @Transactional
+    public void test23() {
+        System.out.println("xxxxx");
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @ClassName SeataController
@@ -25,6 +26,13 @@ public class SeataController {
     @GetMapping("/seata")
     public String test() {
         orderService.seataTest();
+        return "ok";
+    }
+
+    @ResponseBody
+    @GetMapping("/undertow")
+    public String undertow() {
+//        orderService.seataTest();
         return "ok";
     }
 }
