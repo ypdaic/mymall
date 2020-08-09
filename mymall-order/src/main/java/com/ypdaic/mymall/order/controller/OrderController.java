@@ -1,8 +1,10 @@
 package com.ypdaic.mymall.order.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.order.enums.OrderStatusEnum;
 import com.ypdaic.mymall.order.service.IOrderItemService;
 import com.ypdaic.mymall.order.util.SnowflakeUtil;
 import com.ypdaic.mymall.order.vo.OrderItemDto;
@@ -234,6 +236,29 @@ public class OrderController extends BaseController {
     public R getOrderStatus(@PathVariable("orderSn") String orderSn) {
         Order order = orderService.getOrderStatus(orderSn);
         return R.ok().setData(order);
+    }
+
+    /**
+     * 事务回查
+     * @param orderSn
+     * @return
+     */
+    @GetMapping("/callback/{orderSn}")
+    public JSONObject callback(@PathVariable("orderSn") String orderSn) {
+        Order order = orderService.getOrderStatus(orderSn);
+        if (Objects.isNull(order)) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("result", "fail");
+            return jsonObject;
+        }
+        if (!OrderStatusEnum.CREATE_NEW.getCode().equals(order.getStatus())) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("result", "fail");
+            return jsonObject;
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", "ok");
+        return jsonObject;
     }
 
 }

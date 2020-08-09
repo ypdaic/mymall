@@ -26,6 +26,7 @@ public class RabbitmaConfig {
          */
         HashMap<String, Object> arguments = new HashMap<>();
         arguments.put("x-dead-letter-exchange", "order.event.exchange");
+        // 过期后发往order.release.order这个队列
         arguments.put("x-dead-letter-routing-key", "order.release.order");
         arguments.put("x-message-ttl", 60000);
         Queue queue = new Queue("order.delay.queue", true, false, false, arguments);
@@ -45,6 +46,12 @@ public class RabbitmaConfig {
         return topicExchange;
     }
 
+    /**
+     * 订单创建的消息发往延时队列
+     * @param orderDelayQueue
+     * @param orderEventExchange
+     * @return
+     */
     @Bean
     public Binding orderCreateOrderBinding(Queue orderDelayQueue, Exchange orderEventExchange) {
         return BindingBuilder.bind(orderDelayQueue).to(orderEventExchange).with("order.create.order").noargs();

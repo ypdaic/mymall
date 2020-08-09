@@ -11,7 +11,7 @@ spring:
         max-idle: 10
         max-wait: 3000ms
         min-idle: 0
-    host: 192.168.109.128
+    host: 192.168.109.129
     port: 6380
     password: test1234
 

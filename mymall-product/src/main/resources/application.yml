@@ -81,3 +81,4 @@ hystrix:
       execution:
         isolation:
           strategy: SEMAPHORE
+      threadPoolKeyOverride: aaa #每个command用自己的线程池

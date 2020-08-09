@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.common.cache;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cache.interceptor.CacheInterceptor;
 import org.springframework.cache.interceptor.CacheOperationInvoker;
 import org.springframework.cache.interceptor.CacheOperationSource;
@@ -16,6 +17,7 @@ import java.lang.reflect.Method;
  * @Version 0.1
  */
 @Configuration
+@ConditionalOnBean(CacheOperationSource.class)
 public class CacheConfig {
 
     private static final ThreadLocal<Method> cacheMethod = new ThreadLocal<>();

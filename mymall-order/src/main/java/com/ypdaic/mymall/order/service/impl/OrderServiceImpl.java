@@ -1,6 +1,8 @@
 package com.ypdaic.mymall.order.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,22 +11,27 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.common.enums.EnableEnum;
 import com.ypdaic.mymall.common.to.MemberRespVo;
+import com.ypdaic.mymall.common.to.RpTransactionMessageVo;
 import com.ypdaic.mymall.common.to.SkuHasStockVo;
 import com.ypdaic.mymall.common.to.WareSkuLockVo;
 import com.ypdaic.mymall.common.to.mq.OrderTo;
+import com.ypdaic.mymall.common.to.mq.StockLockedTo;
 import com.ypdaic.mymall.common.util.JavaUtils;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.Query;
 import com.ypdaic.mymall.common.util.R;
 import com.ypdaic.mymall.fegin.cart.ICartFeginService;
 import com.ypdaic.mymall.fegin.member.IMemberFeginService;
+import com.ypdaic.mymall.fegin.message.IMessageFeginService;
 import com.ypdaic.mymall.fegin.product.IProductFeignService;
 import com.ypdaic.mymall.fegin.ware.IWareFeignService;
+import com.ypdaic.mymall.order.entity.MqMessage;
 import com.ypdaic.mymall.order.entity.Order;
 import com.ypdaic.mymall.order.entity.OrderItem;
 import com.ypdaic.mymall.order.enums.OrderStatusEnum;
 import com.ypdaic.mymall.order.interceptor.LoginUserInterceptor;
 import com.ypdaic.mymall.order.mapper.OrderMapper;
+import com.ypdaic.mymall.order.service.IMqMessageService;
 import com.ypdaic.mymall.order.service.IOrderItemService;
 import com.ypdaic.mymall.order.service.IOrderService;
 import com.ypdaic.mymall.order.vo.*;
@@ -36,6 +43,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -104,6 +113,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    IMqMessageService mqMessageService;
+
+    @Autowired
+    IMessageFeginService messageFeginService;
+
+    @Autowired
+    InetUtils inetUtils;
+
+    @Value("server.port")
+    private String port;
 
 
     /**
@@ -379,10 +400,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @param orderSubmitVo
      * @return
      */
-    @GlobalTransactional
+//    @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     @Override
     public SubmitResponVo submitOrder(OrderSubmitVo orderSubmitVo) {
+        String messageId = null;
         SubmitResponVo submitResponVo = new SubmitResponVo();
         submitResponVo.setCode(0);
         MemberRespVo memberRespVo = LoginUserInterceptor.threadLocal.get();
@@ -398,6 +420,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             BigDecimal payPrice = orderSubmitVo.getPayPrice();
             if (Math.abs(payAmount.subtract(payPrice).doubleValue()) < 0.01) {
                 // 金额对比
+
+                // 使用消息预发送
+                RpTransactionMessageVo rpTransactionMessageVo = new RpTransactionMessageVo();
+                rpTransactionMessageVo.setCreater("test");
+                rpTransactionMessageVo.setEditor("test");
+                rpTransactionMessageVo.setMessageBody(JSONObject.toJSONString(order.getOrder()));
+                rpTransactionMessageVo.setMessageDataType(Order.class.getName());
+                messageId = UUID.fastUUID().toString();
+                rpTransactionMessageVo.setMessageId(messageId);
+                rpTransactionMessageVo.setVersion(0);
+                rpTransactionMessageVo.setUrl("http://" + inetUtils.findFirstNonLoopbackAddress() + ":" + port + "/order/order/callback/" + order.getOrder().getOrderSn() .);
+                messageFeginService.saveMessageWaitingConfirm(rpTransactionMessageVo);
 
                 // 3.保存订单
                 saveOrder(order);
@@ -432,6 +466,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             }
         }
 
+        // 消息提交
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    messageFeginService.confirmAndSendMessage(messageId);
+                }
+        });
+
+        }
+
         return submitResponVo;
 
     }
@@ -447,6 +492,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return null;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void closeOrder(Order order) {
         Order order1 = baseMapper.selectById(order.getId());
@@ -454,9 +500,34 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if (order1.getStatus() == OrderStatusEnum.CREATE_NEW.getCode()) {
             order1.setStatus(OrderStatusEnum.CANCLED.getCode());
             saveOrUpdate(order1);
+
             OrderTo orderTo = new OrderTo();
             BeanUtils.copyProperties(order1, orderTo);
-            rabbitTemplate.convertAndSend("order.event.exchange", "order.release.other", orderTo);
+
+//            // 本地消息表
+////            MqMessageDto mqMessageDto = new MqMessageDto();
+////            String messageId = UUID.fastUUID().toString();
+////            mqMessageDto.setMessageId(messageId);
+////            mqMessageDto.setContent(JSONObject.toJSONString(orderTo));
+////            mqMessageDto.setMessageStatus(MqMessage.MessageStatus.NO_CONSUME.getValue());
+////            mqMessageDto.setRoutingKey("order.release.other");
+////            mqMessageDto.setToExchange("order.event.exchange");
+////            mqMessageDto.setMessageType(MqMessage.MessageType.NOW.getValue());
+////            mqMessageDto.setClassType(OrderTo.class.getName());
+////            mqMessageService.add(mqMessageDto);
+////
+////            // 本地消息表的方式
+////            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+////                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+////                    @Override
+////                    public void afterCommit() {
+////                        // 库存回退补偿措施
+////                        rabbitTemplate.convertAndSend("order.event.exchange", "order.release.other", orderTo);
+////                    }
+////                });
+////
+////            }
+
         }
     }
 
@@ -502,15 +573,28 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             orderItem.insert();
         });
 
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override
-                public void afterCommit() {
-                    rabbitTemplate.convertAndSend("order.event.exchange", "order.create.order", order.getOrder());
-                }
-            });
-
-        }
+//        // 本地消息表
+//        MqMessageDto mqMessageDto = new MqMessageDto();
+//        String messageId = UUID.fastUUID().toString();
+//        mqMessageDto.setMessageId(messageId);
+//        mqMessageDto.setContent(JSONObject.toJSONString(order.getOrder()));
+//        mqMessageDto.setMessageStatus(MqMessage.MessageStatus.NO_CONSUME.getValue());
+//        mqMessageDto.setRoutingKey("order.create.order");
+//        mqMessageDto.setToExchange("order.event.exchange");
+//        mqMessageDto.setMessageType(MqMessage.MessageType.DELAY.getValue());
+//        mqMessageDto.setClassType(Order.class.getName());
+//        mqMessageService.add(mqMessageDto);
+//
+//        // 本地消息表的方式
+//        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+//            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+//                @Override
+//                public void afterCommit() {
+//                    rabbitTemplate.convertAndSend("order.event.exchange", "order.create.order", order.getOrder());
+//                }
+//            });
+//
+//        }
 
     }
 

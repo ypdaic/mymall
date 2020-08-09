@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: @env@
+  application:
+    name: mymall-message #设置应用名称

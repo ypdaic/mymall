@@ -1,6 +1,8 @@
 package com.ypdaic.mymall.ware.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.rabbitmq.client.Channel;
@@ -10,10 +12,12 @@ import com.ypdaic.mymall.common.to.mq.StockLockedTo;
 import com.ypdaic.mymall.common.util.*;
 import com.ypdaic.mymall.fegin.order.IOrderFeginService;
 import com.ypdaic.mymall.fegin.product.IProductFeignService;
+import com.ypdaic.mymall.ware.entity.MqMessage;
 import com.ypdaic.mymall.ware.entity.WareOrderTask;
 import com.ypdaic.mymall.ware.entity.WareOrderTaskDetail;
 import com.ypdaic.mymall.ware.entity.WareSku;
 import com.ypdaic.mymall.ware.mapper.WareSkuMapper;
+import com.ypdaic.mymall.ware.service.IMqMessageService;
 import com.ypdaic.mymall.ware.service.IWareOrderTaskDetailService;
 import com.ypdaic.mymall.ware.service.IWareOrderTaskService;
 import com.ypdaic.mymall.ware.service.IWareSkuService;
@@ -40,6 +44,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.ypdaic.mymall.common.enums.EnableEnum;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * <p>
@@ -70,6 +76,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
 
     @Autowired
     IOrderFeginService orderFeginService;
+
+    @Autowired
+    IMqMessageService mqMessageService;
 
     /**
      * 新增商品库存
@@ -315,7 +324,31 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSku> impl
                     StockDetailTo stockDetailTo = new StockDetailTo();
                     BeanUtils.copyProperties(wareOrderTaskDetail, stockDetailTo);
                     stockLockedTo.setStockDetailTo(stockDetailTo);
-                    rabbitTemplate.convertAndSend("stock.event.exchange", "stock.locked", stockLockedTo);
+
+                    // 本地消息表
+                    MqMessageDto mqMessageDto = new MqMessageDto();
+                    String messageId = UUID.fastUUID().toString();
+                    mqMessageDto.setMessageId(messageId);
+                    mqMessageDto.setContent(JSONObject.toJSONString(stockLockedTo));
+                    mqMessageDto.setMessageStatus(MqMessage.MessageStatus.NO_CONSUME.getValue());
+                    mqMessageDto.setRoutingKey("stock.locked");
+                    mqMessageDto.setToExchange("stock.event.exchange");
+                    mqMessageDto.setMessageType(MqMessage.MessageType.DELAY.getValue());
+                    mqMessageDto.setClassType(StockLockedTo.class.getName());
+                    mqMessageService.add(mqMessageDto);
+
+                    // 本地消息表的方式
+                    if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                            @Override
+                            public void afterCommit() {
+                                rabbitTemplate.convertAndSend("stock.event.exchange", "stock.locked", stockLockedTo);
+                            }
+                        });
+
+                    }
+
+
                     break;
                 } else {
                     // 当前仓库锁定失败，重试下一个仓库

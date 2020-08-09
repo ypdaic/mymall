@@ -11,7 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @ComponentScan(value = {"com.ypdaic.mymall.order.**", "com.ypdaic.mymall.common.**"})
 @SpringBootApplication(exclude = {TaskSchedulingAutoConfiguration.class})
-@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.member", "com.ypdaic.mymall.fegin.product", "com.ypdaic.mymall.fegin.cart", "com.ypdaic.mymall.fegin.ware"})
+@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.member",
+        "com.ypdaic.mymall.fegin.product", "com.ypdaic.mymall.fegin.cart", "com.ypdaic.mymall.fegin.ware", "com.ypdaic.mymall.fegin.message"})
 public class OrderApplication {
 
     public static void main(String[] args) {

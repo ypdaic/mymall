@@ -1,0 +1,100 @@
+server:
+  port: @message.port@
+  servlet:
+    context-path: /
+
+spring:
+
+ #security:
+  #user:
+  #  name: admin  # 认证用户名
+  #  password: test1234  # 认证密码
+ main:
+   allow-bean-definition-overriding: true
+ session:
+   store-type: redis
+
+ cloud:
+  sentinel:
+    transport:
+      port: 8719
+      dashboard: localhost:8080
+ thymeleaf:
+   cache: false
+   suffix: .html
+
+mybatis-plus:
+  mapperLocations: classpath:/sqlMapperXml/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+
+
+info:
+  app.name: @project.name@
+  company.name: daiyanping
+  build.artifactId: @project.artifactId@
+  build.modelVersion: @project.modelVersion@
+
+ #配置ribbon 饥饿加载
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+      - mymall-coupon
+      - mymall-search
+      - mymall-ware
+# feign配置
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types:
+        - text/xml
+        - application/xml
+        - application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  hystrix: #fegin 开启hystrix后配置参数都是使用的默认值,且commandKey为接口名加方法名如：IWareFeignService#getSkuHasStock(List)
+    enabled: true
+
+hystrix:
+  command:
+    # 自定义feign的command参数
+    IWareFeignService#getSkuHasStock(List):
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+
+    IWareFeignService#getFare(Long):
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+    test:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+
+message:
+  max:
+    send:
+      times: 5
+      1:
+        time: 0
+      2:
+        time: 1
+      3:
+        time: 2
+      4:
+        time: 5
+      5:
+        time: 15
+  handle:
+    duration: 180 ##message timeout (消息存放超过下面设置的时间才可以取出处理)

@@ -35,6 +35,7 @@ ribbon:
     - mymall-product
     - mymall-member
     - mymall-order
+    - mymall-message
 
 # feign配置
 feign:

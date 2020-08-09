@@ -11,13 +11,15 @@ import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.endpoint.event.RefreshEvent;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -30,23 +32,36 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Configuration
-public class NacosConfig {
+@Component
+public class NacosConfig implements BeanDefinitionRegistryPostProcessor {
 
 
-    @Bean
-    public MyNacosContextRefresher nacosContextRefresher(
-            NacosConfigProperties nacosConfigProperties,
-            NacosRefreshProperties nacosRefreshProperties,
-            NacosRefreshHistory refreshHistory) {
-        return new MyNacosContextRefresher(nacosRefreshProperties, refreshHistory,
-                nacosConfigProperties.configServiceInstance());
+//    @Bean
+//    @Primary
+//    public NacosContextRefresher nacosContextRefresher(
+//            NacosConfigProperties nacosConfigProperties,
+//            NacosRefreshProperties nacosRefreshProperties,
+//            NacosRefreshHistory refreshHistory) {
+//        return new MyNacosContextRefresher(nacosRefreshProperties, refreshHistory,
+//                nacosConfigProperties.configServiceInstance());
+//    }
+
+    @Override
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        RootBeanDefinition rootBeanDefinition = new RootBeanDefinition();
+        rootBeanDefinition.setBeanClass(MyNacosContextRefresher.class);
+        registry.registerBeanDefinition("nacosContextRefresher", rootBeanDefinition);
     }
 
-    public static class MyNacosContextRefresher implements ApplicationListener<ApplicationReadyEvent>, ApplicationContextAware {
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+
+    }
+
+    public static class MyNacosContextRefresher extends NacosContextRefresher {
 
         private final static Logger log = LoggerFactory
-                .getLogger(NacosContextRefresher.class);
+                .getLogger(MyNacosContextRefresher.class);
 
         private static final AtomicLong REFRESH_COUNT = new AtomicLong(0);
 
@@ -73,11 +88,13 @@ public class NacosConfig {
             return isHriyx.get();
         }
 
-        public MyNacosContextRefresher(NacosRefreshProperties refreshProperties,
-                                     NacosRefreshHistory refreshHistory, ConfigService configService) {
-            this.refreshProperties = refreshProperties;
+        public MyNacosContextRefresher(NacosConfigProperties nacosConfigProperties,
+                                       NacosRefreshProperties nacosRefreshProperties,
+                                       NacosRefreshHistory refreshHistory) {
+            super(nacosRefreshProperties, refreshHistory, nacosConfigProperties.configServiceInstance());
+            this.refreshProperties = nacosRefreshProperties;
             this.refreshHistory = refreshHistory;
-            this.configService = configService;
+            this.configService = nacosConfigProperties.configServiceInstance();
         }
 
         @Override

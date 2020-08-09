@@ -73,9 +73,11 @@ public class HystrixServiceImpl {
                     @HystrixProperty(name = "requestLog.enabled", value = "true"),
 
                     // 两次健康状态计算的等待时间，健康状态的计算会消耗cpu，默认500ms
-                    @HystrixProperty(name = "metrics.healthSnapshot.intervalInMilliseconds", value = "500")
+                    @HystrixProperty(name = "metrics.healthSnapshot.intervalInMilliseconds", value = "500"),
+                    // 指定线程池的key
+                    @HystrixProperty(name ="threadPoolKeyOverride", value = "test")
             },
-            //线程分组，区分不同的线程池，同一个threadPoolKey使用同一线程池，如果不指定则使用groupKey
+            //线程分组，区分不同的线程池，同一个threadPoolKey使用同一线程池，如果不指定则使用groupKey,也可以指定
             threadPoolKey = "queryContentshystrixJackpool",
             threadPoolProperties = {
                     // 线程池线程数

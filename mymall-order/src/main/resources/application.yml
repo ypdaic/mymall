@@ -38,6 +38,7 @@ ribbon:
     - mymall-product
     - mymall-cart
     - mymall-ware
+    - mymall-message
 
 feign:
   compression:

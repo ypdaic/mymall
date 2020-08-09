@@ -122,29 +122,31 @@ spring:
               multi-statement-allow: true
 
     sharding:
-      tables:
-        oms_order:
-          actual-data-nodes: ds$->{0..1}.oms_order
-#          key-generator:
-#            column: id
-#            type: SNOWFLAKE
-          inline:
-            sharding-column: id
-            algorithm-expression: ds$->{id % 2 + 1}
-        oms_order_item:
-          actual-data-nodes: ds$->{0..1}.oms_order_item
-#          key-generator:
-#            column: id
-#            type: SNOWFLAKE
-          inline:
-            sharding-column: id
-            algorithm-expression: ds$->{id % 2 + 1}
+      defaultDataSourceName: ds0
+#      tables:
+#        oms_order:
+#          actual-data-nodes: ds$->{0..1}.oms_order
+##          key-generator:
+##            column: id
+##            type: SNOWFLAKE
+#          inline:
+#            sharding-column: id
+#            algorithm-expression: ds$->{id % 2 + 1}
+#        oms_order_item:
+#          actual-data-nodes: ds$->{0..1}.oms_order_item
+##          key-generator:
+##            column: id
+##            type: SNOWFLAKE
+#          inline:
+#            sharding-column: id
+#            algorithm-expression: ds$->{id % 2 + 1}
 
 
 
     props:
       sql:
         show: true
+
 
   rabbitmq:
     listener:
@@ -181,7 +183,7 @@ sharding:
   jdbc:
     config:
       sharding:
-        default-data-source-name: ds
+        default-data-source-name: ds0
 
 logging:
   config: classpath:logs/logback-dev.xml
