@@ -51,6 +51,11 @@
             <artifactId>mymall-fegin-service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--        rocketmq 依赖-->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
