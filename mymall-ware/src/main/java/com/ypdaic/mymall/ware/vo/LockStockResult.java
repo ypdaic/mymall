@@ -1,7 +1,6 @@
 package com.ypdaic.mymall.ware.vo;
 
 import lombok.Data;
-import org.omg.PortableInterceptor.INACTIVE;
 
 /**
  * 锁定结果

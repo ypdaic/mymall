@@ -92,7 +92,7 @@ public class CodeGenerator {
 
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setDbType(DbType.MYSQL);
-        dataSourceConfig.setDriverName("com.mysql.jdbc.Driver");
+        dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         //如果是MySQL新版本得加上时区，否则报错
         dataSourceConfig.setUrl(config.getString("databasUrl") + "?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC");
         dataSourceConfig.setUsername(config.getString("username"));
