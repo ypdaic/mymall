@@ -28,6 +28,7 @@ public class RocketMqConfig {
         RocketMQProperties.Producer producerConfig = new RocketMQProperties.Producer();
         producerConfig.setGroup("test");
         producerConfig.setCustomizedTraceTopic("test_topic");
+        producerConfig.setSendMessageTimeout(10000);
         producerConfig.setEnableMsgTrace(false);
         String nameServer = rocketMQProperties.getNameServer();
         String groupName = producerConfig.getGroup();
