@@ -430,7 +430,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 messageId = UUID.fastUUID().toString();
                 rpTransactionMessageVo.setMessageId(messageId);
                 rpTransactionMessageVo.setVersion(0);
-                rpTransactionMessageVo.setUrl("http://" + inetUtils.findFirstNonLoopbackAddress() + ":" + port + "/order/order/callback/" + order.getOrder().getOrderSn() .);
+                rpTransactionMessageVo.setUrl("http://" + inetUtils.findFirstNonLoopbackAddress() + ":" + port + "/order/order/callback/" + order.getOrder().getOrderSn());
                 messageFeginService.saveMessageWaitingConfirm(rpTransactionMessageVo);
 
                 // 3.保存订单
@@ -468,10 +468,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         // 消息提交
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            String messageIdCopy = messageId;
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
-                    messageFeginService.confirmAndSendMessage(messageId);
+                    messageFeginService.confirmAndSendMessage(messageIdCopy);
                 }
         });
 

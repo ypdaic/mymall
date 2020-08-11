@@ -29,26 +29,26 @@ public class MybatisPlusConfig {
     @Autowired
     private MybatisPlusProperties mybatisPlusProperties;
 
-    // 这里的datasource 由shardingjdbc 提供
-//    @Bean(
-//            initMethod = "init"
-//    )
-//    public DruidDataSource druidDataSource() {
-//        return new DruidDataSourceWrapper();
-//    }
-//
-//    /**
-//     * 需要将 DataSourceProxy 设置为主数据源，否则事务无法回滚
-//     * 1.0版本后不再需要改代理类
-//     *
-//     * @param druidDataSource The DruidDataSource
-//     * @return The default datasource
-//     */
-//    @Primary
-//    @Bean("dataSource")
-//    public DataSource dataSource(DruidDataSource druidDataSource) {
-//        return new DataSourceProxy(druidDataSource);
-//    }
+//     这里的datasource 由shardingjdbc 提供
+    @Bean(
+            initMethod = "init"
+    )
+    public DruidDataSource druidDataSource() {
+        return new DruidDataSourceWrapper();
+    }
+
+    /**
+     * 需要将 DataSourceProxy 设置为主数据源，否则事务无法回滚
+     * 1.0版本后不再需要改代理类
+     *
+     * @param druidDataSource The DruidDataSource
+     * @return The default datasource
+     */
+    @Primary
+    @Bean("dataSource")
+    public DataSource dataSource(DruidDataSource druidDataSource) {
+        return new DataSourceProxy(druidDataSource);
+    }
 
 
     @Bean

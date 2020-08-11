@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RocketMQMessageListener(topic = "test", consumerGroup = "test", enableMsgTrace = false)
-public class OrderCloseListenerWithRocketMq implements RocketMQListener {
+public class OrderCloseListenerWithRocketMq implements RocketMQListener<Order> {
 
     @Autowired
     IOrderService orderService;
@@ -39,14 +39,8 @@ public class OrderCloseListenerWithRocketMq implements RocketMQListener {
 
 
     @Override
-    public void onMessage(Object o) {
-        Order order = (Order) o;
+    public void onMessage(Order order) {
         log.info("收到过期的订单信息：准备关闭订单：{}", order.getOrderSn() );
-        try {
-            handleTransaction(order);
 
-        } catch (Exception e) {
-
-        }
     }
 }

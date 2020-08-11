@@ -33,7 +33,7 @@ public class MessageTask {
     /**
      * 处理非延时没有被消费的消息
      */
-    @Scheduled(cron = "*/5 * * * * ?")
+//    @Scheduled(cron = "*/5 * * * * ?")
     public void handle() {
         log.info("执行(处理[NO_CONSUMER]状态的消息)任务开始");
         List<MqMessage> mqMessages = messageScheduled.handleNoConsumerMessage(MqMessage.MessageType.NOW);
@@ -56,7 +56,7 @@ public class MessageTask {
     /**
      * 处理延时没有被消费的消息
      */
-    @Scheduled(cron = "*/30 * * * * ?")
+//    @Scheduled(cron = "*/30 * * * * ?")
     public void handleNowMessage() {
         log.info("执行(处理[NO_CONSUMER]状态的消息)任务开始");
         List<MqMessage> mqMessages = messageScheduled.handleNoConsumerMessage(MqMessage.MessageType.DELAY);
