@@ -31,6 +31,9 @@ info:
 
 # 配置ribbon 饥饿加载
 ribbon:
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1
+  OkToRetryOnAllOperations: true
   eager-load:
     enabled: true
     clients:
@@ -41,6 +44,11 @@ ribbon:
     - mymall-message
 
 feign:
+  client:
+    config:
+      default: #默认所有客户端都用这个配置，否则readTimeout使用的LoadBalancerFeignClient.DEFAULT_OPTIONS，如果这里不进行配置，则会使用ribbon的readTimeout，connectTimeout
+        readTimeout: 3600000
+        connectTimeout: 10000
   compression:
     request:
       enabled: true

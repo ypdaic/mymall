@@ -15,8 +15,8 @@ public class HelloController {
     @Autowired
     AmqpTemplate amqpTemplate;
 
-    @Autowired
-    RocketMQTemplate rocketMQTemplate;
+//    @Autowired
+//    RocketMQTemplate rocketMQTemplate;
 
     @GetMapping("/{page}.html")
     public String listPage(@PathVariable("page") String page) {
@@ -32,12 +32,12 @@ public class HelloController {
         return "ok";
     }
 
-    @ResponseBody
-    @GetMapping("/test/rocketmq")
-    public String rocketmq() {
-        Order order = new Order();
-        rocketMQTemplate.sendAndReceive("test", order, String.class);
-        return "ok";
-    }
+//    @ResponseBody
+//    @GetMapping("/test/rocketmq")
+//    public String rocketmq() {
+//        Order order = new Order();
+//        rocketMQTemplate.sendAndReceive("test", order, String.class);
+//        return "ok";
+//    }
 
 }

@@ -48,6 +48,10 @@ ribbon:
       - mymall-ware
 # feign配置
 feign:
+  client:
+    config:
+      - default:
+          readTimeout: 3600000
   compression:
     request:
       enabled: true

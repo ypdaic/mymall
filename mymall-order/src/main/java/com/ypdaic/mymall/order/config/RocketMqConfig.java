@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
  * @Date 2020/8/10
  * @Version 0.1
  */
-@Configuration
+//@Configuration
 public class RocketMqConfig {
 
     @Bean
