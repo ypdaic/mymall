@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 public class SuperEntity extends Model {
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.INPUT)
     private Long id;
 
     @Override

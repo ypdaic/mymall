@@ -29,6 +29,12 @@ public class SeataController {
         return "ok";
     }
 
+    @GetMapping("/seata-sharding")
+    public String testSharding() {
+        orderService.seataShardingTest();
+        return "ok";
+    }
+
     @ResponseBody
     @GetMapping("/undertow")
     public String undertow() {

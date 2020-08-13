@@ -564,6 +564,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         throw new RuntimeException();
     }
 
+    @GlobalTransactional
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void seataShardingTest() {
+        Order order = new Order();
+        order.setOrderSn("test");
+        order.insert();
+        Order order1 = new Order();
+        order1.setOrderSn("test1");
+        order1.insert();
+//        wareFeignService.seateTest();
+        throw new RuntimeException();
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void saveOrder(OrderCreateTo order) {
         order.getOrder().setModifyTime(new Date());
