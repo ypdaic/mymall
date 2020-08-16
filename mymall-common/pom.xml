@@ -132,7 +132,7 @@
                 将使用maven配置的值进行替换-->
                 <!--includes表示只打包指定的文件-->
                 <includes>
-                    <include>logback-${env}.xml</include>
+                    <include>logs/logback-${env}.xml</include>
                 </includes>
             </resource>
 
