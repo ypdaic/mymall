@@ -186,6 +186,6 @@ sharding:
         default-data-source-name: ds0
 
 logging:
-  config: classpath:logs/logback-dev.xml
+  config: classpath:logback/logback-dev.xml
 
 
