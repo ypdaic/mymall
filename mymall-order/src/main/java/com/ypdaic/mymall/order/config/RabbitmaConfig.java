@@ -19,6 +19,11 @@ public class RabbitmaConfig {
 //    @Autowired
 //    RabbitTemplate rabbitTemplate;
 
+    /**
+     * 同一队列中，有2个消息A和B，A延时3小时，先进。B延时2小时，后进。那么AB会在3小时后才会被消费
+     * 所以一般设置队列的过期时间，所有的消息过期时间一致，就不会有上面的问题
+     * @return
+     */
     @Bean
     public Queue orderDelayQueue() {
         /**
