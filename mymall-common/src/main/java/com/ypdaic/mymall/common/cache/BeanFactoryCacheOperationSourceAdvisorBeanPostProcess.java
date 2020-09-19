@@ -14,7 +14,7 @@ import static org.springframework.cache.config.CacheManagementConfigUtils.CACHE_
 /**
  * 必须继承Ordered，否则无法自定义
  */
-@ConditionalOnBean(CacheInterceptor.class)
+@ConditionalOnBean(CacheInterceptor.class) //这里使用这个Conditional作用在 ConfigurationPhase.REGISTER_BEAN阶段，而此时该类是配置类，所以这个Conditional是不起作用的
 @Component
 public class BeanFactoryCacheOperationSourceAdvisorBeanPostProcess implements BeanPostProcessor, Ordered {
 
