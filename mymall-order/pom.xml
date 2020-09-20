@@ -129,6 +129,7 @@
                     </resources>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                        <port>${order.port}</port>
                     </buildArgs>
 
                     <!-- 必须与maven配置文件settings.xml中配置的server.id一致，镜像名称就必须指定DockerHub的用户名了，私服就指定ip:port -->
