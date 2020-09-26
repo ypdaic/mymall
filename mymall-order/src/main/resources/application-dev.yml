@@ -4,15 +4,15 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      #    url: jdbc:mysql://192.168.109.128:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-      #    username: root
-      #    password: 123456
+      url: jdbc:mysql://192.168.109.129:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
       #    url: jdbc:mysql://192.168.109.129:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       #    url: jdbc:mysql://127.0.0.1:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       # nginx 代理mycat
-      url: jdbc:mysql://192.168.109.129:13307/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-      username: enjoy
-      password: 123456
+#      url: jdbc:mysql://192.168.109.129:13307/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+#      username: enjoy
+#      password: 123456
       initial-size: 1
       max-active: 20
       min-idle: 1
@@ -85,7 +85,7 @@ spring:
       ds1:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.109.129:3310/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://192.168.109.130:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
         #    username: root
         #    password: 123456
         #    url: jdbc:mysql://192.168.109.129:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
@@ -186,6 +186,17 @@ sharding:
         default-data-source-name: ds0
 
 logging:
-  config: classpath:logback/logback-dev.xml
+  config: classpath:logbak/logback-dev.xml
 
-
+dubbo:
+  scan:
+    # dubbo 服务扫描基准包
+    base-packages: com.ypdaic.mymall.order.service
+  protocol:
+    # dubbo 协议
+    name: dubbo
+    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+    port: 20880
+  registry:
+    # 挂载到 Spring Cloud 注册中心
+    address: spring-cloud://localhost

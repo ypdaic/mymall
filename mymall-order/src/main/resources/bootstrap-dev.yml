@@ -2,18 +2,20 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.109.129:80
         service: ${spring.application.name}
         heart-beat-interval: 5000 #心跳间隔
-        namespace: dev
+        namespace: 057107a6-7f12-423b-97e2-7682e592b792
       config:
-        namespace: dev
+        namespace: 057107a6-7f12-423b-97e2-7682e592b792
         name: dev
         # 如果Data Id没有使用后缀，需要指定为空字符串
         file-extension: yml
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.109.129:80
     # sentinel 默认流控限制保存在内存中，重启失效
     sentinel:
       transport:
-        dashboard: 127.0.0.1:8080
+        # sentinel 平台的地址
+        dashboard: 192.168.109.129:8099
+        # 应用开启和sentinel通信的端口
         port: 8719
