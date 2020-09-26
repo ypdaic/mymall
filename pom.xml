@@ -66,6 +66,7 @@
         <shardingjdbc.version>4.0.0-RC2</shardingjdbc.version>
         <rocketmq.version>2.1.1</rocketmq.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dubbo.springboot.version>2.0.0</dubbo.springboot.version>
     </properties>
 
     <dependencyManagement>
@@ -220,6 +221,11 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-transaction-base-seata-at</artifactId>
                 <version>${shardingjdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.spring.boot</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.springboot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

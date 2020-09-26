@@ -86,6 +86,16 @@
             <groupId>org.apache.shardingsphere</groupId>
             <artifactId>sharding-transaction-base-seata-at</artifactId>
         </dependency>
+<!--        dubbo springboot.start依赖-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.spring.boot</groupId>-->
+<!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
