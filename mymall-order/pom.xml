@@ -163,6 +163,8 @@
                     <include>application.yml</include>
                     <include>bootstrap.yml</include>
                     <include>redisson-${env}-*.yml</include>
+                    <include>redisson-${env}-sentinel-*.yml</include>
+                    <include>redisson-${env}-cluster-*.yml</include>
                 </includes>
             </resource>
 

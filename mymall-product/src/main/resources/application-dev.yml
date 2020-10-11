@@ -52,8 +52,11 @@ spring:
       max-idle: 10
       max-wait: 3000ms
       min-idle: 0
-  host: 192.168.109.129
-  port: 6380
+#  host: 192.168.109.129
+#  port: 6380
+  cluster:
+    # 多个节点已","分割
+    nodes: 192.168.109.129:7004,192.168.109.129:7005,192.168.109.129:7006,192.168.109.130:7001,192.168.109.130:7002,192.168.109.130:7003
   password: test1234
  cache:
   type: redis
@@ -71,9 +74,10 @@ hystrix:
           strategy: SEMAPHORE
 
 
-dubbo:
-  registry:
-    # 挂载到 Spring Cloud 注册中心
-    address: spring-cloud://localhost
-  cloud:
-    subscribed-services: mymall-order
+#dubbo:
+#  registry:
+#    # 挂载到 Spring Cloud 注册中心
+#    address: spring-cloud://localhost
+#  cloud:
+#    subscribed-services: mymall-order
+

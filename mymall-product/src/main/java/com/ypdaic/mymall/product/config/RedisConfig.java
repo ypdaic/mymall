@@ -91,6 +91,7 @@ public class RedisConfig {
         configMap.put("APP_CACHE", config);
         configMap.put("WX_CACHE", config2);
         configMap.put("WX_QRCODE_CACHE", config3);
+        configMap.put("category", config3);
 
         builder.withInitialCacheConfigurations(configMap);
 

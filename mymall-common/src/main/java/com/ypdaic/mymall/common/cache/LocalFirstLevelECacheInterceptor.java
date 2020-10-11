@@ -1,15 +1,13 @@
 package com.ypdaic.mymall.common.cache;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.Expiry;
 import com.rabbitmq.client.Channel;
 import com.ypdaic.mymall.common.annotation.MyCacheable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 import org.aopalliance.intercept.MethodInvocation;
-import org.checkerframework.checker.index.qual.NonNegative;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
@@ -31,21 +29,15 @@ import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.lang.reflect.Method;
-import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-/**
- * 本地一级缓存
- * @author daiyanping
- */
-@Slf4j
 @Data
+@Slf4j
 @Scope("prototype")
-public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInterceptor implements InitializingBean, ChannelAwareMessageListener, BeanFactoryAware {
+public class LocalFirstLevelECacheInterceptor extends AbstractFirstLevelCacheInterceptor implements InitializingBean, ChannelAwareMessageListener, BeanFactoryAware {
 
-    protected static final String beanName = "LocalFirstLevelCacheInterceptor";
+    protected static final String beanName = "LocalFirstLevelECacheInterceptor";
 
     public static final String FIRST_LEVEL_CACHE = "FIRST_LEVEL_CACHE";
 
@@ -54,7 +46,8 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
     /**
      * 一级缓存
      */
-    private Cache<String, Object> cache;
+    @Autowired
+    private CacheManager cacheManager;
 
     /**
      * 缓存名称
@@ -93,14 +86,6 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
     @Qualifier("applicationTaskExecutor")
     ThreadPoolTaskExecutor executor;
 
-    public LocalFirstLevelCacheInterceptor() {
-        this.cache = Caffeine.newBuilder()
-                // 自定义过期策略
-                .expireAfter(new MyExpiry(this))
-                .maximumSize(1000)
-                .build();
-    }
-
     @Override
     protected boolean matchMethod(Method method) {
         String name = method.getName();
@@ -113,7 +98,7 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
         MyCacheable myCache = targetMethod.getAnnotation(MyCacheable.class);
         if (Objects.nonNull(myCache)) {
             // 走一级缓存
-            if (myCache.useFirstCache() && myCache.firstCacheType().equals(FirstCacheTypeEnum.CAFFEINE)) {
+            if (myCache.useFirstCache() && myCache.firstCacheType().equals(FirstCacheTypeEnum.ECACHE)) {
                 return getCacheValue(invocation);
             }
         }
@@ -137,15 +122,19 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
                         redisCache = (RedisCache) targetCache;
                     }
                     cacheLocal.set(redisCache);
-                    return cache.get(key, key2 -> {
+                    Cache cache = cacheManager.getCache(cacheName);
+                    Element element = cache.get(key);
+                    if (Objects.isNull(element)) {
                         try {
-                            return invocation.proceed();
+                            Object result = invocation.proceed();
+                            element = new Element(key, result);
+                            cache.putIfAbsent(element);
                         } catch (Throwable throwable) {
                             log.error("缓存获取异常", throwable);
                             throw new RuntimeException("缓存获取异常");
                         }
-                    });
-
+                    }
+                    return element.getObjectValue();
                 case "evict":
                     rabbitTemplate.convertAndSend(exchange, "", key);
                     return null;
@@ -185,11 +174,11 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
 
         ((ConfigurableBeanFactory) this.beanFactory)
                 .registerSingleton(queueName, queue);
+
         if (!beanFactory.containsBean(exchange)) {
             ((ConfigurableBeanFactory) this.beanFactory)
                     .registerSingleton(exchange, fanoutExchange);
         }
-
 
 
         ((ConfigurableBeanFactory) this.beanFactory)
@@ -216,81 +205,15 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
         byte[] body = message.getBody();
         String s = new String(body);
         if (s.equals(clearKey)) {
-            cache.invalidateAll();
+            cacheManager.getCache(cacheName).removeAll();
         } else {
-            cache.invalidate(s);
+            cacheManager.getCache(cacheName).remove(s);
         }
     }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
-    }
-
-    private static class MyExpiry implements Expiry {
-
-        private LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor;
-
-        public MyExpiry(LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor) {
-            this.localFirstLevelCacheInterceptor = localFirstLevelCacheInterceptor;
-        }
-
-        /**
-         * 设置过期时间
-         * @param key
-         * @param value
-         * @param currentTime
-         * @return
-         */
-        @Override
-        public long expireAfterCreate(@NonNull Object key, @NonNull Object value, long currentTime) {
-            try {
-                Method method = CacheConfig.getMethod();
-                MyCacheable myCache = method.getAnnotation(MyCacheable.class);
-                long secondCacheTime = 0L;
-                if (Objects.nonNull(myCache) && myCache.syncSecondCacheTime()) {
-                    secondCacheTime = localFirstLevelCacheInterceptor.getSecondCacheTime();
-                } else {
-                    if (Objects.nonNull(myCache) ) {
-                        // 使用MyCacheable注解的情况
-                        if (!myCache.useCustomExpireDate()) {
-                            org.springframework.cache.Cache cache = cacheLocal.get();
-                            RedisCache redisCache = (RedisCache) cache;
-                            Duration ttl = redisCache.getCacheConfiguration().getTtl();
-                            secondCacheTime = ttl.toMillis();
-                        } else {
-                            secondCacheTime =  TimeUnit.SECONDS.toNanos(myCache.expireDate());
-                        }
-
-                    } else {
-                        // 使用Cacheable注解的情况
-                        org.springframework.cache.Cache cache = cacheLocal.get();
-                        RedisCache redisCache = (RedisCache) cache;
-                        Duration ttl = redisCache.getCacheConfiguration().getTtl();
-                        secondCacheTime = ttl.toMillis();
-                    }
-
-                }
-
-
-                return Math.max((secondCacheTime - TimeUnit.SECONDS.toNanos(1L)), 0L);
-            } finally {
-                localFirstLevelCacheInterceptor.cleanThreadLocal();
-                cacheLocal.remove();
-            }
-
-        }
-
-        @Override
-        public long expireAfterUpdate(@NonNull Object key, @NonNull Object value, long currentTime, @NonNegative long currentDuration) {
-            return currentDuration;
-        }
-
-        // 直接返回currentDuration表示不启用读过期设置
-        @Override
-        public long expireAfterRead(@NonNull Object key, @NonNull Object value, long currentTime, @NonNegative long currentDuration) {
-            return currentDuration;
-        }
     }
 
     /**
@@ -300,7 +223,7 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
      */
     public static String registerBeanDefinition(BeanFactory beanFactory, String cacheName) {
         DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
-        AnnotatedGenericBeanDefinition annotatedBeanDefinition = new AnnotatedGenericBeanDefinition(LocalFirstLevelCacheInterceptor.class);
+        AnnotatedGenericBeanDefinition annotatedBeanDefinition = new AnnotatedGenericBeanDefinition(LocalFirstLevelECacheInterceptor.class);
         MutablePropertyValues propertyValues = new MutablePropertyValues();
         propertyValues.add("cacheName", cacheName);
         annotatedBeanDefinition.setPropertyValues(propertyValues);
@@ -309,6 +232,4 @@ public class LocalFirstLevelCacheInterceptor extends AbstractFirstLevelCacheInte
         return name;
 
     }
-
-
 }

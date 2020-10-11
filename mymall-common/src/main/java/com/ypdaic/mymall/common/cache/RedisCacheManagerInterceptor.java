@@ -62,6 +62,9 @@ public class RedisCacheManagerInterceptor extends AbstractCacheInterceptor imple
                     String beanName = LocalFirstLevelCacheInterceptor.registerBeanDefinition(beanFactory, name);
                     LocalFirstLevelCacheInterceptor localFirstLevelCacheInterceptor = (LocalFirstLevelCacheInterceptor) this.beanFactory.getBean(beanName);
 
+                    String LocalFirstLevelECacheInterceptorBeanName = LocalFirstLevelECacheInterceptor.registerBeanDefinition(beanFactory, name);
+                    LocalFirstLevelECacheInterceptor localFirstLevelECacheInterceptor = (LocalFirstLevelECacheInterceptor) this.beanFactory.getBean(LocalFirstLevelECacheInterceptorBeanName);
+
 //                    ListableBeanFactory listableBeanFactory = (ListableBeanFactory) this.beanFactory;
 //                    if (!listableBeanFactory.containsBeanDefinition(DelayDoubleDeletionInterceptor.BEAN_NAME)) {
 //                        String delayDoubleDeletionInterceptorBeanName = DelayDoubleDeletionInterceptor.registerBeanDefinition(beanFactory, name);
@@ -69,6 +72,7 @@ public class RedisCacheManagerInterceptor extends AbstractCacheInterceptor imple
 //                    }
 
                     factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelCacheInterceptor));
+                    factory.addAdvisor(new DefaultPointcutAdvisor(localFirstLevelECacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(localLockCacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(redisLockCacheInterceptor));
                     factory.addAdvisor(new DefaultPointcutAdvisor(redisCacheTTLInterceptor));

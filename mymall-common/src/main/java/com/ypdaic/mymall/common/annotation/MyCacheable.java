@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.common.annotation;
 
+import com.ypdaic.mymall.common.cache.FirstCacheTypeEnum;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.annotation.AliasFor;
@@ -165,5 +166,9 @@ public @interface MyCacheable {
      */
     boolean syncSecondCacheTime() default false;
 
-
+    /**
+     * 一级缓存类型
+     * @return
+     */
+    FirstCacheTypeEnum firstCacheType() default FirstCacheTypeEnum.CAFFEINE;
 }

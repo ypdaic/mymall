@@ -194,7 +194,7 @@ public class HystrixServiceImpl {
         wareFeignService.getFare(1L);
     }
 
-    @Scheduled(cron = "*/5 * * * * ?")
+//    @Scheduled(cron = "*/5 * * * * ?")
     @Transactional
     public void test23() {
         System.out.println("xxxxx");

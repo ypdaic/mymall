@@ -73,10 +73,10 @@
 <!--            <groupId>com.alibaba.spring.boot</groupId>-->
 <!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-dubbo</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-dubbo</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -101,6 +101,8 @@
                     <include>application.yml</include>
                     <include>bootstrap.yml</include>
                     <include>redisson-${env}-*.yml</include>
+                    <include>redisson-${env}-sentinel-*.yml</include>
+                    <include>redisson-${env}-cluster-*.yml</include>
                 </includes>
             </resource>
 
