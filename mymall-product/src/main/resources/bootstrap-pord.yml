@@ -1,3 +1,0 @@
-spring:
-  application:
-    name: @project.name@ #设置应用名称

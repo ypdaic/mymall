@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -25,12 +26,22 @@ public class MybatisPlusConfig {
     @Autowired
     private MybatisPlusProperties mybatisPlusProperties;
 
+    @Value("${spring.profiles.active}")
+    private String profile;
+
     @Bean
     public MybatisSqlSessionFactoryBean getSqlSessionFactory(DataSource dataSource) throws Exception {
         MybatisSqlSessionFactoryBean factory = new MybatisSqlSessionFactoryBean();
         factory.setDataSource(dataSource);
         factory.setMapperLocations(mybatisPlusProperties.resolveMapperLocations());
-        factory.setPlugins(new Interceptor[]{paginationInterceptor(), performanceInterceptor()});
+        if ("dev".equals(profile) && "test".equals(profile)) {
+            factory.setPlugins(new Interceptor[]{paginationInterceptor(), performanceInterceptor()});
+        }
+        if ("provider".equals(profile)) {
+            factory.setPlugins(new Interceptor[]{paginationInterceptor()});
+        }
+        factory.setPlugins(new Interceptor[]{paginationInterceptor()});
+
         GlobalConfig globalConfig = mybatisPlusProperties.getGlobalConfig();
         factory.setGlobalConfig(globalConfig);
         return factory;

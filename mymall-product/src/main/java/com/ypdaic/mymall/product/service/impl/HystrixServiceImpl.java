@@ -8,6 +8,7 @@ import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.ypdaic.mymall.fegin.ware.IWareFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ public class HystrixServiceImpl {
 
     @Autowired
     IWareFeignService wareFeignService;
+
+    @Autowired
+    HystrixServiceImpl hystrixService;
 
     @HystrixCommand(
             fallbackMethod = "queryContentsFallback",
@@ -186,6 +190,7 @@ public class HystrixServiceImpl {
         return "error";
     }
 
+    @Async
     public String cacheKey() {
         return "test";
     }

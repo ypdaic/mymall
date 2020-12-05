@@ -30,7 +30,14 @@ public class RedissonConfig {
 //        Config config = Config.fromYAML(new ClassPathResource("redisson_dev_config.yml").getInputStream());
 //        Config config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-config.yml").getInputStream());
 //        Config config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-sentinel-config.yml").getInputStream());
-        Config config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-cluster-config.yml").getInputStream());
+        Config config = null;
+        if ("dev".equals(profile)) {
+
+            config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-cluster-config.yml").getInputStream());
+        }
+        if ("provider".equals(profile)) {
+            config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-config.yml").getInputStream());
+        }
         RedissonClient redisson = Redisson.create(config);
         return redisson;
     }
