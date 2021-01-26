@@ -1,7 +1,9 @@
 package com.ypdaic.mymall.product.service.impl;
 
-import com.ypdaic.mymall.common.util.PageUtils;
-import com.ypdaic.mymall.common.util.Query;
+import com.alibaba.fastjson.TypeReference;
+import com.ypdaic.mymall.common.to.SecKillSkuRedisTo;
+import com.ypdaic.mymall.common.util.*;
+import com.ypdaic.mymall.fegin.seckill.ISeckillFeignService;
 import com.ypdaic.mymall.product.entity.SkuImages;
 import com.ypdaic.mymall.product.entity.SkuInfo;
 import com.ypdaic.mymall.product.entity.SpuInfoDesc;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ypdaic.mymall.common.util.ExcelUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import com.ypdaic.mymall.common.enums.EnableEnum;
-import com.ypdaic.mymall.common.util.JavaUtils;
 
 /**
  * <p>
@@ -52,6 +52,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
     @Autowired
     IAttrGroupService attrGroupService;
+
+    @Autowired
+    ISeckillFeignService seckillFeignService;
 
     /**
      * 新增sku信息
@@ -274,7 +277,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         List<SpuItemAttrGroupVo> spuItemAttrGroupVos=attrGroupService.getAttrGroupWithAttrsBySpuId(byId.getSpuId(),byId.getCatalogId());
         skuItemVo.setGroupAttrs(spuItemAttrGroupVos);
 
-
+        R skuSeckillInfo = seckillFeignService.getSkuSeckillInfo(skuId);
+        int code = skuSeckillInfo.getCode();
+        if (code == 0) {
+            SecKillSkuRedisTo data = skuSeckillInfo.getData(new TypeReference<SecKillSkuRedisTo>() {
+            });
+            skuItemVo.setSecKillSkuRedisTo(data);
+        }
         return skuItemVo;
     }
 

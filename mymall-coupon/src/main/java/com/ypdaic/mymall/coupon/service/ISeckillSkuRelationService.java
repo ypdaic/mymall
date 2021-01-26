@@ -1,6 +1,7 @@
 package com.ypdaic.mymall.coupon.service;
 
 import com.ypdaic.mymall.common.util.PageUtils;
+import com.ypdaic.mymall.coupon.entity.SeckillSession;
 import com.ypdaic.mymall.coupon.entity.SeckillSkuRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ypdaic.mymall.coupon.vo.SeckillSkuRelationDto;
@@ -66,4 +67,6 @@ public interface ISeckillSkuRelationService extends IService<SeckillSkuRelation>
     List<SeckillSkuRelation> queryAll(SeckillSkuRelationDto seckillSkuRelationDto);
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void deleteBySeckillSession(SeckillSession seckillSession);
 }

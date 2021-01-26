@@ -182,7 +182,7 @@ public class SkuInfoController extends BaseController {
     public R info(@PathVariable("skuId") Long skuId){
         SkuInfo skuInfo = skuInfoService.getById(skuId);
 
-        return R.ok().put("skuInfo", skuInfo);
+        return R.ok().setData(skuInfo);
     }
 
     /**

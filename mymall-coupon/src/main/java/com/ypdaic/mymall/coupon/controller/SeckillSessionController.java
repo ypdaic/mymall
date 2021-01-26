@@ -1,8 +1,10 @@
 package com.ypdaic.mymall.coupon.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.R;
+import com.ypdaic.mymall.coupon.service.ISeckillSkuRelationService;
 import org.springframework.web.bind.annotation.*;
 
 import com.ypdaic.mymall.common.base.BaseController;
@@ -46,6 +48,8 @@ public class SeckillSessionController extends BaseController {
 
     @Autowired
     ISeckillSessionService seckillSessionService;
+    @Autowired
+    ISeckillSkuRelationService seckillSkuRelationService;
 
     /**
      *
@@ -93,11 +97,14 @@ public class SeckillSessionController extends BaseController {
      */
     @PostMapping("/delete")
 
-    public Result<SeckillSession> delete(@RequestBody SeckillSessionDto seckillSessionDto, HttpServletRequest httpServletRequest) {
+    public Result<SeckillSession> delete(@RequestBody JSONArray jsonArray, HttpServletRequest httpServletRequest) {
+        SeckillSessionDto seckillSessionDto = new SeckillSessionDto();
+        seckillSessionDto.setId(jsonArray.getLong(0));
         SeckillSession seckillSession = seckillSessionService.delete(seckillSessionDto);
         if (seckillSession == null) {
             return ResultUtil.failure(FailureEnum.PARAMETER_FAILURE);
         }
+        seckillSkuRelationService.deleteBySeckillSession(seckillSession);
         return ResultUtil.successOfDelete(seckillSession);
     }
 

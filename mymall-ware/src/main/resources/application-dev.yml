@@ -4,9 +4,9 @@ spring:
   type: com.alibaba.druid.pool.DruidDataSource
   druid:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.109.129:3309/wms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.109.129:3308/wms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: test1234
     initial-size: 1
     max-active: 20
     min-idle: 1
@@ -55,15 +55,15 @@ spring:
       max-idle: 10
       max-wait: 3000ms
       min-idle: 0
-  host: 192.168.109.129
-  port: 6380
-#      password: test1234
+  host: 192.168.109.130
+  port: 6379
+  password: test1234
  cache:
   type: redis
   redis:
     time-to-live: 12h
 
 logging:
-  config: classpath:logs/logback-dev.xml
+  config: classpath:logbak/logback-dev.xml
 
 

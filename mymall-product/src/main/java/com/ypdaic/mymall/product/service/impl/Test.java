@@ -17,7 +17,7 @@ public class Test {
 
     }
 
-    @Transactional
+//    @Transactional
     public void testTransaction() {
 
     }

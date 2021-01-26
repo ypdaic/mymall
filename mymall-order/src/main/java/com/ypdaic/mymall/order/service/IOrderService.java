@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.order.service;
 
+import com.ypdaic.mymall.common.to.SeckillOrderTo;
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.order.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -85,4 +86,6 @@ public interface IOrderService extends IService<Order> {
     void seataTest();
 
     void seataShardingTest();
+
+    void createSeckillOrder(SeckillOrderTo seckillOrderTo);
 }

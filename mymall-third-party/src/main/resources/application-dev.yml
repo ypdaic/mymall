@@ -1,5 +1,5 @@
 
 logging:
-  config: classpath:logs/logback-dev.xml
+  config: classpath:logbak/logback-dev.xml
 
 

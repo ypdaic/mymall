@@ -3,9 +3,9 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
             driver-class-name: com.mysql.cj.jdbc.Driver
-            url: jdbc:mysql://192.168.109.128:3309/admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+            url: jdbc:mysql://192.168.109.129:3308/admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
             username: root
-            password: 123456
+            password: test1234
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -35,10 +35,10 @@ spring:
     cloud:
         nacos:
             discovery:
-                server-addr: 192.168.109.1:8848
+                server-addr: 192.168.109.129:8848
                 service: ${spring.application.name}
                 heart-beat-interval: 5000 #心跳间隔
-                namespace: dev
+                namespace: 4c0b05e6-12b0-48d8-8fbb-102173a5430f
 
 ##多数据源的配置
 #dynamic:

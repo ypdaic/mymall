@@ -2,13 +2,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.109.1:8848
+        server-addr: 192.168.109.129:8848
         service: ${spring.application.name}
         heart-beat-interval: 5000 #心跳间隔
-        namespace: dev
+        namespace: 4c0b05e6-12b0-48d8-8fbb-102173a5430f
       config:
-        namespace: dev
+        namespace: 4c0b05e6-12b0-48d8-8fbb-102173a5430f
         name: dev
         # 如果Data Id没有使用后缀，需要指定为空字符串
         file-extension: yml
-        server-addr: 192.168.109.1:8848
+        server-addr: 192.168.109.129:8848

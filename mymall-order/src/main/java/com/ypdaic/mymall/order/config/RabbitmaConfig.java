@@ -69,6 +69,12 @@ public class RabbitmaConfig {
 
     }
 
+    @Bean
+    public Binding seckillOrderBinding(Queue orderReleaseQueue, Exchange orderEventExchange) {
+        return new Binding("order.seckill.order.queue",  Binding.DestinationType.QUEUE, "order.event.exchange", "order.seckill.order", null);
+
+    }
+
     /**
      * 订单释放直接和库存释放进行绑定
      * @param orderReleaseQueue

@@ -107,6 +107,10 @@ spring:
         uri: lb://mymall-order
         predicates:
           - Host= order.mymall.com #域名转发
+      - id: seckill-host-route #这个需要放在后面，否则我们的/api 接口就会出问题，api接口的还是由上面的路由规则处理
+        uri: lb://mymall-seckill
+        predicates:
+          - Host= seckill.mymall.com #域名转发
 
 
 logging:

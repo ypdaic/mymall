@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: @env@
+  application:
+    name: mymall-activiti #设置应用名称

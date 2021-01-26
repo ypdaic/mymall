@@ -33,7 +33,8 @@ public class RedissonConfig {
         Config config = null;
         if ("dev".equals(profile)) {
 
-            config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-cluster-config.yml").getInputStream());
+//            config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-cluster-config.yml").getInputStream());
+            config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-config.yml").getInputStream());
         }
         if ("provider".equals(profile)) {
             config = Config.fromYAML(new ClassPathResource("redisson-"+ profile +"-config.yml").getInputStream());

@@ -1,5 +1,6 @@
 package com.ypdaic.mymall.product.vo;
 
+import com.ypdaic.mymall.common.to.SecKillSkuRedisTo;
 import com.ypdaic.mymall.product.entity.SkuImages;
 import com.ypdaic.mymall.product.entity.SkuInfo;
 import com.ypdaic.mymall.product.entity.SpuInfoDesc;
@@ -32,4 +33,6 @@ public class SkuItemVo {
     //5. 获取SPU的规格参数信息
     List<SpuItemAttrGroupVo> groupAttrs;
 
+    //秒杀信息
+    SecKillSkuRedisTo secKillSkuRedisTo;
 }

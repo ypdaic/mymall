@@ -3,7 +3,7 @@ package com.ypdaic.mymall.order.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.ypdaic.mymall.order.service.DubboTestService;
 
-@org.apache.dubbo.config.annotation.Service
+//@org.apache.dubbo.config.annotation.Service
 public class DubboTestServiceImpl implements DubboTestService {
 
     @Override

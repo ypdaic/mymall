@@ -4,9 +4,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.109.129:3309/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://192.168.109.129:3308/oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
-      password: 123456
+      password: test1234
       #    url: jdbc:mysql://192.168.109.129:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       #    url: jdbc:mysql://127.0.0.1:8806/ENJOYDB?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       # nginx 代理mycat
@@ -173,16 +173,16 @@ spring:
         max-wait: 3000ms
         min-idle: 0
     # 单机配置
-#    host: 192.168.109.129
-#    port: 6380
+    host: 192.168.109.130
+    port: 6379
     # 哨兵配
 #    sentinel:
 #      master: mymaster
 #      #       哨兵ip:port 不是redis的ip:port
 #      nodes: 192.168.109.129:26379,192.168.109.130:26379
-    cluster:
+#    cluster:
       # 多个节点已","分割
-      nodes: 192.168.109.129:7004,192.168.109.129:7005,192.168.109.129:7006,192.168.109.130:7001,192.168.109.130:7002,192.168.109.130:7003
+#      nodes: 192.168.109.129:7004,192.168.109.129:7005,192.168.109.129:7006,192.168.109.130:7001,192.168.109.130:7002,192.168.109.130:7003
     password: test1234
   cache:
     type: redis
@@ -197,15 +197,15 @@ sharding:
 logging:
   config: classpath:logbak/logback-dev.xml
 
-dubbo:
-  scan:
-    # dubbo 服务扫描基准包
-    base-packages: com.ypdaic.mymall.order.service
-  protocol:
-    # dubbo 协议
-    name: dubbo
-    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
-    port: 20880
-  registry:
-    # 挂载到 Spring Cloud 注册中心
-    address: spring-cloud://localhost
+#dubbo:
+#  scan:
+#    # dubbo 服务扫描基准包
+#    base-packages: com.ypdaic.mymall.order.service
+#  protocol:
+#    # dubbo 协议
+#    name: dubbo
+#    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+#    port: 20880
+#  registry:
+#    # 挂载到 Spring Cloud 注册中心
+#    address: spring-cloud://localhost

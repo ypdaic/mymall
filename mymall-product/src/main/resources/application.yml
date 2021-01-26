@@ -46,6 +46,7 @@ ribbon:
       - mymall-coupon
       - mymall-search
       - mymall-ware
+      - mymall-seckill
 # feign配置
 feign:
   client:

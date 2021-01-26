@@ -61,7 +61,7 @@ spring:
     time-to-live: 12h
 
 logging:
-  config: classpath:logs/logback-dev.xml
+  config: classpath:logbak/logback-dev.xml
 
 hystrix:
   command:

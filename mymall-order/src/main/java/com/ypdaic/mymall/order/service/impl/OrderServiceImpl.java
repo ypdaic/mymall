@@ -10,10 +10,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.common.enums.EnableEnum;
-import com.ypdaic.mymall.common.to.MemberRespVo;
-import com.ypdaic.mymall.common.to.RpTransactionMessageVo;
-import com.ypdaic.mymall.common.to.SkuHasStockVo;
-import com.ypdaic.mymall.common.to.WareSkuLockVo;
+import com.ypdaic.mymall.common.to.*;
 import com.ypdaic.mymall.common.to.mq.OrderTo;
 import com.ypdaic.mymall.common.to.mq.StockLockedTo;
 import com.ypdaic.mymall.common.util.JavaUtils;
@@ -35,6 +32,7 @@ import com.ypdaic.mymall.order.service.IMqMessageService;
 import com.ypdaic.mymall.order.service.IOrderItemService;
 import com.ypdaic.mymall.order.service.IOrderService;
 import com.ypdaic.mymall.order.vo.*;
+import com.ypdaic.mymall.order.vo.OrderItemVo;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -576,6 +574,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order1.insert();
 //        wareFeignService.seateTest();
         throw new RuntimeException();
+    }
+
+    @Override
+    public void createSeckillOrder(SeckillOrderTo seckillOrderTo) {
+        // 保存订单信息
+        Order order = new Order();
+        order.setOrderSn(seckillOrderTo.getOrderSn());
+        order.setMemberId(seckillOrderTo.getMemberId());
+        order.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+        BigDecimal multiply = seckillOrderTo.getSeckillPrice().multiply(new BigDecimal("" + seckillOrderTo.getNum()));
+        order.setPayAmount(multiply);
+
+        this.save(order);
+
+        // 保存订单项信息
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderSn(seckillOrderTo.getOrderSn());
+        orderItem.setRealAmount(multiply);
+
+        orderItem.setSkuQuantity(seckillOrderTo.getNum());
+
+//        productFeignService.getSpuInfoBySkuId();
+        orderItemService.save(orderItem);
     }
 
     @Transactional(rollbackFor = Exception.class)

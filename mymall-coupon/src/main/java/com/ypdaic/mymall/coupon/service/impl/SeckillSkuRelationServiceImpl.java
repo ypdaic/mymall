@@ -2,12 +2,14 @@ package com.ypdaic.mymall.coupon.service.impl;
 
 import com.ypdaic.mymall.common.util.PageUtils;
 import com.ypdaic.mymall.common.util.Query;
+import com.ypdaic.mymall.coupon.entity.SeckillSession;
 import com.ypdaic.mymall.coupon.entity.SeckillSkuRelation;
 import com.ypdaic.mymall.coupon.mapper.SeckillSkuRelationMapper;
 import com.ypdaic.mymall.coupon.service.ISeckillSkuRelationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ypdaic.mymall.coupon.vo.SeckillSkuRelationDto;
 import com.ypdaic.mymall.coupon.enums.SeckillSkuRelationExcelHeadersEnum;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -150,6 +152,20 @@ public class SeckillSkuRelationServiceImpl extends ServiceImpl<SeckillSkuRelatio
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    @Transactional
+    public void deleteBySeckillSession(SeckillSession seckillSession) {
+        QueryWrapper<SeckillSkuRelation> seckillSkuRelationQueryWrapper = new QueryWrapper<>();
+        seckillSkuRelationQueryWrapper.eq("promotion_session_id", seckillSession.getId());
+        List<SeckillSkuRelation> list = list(seckillSkuRelationQueryWrapper);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (SeckillSkuRelation seckillSkuRelation : list) {
+                seckillSkuRelation.deleteById();
+
+            }
+        }
     }
 
 }

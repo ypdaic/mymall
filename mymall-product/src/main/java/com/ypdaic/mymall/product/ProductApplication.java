@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@SpringBootApplication
 @EnableScheduling
 @EnableRedisHttpSession
-@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.coupon", "com.ypdaic.mymall.fegin.ware", "com.ypdaic.mymall.fegin.search"})
+@EnableFeignClients(basePackages = {"com.ypdaic.mymall.fegin.coupon", "com.ypdaic.mymall.fegin.ware", "com.ypdaic.mymall.fegin.search", "com.ypdaic.mymall.fegin.seckill"})
 /**
  * 注入spring.factories 文件中
  * org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker对应的配置类
