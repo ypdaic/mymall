@@ -54,7 +54,7 @@
         <commons-lang3.version>3.10</commons-lang3.version>
         <hutool.version>5.3.7</hutool.version>
         <mybatis-plus-generator.version>3.3.0</mybatis-plus-generator.version>
-        <commons-configuration2.version>2.7</commons-configuration2.version>
+        <commons-configuration2.version>2.8.0</commons-configuration2.version>
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <poi.version>3.17</poi.version>
